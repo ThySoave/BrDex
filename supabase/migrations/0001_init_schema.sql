@@ -60,6 +60,9 @@ create policy "users can delete their own cards"
   to authenticated
   using (auth.uid() = user_id);
 
+grant select on public.cards_catalog to authenticated;
+grant select, insert, update, delete on public.user_cards to authenticated;
+
 create index user_cards_user_id_idx on public.user_cards (user_id);
 create index user_cards_catalog_card_id_idx on public.user_cards (catalog_card_id);
 create index cards_catalog_name_idx on public.cards_catalog using gin (to_tsvector('simple', name));
