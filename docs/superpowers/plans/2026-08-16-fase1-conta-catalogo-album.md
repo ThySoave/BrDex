@@ -104,10 +104,12 @@ BrDex/
 
 ```bash
 cd "/home/tsc/Documents/TSC/Testes/BrDex"
-npx create-expo-app@latest . --template blank-typescript
+yes | npx create-expo-app@latest . --template blank-typescript
 ```
 
-When prompted about the non-empty directory (it contains `docs/` and `.git/`), confirm proceeding.
+The directory is non-empty (it contains `docs/` and `.git`), so `create-expo-app` asks for
+confirmation before proceeding; `yes |` answers that prompt non-interactively so the command
+does not hang.
 
 - [ ] **Step 2: Install Expo Router and its peer dependencies**
 
@@ -259,7 +261,7 @@ values ('33333333-3333-3333-3333-333333333333', 'Pikachu', '25', 'Base Set', 'ba
 
 -- Alice inserts her own card as Alice
 set local role authenticated;
-set local request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
+set local "request.jwt.claims" to '{"sub": "11111111-1111-1111-1111-111111111111", "role": "authenticated"}';
 
 insert into public.user_cards (user_id, catalog_card_id, language, condition, status)
 values ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 'en', 'near_mint', 'guardada');
@@ -271,7 +273,7 @@ select is(
 );
 
 -- Bob should not see Alice's guardada card
-set local request.jwt.claim.sub = '22222222-2222-2222-2222-222222222222';
+set local "request.jwt.claims" to '{"sub": "22222222-2222-2222-2222-222222222222", "role": "authenticated"}';
 
 select is(
   (select count(*)::int from public.user_cards),
