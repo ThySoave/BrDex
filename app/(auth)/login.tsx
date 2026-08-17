@@ -42,6 +42,21 @@ export default function LoginScreen() {
         <Text>Entrar</Text>
       </Pressable>
       <Link href="/(auth)/signup">Criar conta</Link>
+      <Pressable
+        testID="login-google"
+        onPress={async () => {
+          const WebBrowser = await import("expo-web-browser");
+          const { buildGoogleOAuthUrl } = await import("../../src/features/auth/googleAuth");
+          const redirectTo = "brdex://redirect";
+          const url = buildGoogleOAuthUrl(
+            process.env.EXPO_PUBLIC_SUPABASE_URL as string,
+            redirectTo
+          );
+          await WebBrowser.openAuthSessionAsync(url, redirectTo);
+        }}
+      >
+        <Text>Entrar com Google</Text>
+      </Pressable>
     </View>
   );
 }
