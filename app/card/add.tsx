@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View, Text, Pressable, ScrollView, TextInput } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { addUserCard } from "../../src/features/collection/collectionRepository";
+import { CardPrices } from "../../src/components/CardPrices";
 import { CARD_CONDITIONS, type CardCondition } from "../../src/features/collection/conditionScale";
 import type { CardLanguage, CardStatus } from "../../src/features/collection/types";
 
@@ -46,6 +47,7 @@ export default function AddCardScreen() {
 
   return (
     <ScrollView style={{ flex: 1, padding: 16 }}>
+      {catalogCardId ? <CardPrices catalogCardId={catalogCardId} language={language} /> : null}
       <Text>Idioma</Text>
       {LANGUAGES.map((lang) => (
         <Pressable key={lang.value} testID={`language-${lang.value}`} onPress={() => setLanguage(lang.value)}>
