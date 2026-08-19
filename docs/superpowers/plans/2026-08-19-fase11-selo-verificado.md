@@ -30,8 +30,8 @@
 **Interfaces:**
 - Produces: `isUserVerified(userId: string): Promise<boolean>` — RPC `is_premium` com `{ uid: userId }`; erro → `false` (selo é informativo, nunca deve quebrar a listagem).
 
-- [ ] Teste (2 casos: retorna o boolean do RPC chamado com `{ uid }`; erro do RPC vira `false`) → red → implementação → green.
-- [ ] Commit `feat: add user verification check via is_premium rpc`
+- [x] Teste (2 casos: retorna o boolean do RPC chamado com `{ uid }`; erro do RPC vira `false`) → red → implementação → green.
+- [x] Commit `feat: add user verification check via is_premium rpc`
 
 ---
 

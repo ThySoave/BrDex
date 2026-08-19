@@ -3,7 +3,7 @@ jest.mock("../../lib/supabaseClient", () => ({
 }));
 
 import { getSupabaseClient } from "../../lib/supabaseClient";
-import { isPremium } from "./entitlementsRepository";
+import { isPremium, isUserVerified } from "./entitlementsRepository";
 
 describe("isPremium", () => {
   it("returns true when the rpc reports an active subscription", async () => {
@@ -54,5 +54,24 @@ describe("isPremium", () => {
 
     await expect(isPremium()).resolves.toBe(false);
     expect(rpcMock).not.toHaveBeenCalled();
+  });
+});
+
+describe("isUserVerified", () => {
+  it("returns the rpc result for the given user", async () => {
+    const rpcMock = jest.fn().mockResolvedValue({ data: true, error: null });
+
+    (getSupabaseClient as jest.Mock).mockReturnValue({ rpc: rpcMock });
+
+    await expect(isUserVerified("user-2")).resolves.toBe(true);
+    expect(rpcMock).toHaveBeenCalledWith("is_premium", { uid: "user-2" });
+  });
+
+  it("returns false when the rpc fails", async () => {
+    const rpcMock = jest.fn().mockResolvedValue({ data: null, error: { message: "boom" } });
+
+    (getSupabaseClient as jest.Mock).mockReturnValue({ rpc: rpcMock });
+
+    await expect(isUserVerified("user-2")).resolves.toBe(false);
   });
 });

@@ -18,3 +18,15 @@ export async function isPremium(): Promise<boolean> {
 
   return data === true;
 }
+
+// Selo de verificado = assinatura premium ativa; informativo, nunca quebra a listagem.
+export async function isUserVerified(userId: string): Promise<boolean> {
+  const client = getSupabaseClient();
+  const { data, error } = await client.rpc("is_premium", { uid: userId });
+
+  if (error) {
+    return false;
+  }
+
+  return data === true;
+}
