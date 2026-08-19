@@ -95,8 +95,8 @@
 
 **Interfaces:** Produces `ChatMessage { id; senderId; body; createdAt }`; `getOrCreateConversation(otherUserId): Promise<string>` (par de UUIDs ordenado com `.sort()`, select maybeSingle → insert select single); `listMessages(conversationId)` (order created_at asc, snake→camel); `sendMessage(conversationId, body)` (insert com sender = usuário atual); `subscribeToMessages(conversationId, onMessage): () => void` (channel `messages-<id>`, `postgres_changes` INSERT com filter `conversation_id=eq.<id>`, retorna cleanup com `removeChannel`).
 
-- [ ] Teste (4 casos: conversa existente; criação; listMessages mapeado; sendMessage) → red → implementação → green.
-- [ ] Commit `feat: add chat repository with realtime subscription`.
+- [x] Teste (4 casos: conversa existente; criação; listMessages mapeado; sendMessage) → red → implementação → green.
+- [x] Commit `feat: add chat repository with realtime subscription`. (Feito antes da Task 4 para a tela de matches compilar com `getOrCreateConversation`.)
 
 ---
 
