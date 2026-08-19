@@ -61,9 +61,9 @@
 
 **Interfaces:** Consumes Task 2 + `isPremium()` (Fase 4).
 
-- [ ] Teste de componente do catálogo (RNTL, arquivo `app/(tabs)/catalog.test.tsx`): premium — tocar "Alerta" (testID `price-alert-add-<id>`) abre input de valor (testID `price-alert-threshold`) e confirmar (testID `price-alert-confirm`) chama `createPriceAlert(cardId, "en", valor)`; não-premium — tocar "Alerta" mostra upsell (testID `price-alert-upsell`) e não chama `createPriceAlert`. → red → implementação → green.
-- [ ] Teste de componente da aba Valor (estender/criar `app/(tabs)/value.test.tsx`): lista alertas disparados ("<carta> passou de R$ X — atual R$ Y", testID `triggered-alert-<alertId>`); botão remover (testID `triggered-alert-remove-<alertId>`) chama `removePriceAlert` e some da lista. → red → implementação → green.
-- [ ] Full suite verde (`npx jest && npx tsc --noEmit`) → Commit `feat: add price alert creation and triggered alerts display`
+- [x] Teste de componente do catálogo (RNTL, arquivo `app/(tabs)/catalog.test.tsx`): premium — tocar "Alerta" (testID `price-alert-add-<id>`) abre input de valor (testID `price-alert-threshold`) e confirmar (testID `price-alert-confirm`) chama `createPriceAlert(cardId, "en", valor)`; não-premium — tocar "Alerta" mostra upsell (testID `price-alert-upsell`) e não chama `createPriceAlert`. → red → implementação → green.
+- [x] Teste de componente da aba Valor (estender/criar `app/(tabs)/value.test.tsx`): lista alertas disparados ("<carta> passou de R$ X — atual R$ Y", testID `triggered-alert-<alertId>`); botão remover (testID `triggered-alert-remove-<alertId>`) chama `removePriceAlert` e some da lista. → red → implementação → green.
+- [x] Full suite verde (`npx jest && npx tsc --noEmit` — 80 testes, 30 suites; flake de timing sob workers paralelos corrigido em `home.test.tsx`/`value.test.tsx` separando asserções de `waitFor`) → Commit `feat: add price alert creation and triggered alerts display`
 
 ---
 

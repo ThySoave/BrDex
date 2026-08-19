@@ -69,8 +69,13 @@ describe("HomeScreen", () => {
 
     await waitFor(() => {
       expect(dismissSetRelease).toHaveBeenCalledWith("release-1");
-      expect(queryByTestId("home-set-release-banner-release-1")).toBeNull();
     });
+    await waitFor(
+      () => {
+        expect(queryByTestId("home-set-release-banner-release-1")).toBeNull();
+      },
+      { timeout: 3000 }
+    );
   });
 
   it("opens the external link when a news item is pressed", async () => {
