@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, Pressable, Share, Text, View } from "react-native";
 import { listUserCards } from "../../src/features/collection/collectionRepository";
 import { fetchSetProgress, type SetProgress } from "../../src/features/collection/setProgressRepository";
+import { buildCollectionShareMessage } from "../../src/features/collection/shareCollection";
 import { isPremium } from "../../src/features/premium/entitlementsRepository";
 import type { UserCard } from "../../src/features/collection/types";
 
@@ -35,6 +36,13 @@ export default function AlbumScreen() {
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
+      <Pressable
+        testID="share-collection"
+        onPress={() => Share.share({ message: buildCollectionShareMessage(cards.length, null) })}
+        style={{ marginBottom: 8 }}
+      >
+        <Text>Compartilhar</Text>
+      </Pressable>
       {premium ? (
         progress.map((set) => (
           <Text key={set.setId} testID={`set-progress-${set.setId}`}>

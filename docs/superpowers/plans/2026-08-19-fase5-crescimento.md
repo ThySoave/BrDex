@@ -61,9 +61,9 @@
 
 **Interfaces:** Produces `buildCollectionShareMessage(cardCount: number, totalValue: number | null): string` — com valor: "Minha coleção no BrDex: X cartas, avaliada em R$ Y! 🎴"; sem valor (null): "Minha coleção no BrDex: X cartas! 🎴" (Y formatado com vírgula decimal, 2 casas). No `album.tsx`: `Pressable` "Compartilhar" (`testID="share-collection"`) → `Share.share({ message })` com o total de cartas carregado (valor `null` — a tela de álbum não carrega valor).
 
-- [ ] Teste (2 casos: com valor; sem valor) → red → implementação → green.
-- [ ] Wire em `album.tsx` + verificação completa: `npx jest && npx tsc --noEmit` e `sg docker -c "npx supabase test db"` — tudo verde.
-- [ ] Commit `feat: add collection share button on album`.
+- [x] Teste (2 casos: com valor; sem valor) → red → implementação → green.
+- [x] Wire em `album.tsx` + verificação completa: `npx jest && npx tsc --noEmit` e `sg docker -c "npx supabase test db"` — tudo verde.
+- [x] Commit `feat: add collection share button on album`.
 
 ---
 
