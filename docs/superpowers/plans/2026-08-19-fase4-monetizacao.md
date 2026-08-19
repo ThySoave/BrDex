@@ -74,10 +74,10 @@
 
 **Interfaces:** Produces `buildTcgplayerSearchUrl(cardName: string): string` — `https://www.tcgplayer.com/search/pokemon/product?q=<nome url-encoded>&utm_campaign=affiliate&utm_source=<TCGPLAYER_AFFILIATE_ID>`; exporta `TCGPLAYER_AFFILIATE_ID = "brdex-placeholder"`.
 
-- [ ] Teste (2 casos: URL com nome codificado; inclui o id de afiliado) → red → implementação → green.
-- [ ] Wire: no item do catálogo, `Pressable` "Comprar" (`testID: buy-<id>`) → `Linking.openURL(buildTcgplayerSearchUrl(item.name))`.
-- [ ] Verificação completa: `npx jest && npx tsc --noEmit` e `sg docker -c "npx supabase test db"` — tudo verde.
-- [ ] Commit `feat: add TCGplayer affiliate buy links on catalog`.
+- [x] Teste (2 casos: URL com nome codificado; inclui o id de afiliado) → red → implementação → green.
+- [x] Wire: no item do catálogo, `Pressable` "Comprar" (`testID: buy-<id>`) → `Linking.openURL(buildTcgplayerSearchUrl(item.name))`.
+- [x] Verificação completa: `npx jest && npx tsc --noEmit` e `sg docker -c "npx supabase test db"` — tudo verde.
+- [x] Commit `feat: add TCGplayer affiliate buy links on catalog`.
 
 ---
 

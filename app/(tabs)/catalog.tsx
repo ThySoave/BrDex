@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Alert, FlatList, Pressable, Text, TextInput, View } from "react-native";
+import { Alert, FlatList, Linking, Pressable, Text, TextInput, View } from "react-native";
 import { fetchCatalogPage } from "../../src/features/catalog/catalogRepository";
 import { filterCatalogCards } from "../../src/features/catalog/catalogSearch";
 import { addToWishlist } from "../../src/features/social/wishlistRepository";
+import { buildTcgplayerSearchUrl } from "../../src/features/premium/affiliateLinks";
 import { CardGridItem } from "../../src/components/CardGridItem";
 import type { CatalogCard } from "../../src/features/catalog/types";
 
@@ -41,6 +42,12 @@ export default function CatalogScreen() {
               }
             >
               <Text>Quero</Text>
+            </Pressable>
+            <Pressable
+              testID={`buy-${item.id}`}
+              onPress={() => Linking.openURL(buildTcgplayerSearchUrl(item.name))}
+            >
+              <Text>Comprar</Text>
             </Pressable>
           </View>
         )}
