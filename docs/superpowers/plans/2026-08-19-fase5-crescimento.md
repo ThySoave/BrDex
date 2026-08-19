@@ -49,9 +49,9 @@
 
 **Interfaces:** Produces `fetchSetProgress(): Promise<SetProgress[]>` (`SetProgress { setId, setName, owned, total }`) — `client.rpc("set_progress", { uid: user.id })`, mapeia snake_case → camelCase; erro vira `throw new Error(message)`; sem usuário retorna `[]`. No `album.tsx`: se `isPremium()`, mostra por set `Text` `testID="set-progress-<setId>"` com "`<setName>`: `<owned>` de `<total>`"; senão `Text` `testID="set-progress-upsell"`: "Assine o premium para ver o progresso por edição."
 
-- [ ] Teste do repository (3 casos: mapeia linhas; erro propagado; sem usuário → `[]` sem RPC) → red → implementação → green.
-- [ ] Wire em `album.tsx` + full suite verde (`npx jest && npx tsc --noEmit`).
-- [ ] Commit `feat: show per-set collection progress for premium users`.
+- [x] Teste do repository (3 casos: mapeia linhas; erro propagado; sem usuário → `[]` sem RPC) → red → implementação → green.
+- [x] Wire em `album.tsx` + full suite verde (`npx jest && npx tsc --noEmit`).
+- [x] Commit `feat: show per-set collection progress for premium users`.
 
 ---
 

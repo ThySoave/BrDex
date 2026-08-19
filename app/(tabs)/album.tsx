@@ -1,16 +1,28 @@
 import { useEffect, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 import { listUserCards } from "../../src/features/collection/collectionRepository";
+import { fetchSetProgress, type SetProgress } from "../../src/features/collection/setProgressRepository";
+import { isPremium } from "../../src/features/premium/entitlementsRepository";
 import type { UserCard } from "../../src/features/collection/types";
 
 export default function AlbumScreen() {
   const [cards, setCards] = useState<UserCard[]>([]);
+  const [premium, setPremium] = useState(false);
+  const [progress, setProgress] = useState<SetProgress[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     listUserCards()
       .then(setCards)
       .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar álbum"));
+    isPremium()
+      .then((active) => {
+        setPremium(active);
+        if (active) {
+          fetchSetProgress().then(setProgress).catch(() => setProgress([]));
+        }
+      })
+      .catch(() => setPremium(false));
   }, []);
 
   if (error) {
@@ -23,6 +35,17 @@ export default function AlbumScreen() {
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
+      {premium ? (
+        progress.map((set) => (
+          <Text key={set.setId} testID={`set-progress-${set.setId}`}>
+            {`${set.setName}: ${set.owned} de ${set.total}`}
+          </Text>
+        ))
+      ) : (
+        <Text testID="set-progress-upsell" style={{ color: "#666", marginBottom: 8 }}>
+          Assine o premium para ver o progresso por edição.
+        </Text>
+      )}
       <FlatList
         testID="album-list"
         data={cards}
