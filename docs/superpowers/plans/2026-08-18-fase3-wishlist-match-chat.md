@@ -106,8 +106,8 @@
 
 **Interfaces:** Produces `blockUser(blockedId): Promise<void>` (insert em `blocks` com blocker = usuário atual) e `reportUser(reportedId, reason, context): Promise<void>` (insert em `reports`), erros propagados.
 
-- [ ] Teste (3 casos: block; report; erro) → red → implementação → green.
-- [ ] Commit `feat: add safety repository for blocks and reports`.
+- [x] Teste (3 casos: block; report; erro) → red → implementação → green.
+- [x] Commit `feat: add safety repository for blocks and reports`.
 
 ---
 
