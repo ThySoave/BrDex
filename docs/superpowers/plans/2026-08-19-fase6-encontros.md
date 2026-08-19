@@ -59,9 +59,9 @@
 
 **Interfaces:** Tela com `FlatList` `testID="meetups-list"` dos encontros futuros (cada item `testID="meetup-<id>"`, mostra título, cidade e data em pt-BR) e formulário simples (inputs `meetup-title`, `meetup-city`, `meetup-date` + `Pressable` `testID="meetup-create"` "Publicar encontro") que chama `createMeetup` e recarrega a lista. Aba "Encontros" registrada no layout.
 
-- [ ] Tela criada + aba registrada, seguindo o padrão das telas existentes.
-- [ ] Verificação completa: `npx jest && npx tsc --noEmit` e `sg docker -c "npx supabase test db"` — tudo verde.
-- [ ] Commit `feat: add meetups tab with upcoming events and creation form`.
+- [x] Tela criada + aba registrada, seguindo o padrão das telas existentes.
+- [x] Verificação completa: `npx jest && npx tsc --noEmit` e `sg docker -c "npx supabase test db"` — tudo verde.
+- [x] Commit `feat: add meetups tab with upcoming events and creation form`.
 
 ---
 

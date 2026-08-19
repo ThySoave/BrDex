@@ -1,0 +1,74 @@
+import { useCallback, useEffect, useState } from "react";
+import { Alert, FlatList, Pressable, Text, TextInput, View } from "react-native";
+import { createMeetup, listUpcomingMeetups, type Meetup } from "../../src/features/meetups/meetupsRepository";
+
+function formatDate(iso: string): string {
+  const date = new Date(iso);
+  return date.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
+}
+
+export default function MeetupsScreen() {
+  const [meetups, setMeetups] = useState<Meetup[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [title, setTitle] = useState("");
+  const [city, setCity] = useState("");
+  const [date, setDate] = useState("");
+
+  const loadMeetups = useCallback(() => {
+    listUpcomingMeetups()
+      .then(setMeetups)
+      .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar encontros"));
+  }, []);
+
+  useEffect(() => {
+    loadMeetups();
+  }, [loadMeetups]);
+
+  const handleCreate = () => {
+    const startsAt = new Date(date);
+    if (!title.trim() || !city.trim() || Number.isNaN(startsAt.getTime())) {
+      Alert.alert("Preencha título, cidade e uma data válida (AAAA-MM-DD)");
+      return;
+    }
+
+    createMeetup({ title: title.trim(), city: city.trim(), startsAt: startsAt.toISOString(), description: null })
+      .then(() => {
+        setTitle("");
+        setCity("");
+        setDate("");
+        loadMeetups();
+      })
+      .catch((err: Error) => Alert.alert("Erro", err.message));
+  };
+
+  if (error) {
+    return (
+      <View style={{ flex: 1, padding: 16 }}>
+        <Text>{error}</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={{ flex: 1, padding: 16 }}>
+      <TextInput testID="meetup-title" placeholder="Título do encontro" value={title} onChangeText={setTitle} />
+      <TextInput testID="meetup-city" placeholder="Cidade" value={city} onChangeText={setCity} />
+      <TextInput testID="meetup-date" placeholder="Data (AAAA-MM-DD)" value={date} onChangeText={setDate} />
+      <Pressable testID="meetup-create" onPress={handleCreate} style={{ marginVertical: 8 }}>
+        <Text>Publicar encontro</Text>
+      </Pressable>
+      <FlatList
+        testID="meetups-list"
+        data={meetups}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View testID={`meetup-${item.id}`} style={{ paddingVertical: 8 }}>
+            <Text style={{ fontWeight: "bold" }}>{item.title}</Text>
+            <Text>{`${item.city} — ${formatDate(item.startsAt)}`}</Text>
+            {item.description ? <Text style={{ color: "#666" }}>{item.description}</Text> : null}
+          </View>
+        )}
+      />
+    </View>
+  );
+}
