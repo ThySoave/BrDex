@@ -41,9 +41,9 @@
 
 **Interfaces:** Consumes Task 1.
 
-- [ ] Teste de componente (RNTL, mockando `matchesRepository`, `chatRepository`, `entitlementsRepository` e `expo-router`): match de usuário verificado mostra badge (testID `verified-badge-<matchId>`); match de usuário não verificado não mostra; com dois matches (não-verificado primeiro na resposta), o verificado aparece primeiro na lista renderizada. → red
-- [ ] Implementar: após `listMatches()`, resolver `isUserVerified` por `otherUserId` único (`Promise.all`), guardar mapa `userId -> boolean`, ordenar verificados primeiro (estável) e renderizar badge "Verificado". → green
-- [ ] Full suite verde (`npx jest && npx tsc --noEmit`) → Commit `feat: show verified badge and prioritize verified users in matches`
+- [x] Teste de componente (RNTL, mockando `matchesRepository`, `chatRepository`, `entitlementsRepository` e `expo-router`): match de usuário verificado mostra badge (testID `verified-badge-<matchId>`); match de usuário não verificado não mostra; com dois matches (não-verificado primeiro na resposta), o verificado aparece primeiro na lista renderizada. → red
+- [x] Implementar: após `listMatches()`, resolver `isUserVerified` por `otherUserId` único (`Promise.all`), guardar mapa `userId -> boolean`, ordenar verificados primeiro (estável) e renderizar badge "Verificado". → green
+- [x] Full suite verde (`npx jest && npx tsc --noEmit` — 90 testes, 33 suites) → Commit `feat: show verified badge and prioritize verified users in matches`
 
 ---
 

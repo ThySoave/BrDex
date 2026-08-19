@@ -3,9 +3,11 @@ import { Alert, FlatList, Pressable, Text, View } from "react-native";
 import { router, useFocusEffect } from "expo-router";
 import { listMatches, type MatchItem } from "../../src/features/social/matchesRepository";
 import { getOrCreateConversation } from "../../src/features/social/chatRepository";
+import { isUserVerified } from "../../src/features/premium/entitlementsRepository";
 
 export default function MatchesScreen() {
   const [matches, setMatches] = useState<MatchItem[]>([]);
+  const [verifiedByUser, setVerifiedByUser] = useState<Record<string, boolean>>({});
   const [error, setError] = useState<string | null>(null);
 
   useFocusEffect(
@@ -14,9 +16,19 @@ export default function MatchesScreen() {
         .then((items) => {
           setMatches(items);
           setError(null);
+
+          const userIds = [...new Set(items.map((item) => item.otherUserId))];
+          return Promise.all(
+            userIds.map((userId) => isUserVerified(userId).then((verified) => [userId, verified] as const))
+          ).then((entries) => setVerifiedByUser(Object.fromEntries(entries)));
         })
         .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar trocas"));
     }, [])
+  );
+
+  // Verificados primeiro, ordem original preservada entre iguais
+  const sortedMatches = [...matches].sort(
+    (a, b) => Number(verifiedByUser[b.otherUserId] ?? false) - Number(verifiedByUser[a.otherUserId] ?? false)
   );
 
   const openConversation = (match: MatchItem) => {
@@ -39,7 +51,7 @@ export default function MatchesScreen() {
     <View style={{ flex: 1, padding: 16 }}>
       <FlatList
         testID="matches-list"
-        data={matches}
+        data={sortedMatches}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={
           <Text testID="matches-empty">
@@ -50,6 +62,11 @@ export default function MatchesScreen() {
         }
         renderItem={({ item }) => (
           <View testID={`match-item-${item.id}`} style={{ marginBottom: 16 }}>
+            {verifiedByUser[item.otherUserId] ? (
+              <Text testID={`verified-badge-${item.id}`} style={{ color: "#0a8f3c" }}>
+                ✓ Verificado
+              </Text>
+            ) : null}
             <Text>
               {item.role === "quero"
                 ? `Você quer: ${item.cardName}`
