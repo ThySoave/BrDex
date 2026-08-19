@@ -39,11 +39,11 @@
 **Interfaces:**
 - Produces: `news_items(id, title, summary, url, source, published_at, created_at)` com unique em `url`; `set_releases(id, set_id, set_name, released_detected_at)` com unique em `set_id`; `user_dismissed_set_releases(user_id, set_release_id, dismissed_at)` com PK composta. Tasks 2–5 usam exatamente esses nomes.
 
-- [ ] **Step 1: Write the failing pgTAP test** (`news_and_set_releases.test.sql` — 6 asserções: qualquer usuário autenticado lê `news_items`; insert direto por `authenticated` é bloqueado — só service role escreve; qualquer usuário autenticado lê `set_releases`; usuário só vê/insere seus próprios `user_dismissed_set_releases`; unique em `news_items.url` impede duplicata; unique em `set_releases.set_id` impede duplicata.)
-- [ ] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `relation "public.news_items" does not exist`.
-- [ ] **Step 3: Write the migration** (`0009_news_and_set_releases.sql`): as três tabelas acima; RLS: `news_items` e `set_releases` — select para `authenticated`, nenhum insert/update/delete para `authenticated` (só service role, usado pelas Edge Functions); `user_dismissed_set_releases` — RLS dono (select/insert `user_id = auth.uid()`).
-- [ ] **Step 4: Apply and verify** — reset + test db → PASS 6/6 novos + suite completa anterior (34 pgTAP).
-- [ ] **Step 5: Commit** — `feat: add news_items, set_releases and dismissal tracking tables`
+- [x] **Step 1: Write the failing pgTAP test** (`news_and_set_releases.test.sql` — 6 asserções: qualquer usuário autenticado lê `news_items`; insert direto por `authenticated` é bloqueado — só service role escreve; qualquer usuário autenticado lê `set_releases`; usuário só vê/insere seus próprios `user_dismissed_set_releases`; unique em `news_items.url` impede duplicata; unique em `set_releases.set_id` impede duplicata.)
+- [x] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `relation "public.news_items" does not exist`.
+- [x] **Step 3: Write the migration** (`0009_news_and_set_releases.sql`): as três tabelas acima; RLS: `news_items` e `set_releases` — select para `authenticated`, nenhum insert/update/delete para `authenticated` (só service role, usado pelas Edge Functions); `user_dismissed_set_releases` — RLS dono (select/insert `user_id = auth.uid()`).
+- [x] **Step 4: Apply and verify** — reset + test db → PASS 7/7 novos + suite completa anterior (41 pgTAP total).
+- [x] **Step 5: Commit** — `feat: add news_items, set_releases and dismissal tracking tables`
 
 ---
 
