@@ -35,11 +35,11 @@
 **Interfaces:**
 - Produces: `trades(id, conversation_id, proposed_by, created_at, confirmed_at)`; `confirm_trade(trade_id uuid) returns void` (security definer; erro se chamador não é o outro participante ou se já confirmada); `completed_trades_count(target_user uuid) returns int` (security definer, conta trades com `confirmed_at not null` de conversas onde `target_user` é participante). Task 2 usa exatamente esses nomes.
 
-- [ ] **Step 1: Write the failing pgTAP test** (`trades.test.sql` — 6 asserções: participante propõe trade na própria conversa; não-participante não insere (RLS); outro participante confirma via `confirm_trade`; quem propôs não consegue confirmar a própria trade (erro); trade já confirmada não confirma de novo (erro); `completed_trades_count` retorna 1 para ambos os participantes após a confirmação.)
-- [ ] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `relation "public.trades" does not exist`.
-- [ ] **Step 3: Write the migration** (`0011_trades.sql`): tabela + RLS (select/insert para participantes da conversa, `proposed_by = auth.uid()`; sem update/delete direto) + `confirm_trade` + `completed_trades_count`, grants para `authenticated`.
-- [ ] **Step 4: Apply and verify** — reset + test db → PASS 6/6 novos + suite anterior completa (41 pgTAP).
-- [ ] **Step 5: Commit** — `feat: add trades table with confirm flow and reputation count function`
+- [x] **Step 1: Write the failing pgTAP test** (`trades.test.sql` — 6 asserções: participante propõe trade na própria conversa; não-participante não insere (RLS); outro participante confirma via `confirm_trade`; quem propôs não consegue confirmar a própria trade (erro); trade já confirmada não confirma de novo (erro); `completed_trades_count` retorna 1 para ambos os participantes após a confirmação.)
+- [x] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `relation "public.trades" does not exist`.
+- [x] **Step 3: Write the migration** (`0011_trades.sql`): tabela + RLS (select/insert para participantes da conversa, `proposed_by = auth.uid()`; sem update/delete direto) + `confirm_trade` + `completed_trades_count`, grants para `authenticated`.
+- [x] **Step 4: Apply and verify** — reset + test db → PASS 6/6 novos + suite anterior completa (47 pgTAP total).
+- [x] **Step 5: Commit** — `feat: add trades table with confirm flow and reputation count function`
 
 ---
 
