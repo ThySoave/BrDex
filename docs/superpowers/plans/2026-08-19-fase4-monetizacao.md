@@ -37,11 +37,11 @@
 **Interfaces:**
 - Produces: `premium_subscriptions(user_id pk → auth.users, activated_at, expires_at nullable)`; função `public.is_premium(uid uuid): boolean` security definer (ativa se existe linha com `expires_at` nulo ou futuro); trigger `user_cards_enforce_free_limit` (before insert: se não premium e count(user_cards do usuário) >= 100 → exception `P0001` com mensagem "Limite de 100 cartas no plano grátis"). RLS: usuário lê a própria assinatura; escrita só por service role (sem policy de insert para authenticated).
 
-- [ ] **Step 1: Write the failing pgTAP test** (`premium.test.sql` — 4 asserções: `is_premium` falso sem assinatura; verdadeiro com assinatura ativa; falso com assinatura expirada; inserção da carta 101 falha para usuário grátis — usar loop para inserir 100 cartas.)
-- [ ] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `function public.is_premium(uuid) does not exist`.
-- [ ] **Step 3: Write the migration** (`0006_premium.sql`).
-- [ ] **Step 4: Apply and verify** — reset + test db → PASS 4/4 novos + 23 anteriores.
-- [ ] **Step 5: Commit** — `feat: add premium subscriptions with free-tier card limit`
+- [x] **Step 1: Write the failing pgTAP test** (`premium.test.sql` — 4 asserções: `is_premium` falso sem assinatura; verdadeiro com assinatura ativa; falso com assinatura expirada; inserção da carta 101 falha para usuário grátis — usar loop para inserir 100 cartas.)
+- [x] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `function public.is_premium(uuid) does not exist`.
+- [x] **Step 3: Write the migration** (`0006_premium.sql`).
+- [x] **Step 4: Apply and verify** — reset + test db → PASS 4/4 novos + 23 anteriores.
+- [x] **Step 5: Commit** — `feat: add premium subscriptions with free-tier card limit`
 
 ---
 
