@@ -35,11 +35,11 @@
 **Interfaces:**
 - Produces: `price_alerts(id, user_id, catalog_card_id, language, threshold_brl, created_at)` com unique `(user_id, catalog_card_id, language)`; `triggered_price_alerts() returns table(alert_id uuid, catalog_card_id uuid, card_name text, language card_language, threshold_brl numeric, current_price numeric)`. Task 2 usa exatamente esses nomes.
 
-- [ ] **Step 1: Write the failing pgTAP test** (`price_alerts.test.sql` — 5 asserções: dono cria alerta; outro usuário não vê alertas alheios; outro usuário não insere alerta em nome do dono (RLS); `triggered_price_alerts()` retorna o alerta quando a mediana comunitária >= threshold (seed: carta no catálogo + user_card com `price_paid` formando mediana); alerta com threshold acima da mediana não é retornado.)
-- [ ] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `relation "public.price_alerts" does not exist`.
-- [ ] **Step 3: Write the migration** (`0012_price_alerts.sql`): tabela + RLS dono (select/insert/delete `user_id = auth.uid()`) + função `language sql stable` (security invoker) juntando `price_alerts` × `price_community` × `cards_catalog`, grants para `authenticated`.
-- [ ] **Step 4: Apply and verify** — reset + test db → PASS 5/5 novos + suite anterior completa (47 pgTAP).
-- [ ] **Step 5: Commit** — `feat: add price alerts table and trigger query function`
+- [x] **Step 1: Write the failing pgTAP test** (`price_alerts.test.sql` — 5 asserções: dono cria alerta; outro usuário não vê alertas alheios; outro usuário não insere alerta em nome do dono (RLS); `triggered_price_alerts()` retorna o alerta quando a mediana comunitária >= threshold (seed: carta no catálogo + user_card com `price_paid` formando mediana); alerta com threshold acima da mediana não é retornado.)
+- [x] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `relation "public.price_alerts" does not exist`.
+- [x] **Step 3: Write the migration** (`0012_price_alerts.sql`): tabela + RLS dono (select/insert/delete `user_id = auth.uid()`) + função `language sql stable` (security invoker) juntando `price_alerts` × `price_community` × `cards_catalog`, grants para `authenticated`.
+- [x] **Step 4: Apply and verify** — reset + test db → PASS 5/5 novos + suite anterior completa (52 pgTAP total).
+- [x] **Step 5: Commit** — `feat: add price alerts table and trigger query function`
 
 ---
 
