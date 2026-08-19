@@ -50,8 +50,8 @@
 **Interfaces:**
 - Produces: `Trade { id; conversationId; proposedBy; createdAt; confirmedAt: string | null }`; `listTrades(conversationId): Promise<Trade[]>` (order `created_at desc`); `proposeTrade(conversationId): Promise<void>` (insert com usuário atual como `proposed_by`); `confirmTrade(tradeId): Promise<void>` (RPC `confirm_trade`); `completedTradesCount(userId): Promise<number>` (RPC `completed_trades_count`); erros viram `throw new Error(message)`.
 
-- [ ] Teste `tradesRepository` (4 casos: listTrades mapeado; proposeTrade insere com usuário atual; confirmTrade chama RPC com o id; completedTradesCount retorna o número do RPC; + erro propagado em pelo menos um deles) → red → implementação → green.
-- [ ] Commit `feat: add trades repository`
+- [x] Teste `tradesRepository` (5 casos: listTrades mapeado; erro propagado; proposeTrade insere com usuário atual; confirmTrade chama RPC com o id; completedTradesCount retorna o número do RPC) → red → implementação → green.
+- [x] Commit `feat: add trades repository`
 
 ---
 
