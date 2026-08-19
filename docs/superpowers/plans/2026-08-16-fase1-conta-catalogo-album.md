@@ -100,7 +100,7 @@ BrDex/
 **Interfaces:**
 - Produces: a working `npm test` command and a working `npx expo start` command that later tasks build on.
 
-- [ ] **Step 1: Create the Expo app**
+- [x] **Step 1: Create the Expo app**
 
 ```bash
 cd "/home/tsc/Documents/TSC/Testes/BrDex"
@@ -111,13 +111,13 @@ The directory is non-empty (it contains `docs/` and `.git`), so `create-expo-app
 confirmation before proceeding; `yes |` answers that prompt non-interactively so the command
 does not hang.
 
-- [ ] **Step 2: Install Expo Router and its peer dependencies**
+- [x] **Step 2: Install Expo Router and its peer dependencies**
 
 ```bash
 npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar
 ```
 
-- [ ] **Step 3: Configure Expo Router as the entry point**
+- [x] **Step 3: Configure Expo Router as the entry point**
 
 Edit `package.json`, set:
 
@@ -138,7 +138,7 @@ Edit `app.json`, add inside `"expo"`:
 }
 ```
 
-- [ ] **Step 4: Create the root layout and index redirect**
+- [x] **Step 4: Create the root layout and index redirect**
 
 Create `app/_layout.tsx`:
 
@@ -160,7 +160,7 @@ export default function Index() {
 }
 ```
 
-- [ ] **Step 5: Install and configure Jest**
+- [x] **Step 5: Install and configure Jest**
 
 ```bash
 npx expo install jest-expo jest @types/jest --dev
@@ -190,7 +190,7 @@ Add to `package.json` scripts:
 }
 ```
 
-- [ ] **Step 6: Write the failing sanity test**
+- [x] **Step 6: Write the failing sanity test**
 
 Create `src/lib/sanity.test.ts`:
 
@@ -202,12 +202,12 @@ describe("test pipeline", () => {
 });
 ```
 
-- [ ] **Step 7: Run the test to verify the pipeline works**
+- [x] **Step 7: Run the test to verify the pipeline works**
 
 Run: `npm test`
 Expected: PASS — 1 test passed.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add -A
@@ -226,7 +226,7 @@ git commit -m "chore: scaffold Expo Router app with Jest test pipeline"
 **Interfaces:**
 - Produces: `cards_catalog(id, name, number, set_name, set_id, rarity, image_url, created_at)` and `user_cards(id, user_id, catalog_card_id, language, condition, price_paid, price_sold, photo_url, status, created_at, updated_at)`. Later tasks (3, 8, 10) query these exact column names.
 
-- [ ] **Step 1: Install the Supabase CLI and initialize the project**
+- [x] **Step 1: Install the Supabase CLI and initialize the project**
 
 ```bash
 npm install --save-dev supabase
@@ -235,7 +235,7 @@ npx supabase init
 
 Confirm `supabase/config.toml` was created.
 
-- [ ] **Step 2: Start the local Supabase stack**
+- [x] **Step 2: Start the local Supabase stack**
 
 ```bash
 npx supabase start
@@ -243,7 +243,7 @@ npx supabase start
 
 Expected: output includes `API URL`, `anon key`, `service_role key` — keep this terminal running or note the printed keys.
 
-- [ ] **Step 3: Write the failing RLS test**
+- [x] **Step 3: Write the failing RLS test**
 
 Create `supabase/tests/database/user_cards_rls.test.sql`:
 
@@ -292,7 +292,7 @@ select * from finish();
 rollback;
 ```
 
-- [ ] **Step 4: Run the test to verify it fails**
+- [x] **Step 4: Run the test to verify it fails**
 
 ```bash
 npx supabase test db
@@ -300,7 +300,7 @@ npx supabase test db
 
 Expected: FAIL — `relation "public.cards_catalog" does not exist` (no migration yet).
 
-- [ ] **Step 5: Write the migration**
+- [x] **Step 5: Write the migration**
 
 Create `supabase/migrations/0001_init_schema.sql`:
 
@@ -372,7 +372,7 @@ create index user_cards_catalog_card_id_idx on public.user_cards (catalog_card_i
 create index cards_catalog_name_idx on public.cards_catalog using gin (to_tsvector('simple', name));
 ```
 
-- [ ] **Step 6: Apply the migration and run the test again**
+- [x] **Step 6: Apply the migration and run the test again**
 
 ```bash
 npx supabase db reset
@@ -381,7 +381,7 @@ npx supabase test db
 
 Expected: PASS — 3/3 assertions pass.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add supabase/
@@ -401,13 +401,13 @@ git commit -m "feat: add cards_catalog and user_cards schema with RLS policies"
 - Consumes: `EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY` env vars.
 - Produces: `getSupabaseClient(): SupabaseClient` — every repository in later tasks imports this.
 
-- [ ] **Step 1: Install the Supabase JS client**
+- [x] **Step 1: Install the Supabase JS client**
 
 ```bash
 npx expo install @supabase/supabase-js @react-native-async-storage/async-storage
 ```
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 Create `src/lib/supabaseClient.test.ts`:
 
@@ -444,12 +444,12 @@ describe("getSupabaseClient", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- supabaseClient`
 Expected: FAIL with "Cannot find module './supabaseClient'".
 
-- [ ] **Step 3: Write the implementation**
+- [x] **Step 3: Write the implementation**
 
 Create `src/lib/supabaseClient.ts`:
 
@@ -492,12 +492,12 @@ export function getSupabaseClient(): SupabaseClient {
 npx expo install react-native-url-polyfill
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npm test -- supabaseClient`
 Expected: PASS — 2 tests passed.
 
-- [ ] **Step 5: Document the env vars**
+- [x] **Step 5: Document the env vars**
 
 Create `.env.example`:
 
@@ -506,7 +506,7 @@ EXPO_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 EXPO_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/lib/ .env.example package.json
@@ -525,7 +525,7 @@ git commit -m "feat: add Supabase client wrapper with env validation"
 - Consumes: `getSupabaseClient` from `src/lib/supabaseClient.ts` (Task 3).
 - Produces: `signUp(email: string, password: string): Promise<void>`, `signIn(email: string, password: string): Promise<void>`, `signOut(): Promise<void>`, `getSession(): Promise<Session | null>` — Task 5 (screens) and Task 9's account gating call these.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `src/features/auth/authRepository.test.ts`:
 
@@ -588,12 +588,12 @@ describe("authRepository", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- authRepository`
 Expected: FAIL with "Cannot find module './authRepository'".
 
-- [ ] **Step 3: Write the implementation**
+- [x] **Step 3: Write the implementation**
 
 Create `src/features/auth/authRepository.ts`:
 
@@ -630,12 +630,12 @@ export async function getSession(): Promise<Session | null> {
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npm test -- authRepository`
 Expected: PASS — 5 tests passed.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/features/auth/
@@ -653,7 +653,7 @@ git commit -m "feat: add auth repository wrapping Supabase email/password auth"
 **Interfaces:**
 - Consumes: `signIn`, `signUp` from `src/features/auth/authRepository.ts` (Task 4).
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `app/(auth)/login.test.tsx`:
 
@@ -686,12 +686,12 @@ describe("LoginScreen", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- login.test`
 Expected: FAIL with "Cannot find module './login'".
 
-- [ ] **Step 3: Write the implementation**
+- [x] **Step 3: Write the implementation**
 
 Create `app/(auth)/_layout.tsx`:
 
@@ -806,12 +806,12 @@ export default function SignupScreen() {
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npm test -- login.test`
 Expected: PASS — 1 test passed.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add app/
@@ -829,7 +829,7 @@ git commit -m "feat: add login and signup screens"
 **Interfaces:**
 - Produces: `buildGoogleOAuthUrl(supabaseUrl: string, redirectTo: string): string` — used by the login screen's "Entrar com Google" button (wired in this task).
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `src/features/auth/googleAuth.test.ts`:
 
@@ -849,12 +849,12 @@ describe("buildGoogleOAuthUrl", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- googleAuth`
 Expected: FAIL with "Cannot find module './googleAuth'".
 
-- [ ] **Step 3: Write the implementation**
+- [x] **Step 3: Write the implementation**
 
 Create `src/features/auth/googleAuth.ts`:
 
@@ -868,12 +868,12 @@ export function buildGoogleOAuthUrl(supabaseUrl: string, redirectTo: string): st
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npm test -- googleAuth`
 Expected: PASS — 1 test passed.
 
-- [ ] **Step 5: Wire it into the login screen**
+- [x] **Step 5: Wire it into the login screen**
 
 ```bash
 npx expo install expo-auth-session expo-web-browser
@@ -899,12 +899,12 @@ Modify `app/(auth)/login.tsx` — add below the `Link` at the end of the returne
       </Pressable>
 ```
 
-- [ ] **Step 6: Run the full test suite to confirm nothing broke**
+- [x] **Step 6: Run the full test suite to confirm nothing broke**
 
 Run: `npm test`
 Expected: PASS — all tests from Tasks 1-6 pass.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add -A
@@ -923,7 +923,7 @@ git commit -m "feat: add Google OAuth redirect helper and wire it into login scr
 **Interfaces:**
 - Produces: `mapPokemonTcgCardToRow(card: PokemonTcgApiCard): CardsCatalogRow` — matches the `cards_catalog` columns from Task 2 exactly (`external_id, name, number, set_name, set_id, rarity, image_url`).
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `supabase/functions/sync-catalog/transform.test.ts`:
 
@@ -969,7 +969,7 @@ Deno.test("mapPokemonTcgCardToRow defaults rarity to null when absent", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 ```bash
 cd supabase/functions/sync-catalog
@@ -978,7 +978,7 @@ deno test --allow-none transform.test.ts
 
 Expected: FAIL — "Module not found './transform.ts'".
 
-- [ ] **Step 3: Write the implementation**
+- [x] **Step 3: Write the implementation**
 
 Create `supabase/functions/sync-catalog/transform.ts`:
 
@@ -1015,7 +1015,7 @@ export function mapPokemonTcgCardToRow(card: PokemonTcgApiCard): CardsCatalogRow
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 ```bash
 deno test --allow-none transform.test.ts
@@ -1023,7 +1023,7 @@ deno test --allow-none transform.test.ts
 
 Expected: PASS — 2 tests passed.
 
-- [ ] **Step 5: Write the Edge Function entrypoint that uses the pure transform**
+- [x] **Step 5: Write the Edge Function entrypoint that uses the pure transform**
 
 Create `supabase/functions/sync-catalog/index.ts`:
 
@@ -1076,7 +1076,7 @@ Deno.serve(async () => {
 });
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add supabase/functions/
@@ -1096,7 +1096,7 @@ git commit -m "feat: add catalog sync Edge Function with pure API-to-row transfo
 - Consumes: `getSupabaseClient` (Task 3). `cards_catalog` table shape from Task 2.
 - Produces: `CatalogCard` type and `searchCatalogCards(query, page)` — Task 10 (add-card screen) reuses `CatalogCard` and `CardGridItem`.
 
-- [ ] **Step 1: Write the failing test for the pure filter helper**
+- [x] **Step 1: Write the failing test for the pure filter helper**
 
 Create `src/features/catalog/types.ts`:
 
@@ -1140,12 +1140,12 @@ describe("filterCatalogCards", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- catalogSearch`
 Expected: FAIL with "Cannot find module './catalogSearch'".
 
-- [ ] **Step 3: Write the pure filter implementation**
+- [x] **Step 3: Write the pure filter implementation**
 
 Create `src/features/catalog/catalogSearch.ts`:
 
@@ -1161,12 +1161,12 @@ export function filterCatalogCards(cards: CatalogCard[], query: string): Catalog
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npm test -- catalogSearch`
 Expected: PASS — 3 tests passed.
 
-- [ ] **Step 5: Write the failing repository test**
+- [x] **Step 5: Write the failing repository test**
 
 Create `src/features/catalog/catalogRepository.test.ts`:
 
@@ -1228,12 +1228,12 @@ describe("fetchCatalogPage", () => {
 });
 ```
 
-- [ ] **Step 6: Run the test to verify it fails**
+- [x] **Step 6: Run the test to verify it fails**
 
 Run: `npm test -- catalogRepository`
 Expected: FAIL with "Cannot find module './catalogRepository'".
 
-- [ ] **Step 7: Write the repository implementation**
+- [x] **Step 7: Write the repository implementation**
 
 Create `src/features/catalog/catalogRepository.ts`:
 
@@ -1268,12 +1268,12 @@ export async function fetchCatalogPage(page: number): Promise<CatalogCard[]> {
 }
 ```
 
-- [ ] **Step 8: Run the test to verify it passes**
+- [x] **Step 8: Run the test to verify it passes**
 
 Run: `npm test -- catalogRepository`
 Expected: PASS — 2 tests passed.
 
-- [ ] **Step 9: Build the screen**
+- [x] **Step 9: Build the screen**
 
 Create `src/components/CardGridItem.tsx`:
 
@@ -1347,12 +1347,12 @@ export default function CatalogScreen() {
 }
 ```
 
-- [ ] **Step 10: Run the full suite**
+- [x] **Step 10: Run the full suite**
 
 Run: `npm test`
 Expected: PASS — all tests pass.
 
-- [ ] **Step 11: Commit**
+- [x] **Step 11: Commit**
 
 ```bash
 git add -A
@@ -1370,7 +1370,7 @@ git commit -m "feat: add catalog search screen backed by cards_catalog"
 **Interfaces:**
 - Produces: `CARD_CONDITIONS: { value: CardCondition; label: string }[]` and `CardCondition` type — Task 10's add-card form and picker consume this exact list, in this exact order.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `src/features/collection/conditionScale.test.ts`:
 
@@ -1397,12 +1397,12 @@ describe("CARD_CONDITIONS", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npm test -- conditionScale`
 Expected: FAIL with "Cannot find module './conditionScale'".
 
-- [ ] **Step 3: Write the implementation**
+- [x] **Step 3: Write the implementation**
 
 Create `src/features/collection/conditionScale.ts`:
 
@@ -1419,12 +1419,12 @@ export const CARD_CONDITIONS: { value: CardCondition; label: string }[] = [
 ];
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npm test -- conditionScale`
 Expected: PASS — 2 tests passed.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/features/collection/conditionScale.ts src/features/collection/conditionScale.test.ts
@@ -1444,7 +1444,7 @@ git commit -m "feat: add fixed card condition scale"
 - Consumes: `getSupabaseClient` (Task 3), `CatalogCard` (Task 8), `CardCondition`/`CARD_CONDITIONS` (Task 9), `CardGridItem` (Task 8).
 - Produces: `addUserCard(input: AddUserCardInput): Promise<void>`, `listUserCards(): Promise<UserCard[]>`.
 
-- [ ] **Step 1: Define the types**
+- [x] **Step 1: Define the types**
 
 Create `src/features/collection/types.ts`:
 
@@ -1474,7 +1474,7 @@ export interface UserCard {
 }
 ```
 
-- [ ] **Step 2: Write the failing repository test**
+- [x] **Step 2: Write the failing repository test**
 
 Create `src/features/collection/collectionRepository.test.ts`:
 
@@ -1564,12 +1564,12 @@ describe("listUserCards", () => {
 });
 ```
 
-- [ ] **Step 3: Run the test to verify it fails**
+- [x] **Step 3: Run the test to verify it fails**
 
 Run: `npm test -- collectionRepository`
 Expected: FAIL with "Cannot find module './collectionRepository'".
 
-- [ ] **Step 4: Write the implementation**
+- [x] **Step 4: Write the implementation**
 
 Create `src/features/collection/collectionRepository.ts`:
 
@@ -1635,12 +1635,12 @@ export async function listUserCards(): Promise<UserCard[]> {
 }
 ```
 
-- [ ] **Step 5: Run the test to verify it passes**
+- [x] **Step 5: Run the test to verify it passes**
 
 Run: `npm test -- collectionRepository`
 Expected: PASS — 2 tests passed.
 
-- [ ] **Step 6: Build the add-card screen**
+- [x] **Step 6: Build the add-card screen**
 
 Create `app/card/add.tsx`:
 
@@ -1732,7 +1732,7 @@ export default function AddCardScreen() {
 }
 ```
 
-- [ ] **Step 7: Build the album screen**
+- [x] **Step 7: Build the album screen**
 
 Create `app/(tabs)/album.tsx`:
 
@@ -1778,12 +1778,12 @@ export default function AlbumScreen() {
 }
 ```
 
-- [ ] **Step 8: Run the full test suite**
+- [x] **Step 8: Run the full test suite**
 
 Run: `npm test`
 Expected: PASS — all tests from Tasks 1-10 pass.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add -A

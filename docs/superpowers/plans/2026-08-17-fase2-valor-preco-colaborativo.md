@@ -42,7 +42,7 @@
 **Interfaces:**
 - Produces: tabela `price_reference(id, catalog_card_id, language, price_brl, source, captured_at)` com unique `(catalog_card_id, language)`; view `price_community(catalog_card_id, language, median_price, min_price, max_price, sample_count)`. Tasks 3 e 5 consultam exatamente esses nomes.
 
-- [ ] **Step 1: Write the failing pgTAP test**
+- [x] **Step 1: Write the failing pgTAP test**
 
 Create `supabase/tests/database/price_community.test.sql`:
 
@@ -113,7 +113,7 @@ select * from finish();
 rollback;
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 ```bash
 sg docker -c "npx supabase test db"
@@ -121,7 +121,7 @@ sg docker -c "npx supabase test db"
 
 Expected: FAIL — `relation "public.price_community" does not exist`.
 
-- [ ] **Step 3: Write the migration**
+- [x] **Step 3: Write the migration**
 
 Create `supabase/migrations/0002_price_tables.sql`:
 
@@ -181,7 +181,7 @@ group by catalog_card_id, language;
 grant select on public.price_community to authenticated;
 ```
 
-- [ ] **Step 4: Apply and verify the test passes**
+- [x] **Step 4: Apply and verify the test passes**
 
 ```bash
 sg docker -c "npx supabase db reset"
@@ -190,7 +190,7 @@ sg docker -c "npx supabase test db"
 
 Expected: PASS — todos os testes (novos 5/5 e os 3 da Fase 1).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add supabase/
@@ -209,7 +209,7 @@ git commit -m "feat: add price_reference table and price_community view with out
 - Consumes: `price_community` e `price_reference` (Task 1); `user_cards` (Fase 1).
 - Produces: tabela `collection_value_snapshots(id, user_id, captured_on, total_value)` com unique `(user_id, captured_on)`; função `public.snapshot_collection_values()`. Task 5 lê `captured_on` e `total_value`.
 
-- [ ] **Step 1: Write the failing pgTAP test**
+- [x] **Step 1: Write the failing pgTAP test**
 
 Create `supabase/tests/database/collection_value_snapshots.test.sql`:
 
@@ -274,7 +274,7 @@ select * from finish();
 rollback;
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 ```bash
 sg docker -c "npx supabase test db"
@@ -282,7 +282,7 @@ sg docker -c "npx supabase test db"
 
 Expected: FAIL — `function public.snapshot_collection_values() does not exist`.
 
-- [ ] **Step 3: Write the migration**
+- [x] **Step 3: Write the migration**
 
 Create `supabase/migrations/0003_collection_value_snapshots.sql`:
 
@@ -335,7 +335,7 @@ select cron.schedule(
 );
 ```
 
-- [ ] **Step 4: Apply and verify the test passes**
+- [x] **Step 4: Apply and verify the test passes**
 
 ```bash
 sg docker -c "npx supabase db reset"
@@ -344,7 +344,7 @@ sg docker -c "npx supabase test db"
 
 Expected: PASS — 4/4 novos + todos os anteriores.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add supabase/
@@ -364,7 +364,7 @@ git commit -m "feat: add daily collection value snapshots with pg_cron schedule"
 - Consumes: `getSupabaseClient` de `src/lib/supabaseClient.ts`; view `price_community` e tabela `price_reference` (Task 1); tipo `CardLanguage` de `src/features/collection/types.ts`.
 - Produces: `fetchCardPrices(catalogCardId: string, language: CardLanguage): Promise<CardPricesData>` — Task 4 consome. Tipo `CardPricesData { community: CommunityPrice | null; reference: ReferencePrice | null }`.
 
-- [ ] **Step 1: Define the types**
+- [x] **Step 1: Define the types**
 
 Create `src/features/pricing/types.ts`:
 
@@ -387,7 +387,7 @@ export interface CardPricesData {
 }
 ```
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 Create `src/features/pricing/pricingRepository.test.ts`:
 
@@ -456,12 +456,12 @@ describe("fetchCardPrices", () => {
 });
 ```
 
-- [ ] **Step 3: Run the test to verify it fails**
+- [x] **Step 3: Run the test to verify it fails**
 
 Run: `npx jest pricingRepository`
 Expected: FAIL — "Cannot find module './pricingRepository'".
 
-- [ ] **Step 4: Write the implementation**
+- [x] **Step 4: Write the implementation**
 
 Create `src/features/pricing/pricingRepository.ts`:
 
@@ -519,12 +519,12 @@ export async function fetchCardPrices(
 }
 ```
 
-- [ ] **Step 5: Run the test to verify it passes**
+- [x] **Step 5: Run the test to verify it passes**
 
 Run: `npx jest pricingRepository`
 Expected: PASS — 3 tests passed.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/features/pricing/
@@ -544,7 +544,7 @@ git commit -m "feat: add pricing repository reading community and reference pric
 - Consumes: `fetchCardPrices` e `CardPricesData` (Task 3); `CardLanguage` (Fase 1).
 - Produces: componente `CardPrices({ catalogCardId, language })` — busca sozinho via `fetchCardPrices` e renderiza.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `src/components/CardPrices.test.tsx`:
 
@@ -589,12 +589,12 @@ describe("CardPrices", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npx jest CardPrices`
 Expected: FAIL — "Cannot find module './CardPrices'".
 
-- [ ] **Step 3: Write the component**
+- [x] **Step 3: Write the component**
 
 Create `src/components/CardPrices.tsx`:
 
@@ -660,12 +660,12 @@ export function CardPrices({
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npx jest CardPrices`
 Expected: PASS — 2 tests passed.
 
-- [ ] **Step 5: Wire into the add-card screen**
+- [x] **Step 5: Wire into the add-card screen**
 
 Modify `app/card/add.tsx` — adicionar o import no topo, junto aos demais:
 
@@ -681,12 +681,12 @@ E dentro do `ScrollView`, como primeiro elemento (antes de `<Text>Idioma</Text>`
 
 (Como o componente recebe `language` do estado da tela, trocar o idioma re-busca o preço do mercado certo automaticamente.)
 
-- [ ] **Step 6: Run the full suite**
+- [x] **Step 6: Run the full suite**
 
 Run: `npx jest`
 Expected: PASS — todos os testes.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/components/ app/card/add.tsx
@@ -705,7 +705,7 @@ git commit -m "feat: show community and reference prices on the add-card screen"
 - Consumes: `getSupabaseClient`; tabela `collection_value_snapshots` (Task 2).
 - Produces: `fetchValueSnapshots(): Promise<ValueSnapshot[]>` com `ValueSnapshot { capturedOn: string; totalValue: number }`, ordenado do mais antigo ao mais recente — Task 6 consome.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 Create `src/features/collection/valueRepository.test.ts`:
 
@@ -752,12 +752,12 @@ describe("fetchValueSnapshots", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npx jest valueRepository`
 Expected: FAIL — "Cannot find module './valueRepository'".
 
-- [ ] **Step 3: Write the implementation**
+- [x] **Step 3: Write the implementation**
 
 Create `src/features/collection/valueRepository.ts`:
 
@@ -788,12 +788,12 @@ export async function fetchValueSnapshots(): Promise<ValueSnapshot[]> {
 
 (O RLS da Task 2 garante que só vêm os snapshots do próprio usuário — não precisa de filtro por `user_id` no cliente.)
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npx jest valueRepository`
 Expected: PASS — 2 tests passed.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/features/collection/valueRepository.ts src/features/collection/valueRepository.test.ts
@@ -814,7 +814,7 @@ git commit -m "feat: add collection value snapshots repository"
 - Consumes: `fetchValueSnapshots` / `ValueSnapshot` (Task 5).
 - Produces: `buildChartBars(snapshots: ValueSnapshot[], maxBarHeight: number): ChartBar[]` com `ChartBar { label: string; height: number; value: number }` — alturas normalizadas pelo maior valor da série.
 
-- [ ] **Step 1: Write the failing test for the pure helper**
+- [x] **Step 1: Write the failing test for the pure helper**
 
 Create `src/features/collection/valueChart.test.ts`:
 
@@ -857,12 +857,12 @@ describe("buildChartBars", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `npx jest valueChart`
 Expected: FAIL — "Cannot find module './valueChart'".
 
-- [ ] **Step 3: Write the pure helper**
+- [x] **Step 3: Write the pure helper**
 
 Create `src/features/collection/valueChart.ts`:
 
@@ -896,12 +896,12 @@ export function buildChartBars(snapshots: ValueSnapshot[], maxBarHeight: number)
 }
 ```
 
-- [ ] **Step 4: Run the test to verify it passes**
+- [x] **Step 4: Run the test to verify it passes**
 
 Run: `npx jest valueChart`
 Expected: PASS — 3 tests passed.
 
-- [ ] **Step 5: Build the screen**
+- [x] **Step 5: Build the screen**
 
 Create `app/(tabs)/value.tsx`:
 
@@ -969,7 +969,7 @@ export default function ValueScreen() {
 }
 ```
 
-- [ ] **Step 6: Register the tab**
+- [x] **Step 6: Register the tab**
 
 Modify `app/(tabs)/_layout.tsx` — substituir o conteúdo por:
 
@@ -987,12 +987,12 @@ export default function TabsLayout() {
 }
 ```
 
-- [ ] **Step 7: Run the full suite and the type check**
+- [x] **Step 7: Run the full suite and the type check**
 
 Run: `npx jest && npx tsc --noEmit`
 Expected: todos os testes passam; tsc sem erros.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/features/collection/valueChart.ts src/features/collection/valueChart.test.ts "app/(tabs)/value.tsx" "app/(tabs)/_layout.tsx"
