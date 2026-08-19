@@ -116,9 +116,9 @@
 
 **Interfaces:** Consumes Task 2.
 
-- [ ] Verificar como o agendamento de `sync-catalog` foi feito (documentação/migration existente) e replicar o mesmo padrão para `fetch-news`, com frequência razoável (ex: a cada 6h — notícias não mudam a cada minuto).
-- [ ] Apply and verify — `sg docker -c "npx supabase db reset"` sem erros, job aparece listado em `cron.job` (se aplicável ao ambiente local).
-- [ ] Commit `feat: schedule fetch-news edge function via pg_cron`
+- [x] Verificar como o agendamento de `sync-catalog` foi feito (documentação/migration existente) e replicar o mesmo padrão para `fetch-news`, com frequência razoável (ex: a cada 6h — notícias não mudam a cada minuto). (Único cron existente era o de snapshots em `0003`; como Edge Function é invocada por HTTP, o job usa pg_cron + pg_net com URL/service key lidas do Vault em runtime.)
+- [x] Apply and verify — `sg docker -c "npx supabase db reset"` sem erros, job `fetch-news-every-6h` listado em `cron.job`; suite pgTAP 41/41.
+- [x] Commit `feat: schedule fetch-news edge function via pg_cron`
 
 ---
 
