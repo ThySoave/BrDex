@@ -117,9 +117,9 @@
 
 **Interfaces:** Consumes Tasks 5 e 6; params de rota `conversationId` + query `other`.
 
-- [ ] Tela: aviso fixo (texto exato das Global Constraints, `testID chat-disclaimer`); botões Denunciar (`reportUser(other, "denúncia feita a partir do chat", "conversa <id>")` + Alert) e Bloquear (`blockUser(other)` + Alert + `router.back()`); FlatList de mensagens (`listMessages` no mount + `subscribeToMessages` com dedupe por id e cleanup no unmount); input + Enviar (`sendMessage` e recarrega).
-- [ ] Verificação completa: `npx jest && npx tsc --noEmit` e `sg docker -c "npx supabase test db"` — tudo verde.
-- [ ] Commit `feat: add chat screen with disclaimer, report and block actions`.
+- [x] Tela: aviso fixo (texto exato das Global Constraints, `testID chat-disclaimer`); botões Denunciar (`reportUser(other, "denúncia feita a partir do chat", "conversa <id>")` + Alert) e Bloquear (`blockUser(other)` + Alert + `router.back()`); FlatList de mensagens (`listMessages` no mount + `subscribeToMessages` com dedupe por id e cleanup no unmount); input + Enviar (`sendMessage` e recarrega).
+- [x] Verificação completa: `npx jest && npx tsc --noEmit` e `sg docker -c "npx supabase test db"` — tudo verde.
+- [x] Commit `feat: add chat screen with disclaimer, report and block actions`.
 
 ---
 
