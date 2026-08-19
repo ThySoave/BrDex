@@ -8,6 +8,13 @@ import {
   type ChatMessage
 } from "../../src/features/social/chatRepository";
 import { blockUser, reportUser } from "../../src/features/social/safetyRepository";
+import {
+  completedTradesCount,
+  confirmTrade,
+  listTrades,
+  proposeTrade,
+  type Trade
+} from "../../src/features/social/tradesRepository";
 
 export default function ChatScreen() {
   const { conversationId, other } = useLocalSearchParams<{
@@ -16,6 +23,22 @@ export default function ChatScreen() {
   }>();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState("");
+  const [trades, setTrades] = useState<Trade[]>([]);
+  const [reputation, setReputation] = useState<number | null>(null);
+
+  const loadTrades = () => {
+    if (!conversationId) {
+      return;
+    }
+    listTrades(conversationId)
+      .then(setTrades)
+      .catch(() => setTrades([]));
+    if (other) {
+      completedTradesCount(other)
+        .then(setReputation)
+        .catch(() => setReputation(null));
+    }
+  };
 
   useEffect(() => {
     if (!conversationId) {
@@ -25,6 +48,8 @@ export default function ChatScreen() {
     listMessages(conversationId)
       .then(setMessages)
       .catch((err: Error) => Alert.alert("Erro", err.message));
+
+    loadTrades();
 
     const unsubscribe = subscribeToMessages(conversationId, (message) => {
       setMessages((current) =>
@@ -72,8 +97,51 @@ export default function ChatScreen() {
       .catch((err: Error) => Alert.alert("Erro", err.message));
   };
 
+  const handleProposeTrade = () => {
+    if (!conversationId) {
+      return;
+    }
+
+    proposeTrade(conversationId)
+      .then(() => {
+        Alert.alert("Proposta enviada", "Aguardando a confirmação do outro usuário.");
+        loadTrades();
+      })
+      .catch((err: Error) => Alert.alert("Erro", err.message));
+  };
+
+  const handleConfirmTrade = (tradeId: string) => {
+    confirmTrade(tradeId)
+      .then(loadTrades)
+      .catch((err: Error) => Alert.alert("Erro", err.message));
+  };
+
+  const pendingFromOther = trades.find((t) => !t.confirmedAt && t.proposedBy === other);
+  const pendingOwn = trades.find((t) => !t.confirmedAt && t.proposedBy !== other);
+
   return (
     <View style={{ flex: 1, padding: 16 }}>
+      {reputation !== null ? (
+        <Text testID="chat-reputation" style={{ color: "#666" }}>
+          {`${reputation} ${reputation === 1 ? "negociação concluída" : "negociações concluídas"}`}
+        </Text>
+      ) : null}
+      {pendingFromOther ? (
+        <Pressable
+          testID="chat-confirm-trade"
+          onPress={() => handleConfirmTrade(pendingFromOther.id)}
+          style={{ marginVertical: 4 }}
+        >
+          <Text style={{ color: "#0a66c2" }}>Confirmar troca</Text>
+        </Pressable>
+      ) : null}
+      {!pendingOwn ? (
+        <Pressable testID="chat-propose-trade" onPress={handleProposeTrade} style={{ marginVertical: 4 }}>
+          <Text style={{ color: "#0a66c2" }}>Troca concluída</Text>
+        </Pressable>
+      ) : (
+        <Text style={{ color: "#666" }}>Proposta de troca aguardando confirmação.</Text>
+      )}
       <Text testID="chat-disclaimer">
         A negociação (pagamento, entrega) é por conta dos usuários — o BrDex não garante nem
         participa da transação.

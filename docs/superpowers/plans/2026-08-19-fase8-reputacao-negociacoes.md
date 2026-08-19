@@ -61,9 +61,9 @@
 
 **Interfaces:** Consumes Task 2. A tela já recebe `other` (id do outro usuário) via `useLocalSearchParams`.
 
-- [ ] Teste de componente (RNTL, mesmo padrão de `home.test.tsx`, mockando repositórios e `expo-router`): mostra "N negociações concluídas" do outro usuário (testID `chat-reputation`); botão "Troca concluída" (testID `chat-propose-trade`) chama `proposeTrade`; quando há trade pendente proposta **pelo outro**, botão "Confirmar troca" (testID `chat-confirm-trade`) chama `confirmTrade`. → red
-- [ ] Implementar na tela: carregar `completedTradesCount(other)` + `listTrades(conversationId)` no mount; linha de reputação; botão propor (sempre visível, some se já existe pendente própria); botão confirmar visível só para pendente proposta pelo outro; após confirmar/propor, recarregar trades e reputação. → green
-- [ ] Full suite verde (`npx jest && npx tsc --noEmit`) → Commit `feat: show trade reputation and confirmation flow in chat`
+- [x] Teste de componente (RNTL, mesmo padrão de `home.test.tsx`, mockando repositórios e `expo-router`): mostra "N negociações concluídas" do outro usuário (testID `chat-reputation`); botão "Troca concluída" (testID `chat-propose-trade`) chama `proposeTrade`; quando há trade pendente proposta **pelo outro**, botão "Confirmar troca" (testID `chat-confirm-trade`) chama `confirmTrade`. → red
+- [x] Implementar na tela: carregar `completedTradesCount(other)` + `listTrades(conversationId)` no mount; linha de reputação; botão propor (sempre visível, some se já existe pendente própria); botão confirmar visível só para pendente proposta pelo outro; após confirmar/propor, recarregar trades e reputação. → green
+- [x] Full suite verde (`npx jest && npx tsc --noEmit` — 72 testes, 27 suites) → Commit `feat: show trade reputation and confirmation flow in chat`
 
 ---
 
