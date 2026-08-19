@@ -32,8 +32,8 @@
 **Interfaces:**
 - Produces: `buildCollectionPdfHtml(cards: UserCard[], generatedAtIso: string): string` — HTML completo com: título "Coleção BrDex", data de geração formatada pt-BR, uma linha de tabela por carta (nome, idioma, condição, preço pago formatado ou "—"), rodapé com contagem de cartas e soma dos preços pagos ("Total investido: R$ X,XX"). Task 2 usa exatamente esse nome.
 
-- [ ] Teste `exportPdf` (4 casos: HTML contém título, data e uma linha por carta; caracteres especiais no nome da carta são escapados (`<`, `&`); preço nulo vira "—" e não entra na soma; total investido soma os preços pagos com vírgula decimal) → red → implementação → green.
-- [ ] Commit `feat: add collection PDF HTML builder`
+- [x] Teste `exportPdf` (4 casos: HTML contém título, data e uma linha por carta; caracteres especiais no nome da carta são escapados (`<`, `&`); preço nulo vira "—" e não entra na soma; total investido soma os preços pagos com vírgula decimal) → red → implementação → green.
+- [x] Commit `feat: add collection PDF HTML builder`
 
 ---
 
