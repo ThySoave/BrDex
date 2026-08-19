@@ -1,18 +1,25 @@
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { fetchValueSnapshots, type ValueSnapshot } from "../../src/features/collection/valueRepository";
-import { buildChartBars } from "../../src/features/collection/valueChart";
+import { buildChartBars, limitHistoryDays } from "../../src/features/collection/valueChart";
+import { isPremium } from "../../src/features/premium/entitlementsRepository";
+
+const FREE_HISTORY_DAYS = 30;
 
 const BAR_MAX_HEIGHT = 160;
 
 export default function ValueScreen() {
   const [snapshots, setSnapshots] = useState<ValueSnapshot[]>([]);
+  const [premium, setPremium] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchValueSnapshots()
       .then(setSnapshots)
       .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar valores"));
+    isPremium()
+      .then(setPremium)
+      .catch(() => setPremium(false));
   }, []);
 
   if (error) {
@@ -23,7 +30,8 @@ export default function ValueScreen() {
     );
   }
 
-  const bars = buildChartBars(snapshots, BAR_MAX_HEIGHT);
+  const visibleSnapshots = premium ? snapshots : limitHistoryDays(snapshots, FREE_HISTORY_DAYS);
+  const bars = buildChartBars(visibleSnapshots, BAR_MAX_HEIGHT);
   const latest = snapshots.length > 0 ? snapshots[snapshots.length - 1] : null;
 
   if (!latest || bars.length === 0) {
@@ -56,6 +64,11 @@ export default function ValueScreen() {
           ))}
         </View>
       </ScrollView>
+      {!premium && (
+        <Text testID="value-upsell" style={{ color: "#666", marginTop: 12 }}>
+          Assine o premium para ver o histórico completo.
+        </Text>
+      )}
     </View>
   );
 }

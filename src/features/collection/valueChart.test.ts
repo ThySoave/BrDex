@@ -1,4 +1,4 @@
-import { buildChartBars } from "./valueChart";
+import { buildChartBars, limitHistoryDays } from "./valueChart";
 
 describe("buildChartBars", () => {
   it("normalizes heights against the max value and labels with day/month", () => {
@@ -32,5 +32,24 @@ describe("buildChartBars", () => {
 
   it("returns an empty array when every value is zero", () => {
     expect(buildChartBars([{ capturedOn: "2026-08-17", totalValue: 0 }], 100)).toEqual([]);
+  });
+});
+
+describe("limitHistoryDays", () => {
+  it("drops points older than the window relative to the latest point", () => {
+    const snapshots = [
+      { capturedOn: "2026-06-01", totalValue: 10 },
+      { capturedOn: "2026-07-20", totalValue: 20 },
+      { capturedOn: "2026-08-15", totalValue: 30 }
+    ];
+
+    expect(limitHistoryDays(snapshots, 30)).toEqual([
+      { capturedOn: "2026-07-20", totalValue: 20 },
+      { capturedOn: "2026-08-15", totalValue: 30 }
+    ]);
+  });
+
+  it("returns an empty array for an empty list", () => {
+    expect(limitHistoryDays([], 30)).toEqual([]);
   });
 });

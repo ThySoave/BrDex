@@ -62,9 +62,9 @@
 
 **Interfaces:** Produces `limitHistoryDays(points: ValuePoint[], days: number): ValuePoint[]` (puro: mantém só pontos com data >= max(data) - days). `value.tsx` chama `isPremium()` no load; se falso aplica `limitHistoryDays(points, 30)` e mostra `Text` com `testID="value-upsell"`: "Assine o premium para ver o histórico completo."
 
-- [ ] Teste de `limitHistoryDays` (2 casos: corta pontos antigos; lista vazia) → red → implementação → green.
-- [ ] Wire em `value.tsx` + full suite verde.
-- [ ] Commit `feat: limit value history to 30 days for free tier`.
+- [x] Teste de `limitHistoryDays` (2 casos: corta pontos antigos; lista vazia) → red → implementação → green.
+- [x] Wire em `value.tsx` + full suite verde.
+- [x] Commit `feat: limit value history to 30 days for free tier`.
 
 ---
 
