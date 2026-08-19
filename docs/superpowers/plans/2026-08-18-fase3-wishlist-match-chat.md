@@ -56,11 +56,11 @@
 - Consumes: `users_blocked` (Task 1).
 - Produces: `conversations(id, participant_a, participant_b, created_at)` com `check (participant_a < participant_b)` e unique do par; `messages(id, conversation_id, sender_id, body, created_at)` com body 1–2000 chars. Realtime habilitado em `messages`.
 
-- [ ] **Step 1: Write the failing pgTAP test** (`chat.test.sql` — 4 asserções: participante envia mensagem; outro participante lê; não-participante não vê a conversa; após bloqueio o envio falha com 42501.)
-- [ ] **Step 2: Run to verify it fails** — FAIL `relation "public.conversations" does not exist`.
-- [ ] **Step 3: Write the migration** (`0005_chat.sql`): `conversations` (RLS: select participantes; insert participante e par não bloqueado), `messages` (RLS: select participante; insert sender = auth.uid() + participante + par não bloqueado), índice `(conversation_id, created_at)`, `alter publication supabase_realtime add table public.messages`.
-- [ ] **Step 4: Apply and verify** — PASS 4/4 novos, 23 total.
-- [ ] **Step 5: Commit** — `feat: add conversations and messages with block-aware RLS and realtime`
+- [x] **Step 1: Write the failing pgTAP test** (`chat.test.sql` — 4 asserções: participante envia mensagem; outro participante lê; não-participante não vê a conversa; após bloqueio o envio falha com 42501.)
+- [x] **Step 2: Run to verify it fails** — FAIL `relation "public.conversations" does not exist`.
+- [x] **Step 3: Write the migration** (`0005_chat.sql`): `conversations` (RLS: select participantes; insert participante e par não bloqueado), `messages` (RLS: select participante; insert sender = auth.uid() + participante + par não bloqueado), índice `(conversation_id, created_at)`, `alter publication supabase_realtime add table public.messages`.
+- [x] **Step 4: Apply and verify** — PASS 4/4 novos, 23 total.
+- [x] **Step 5: Commit** — `feat: add conversations and messages with block-aware RLS and realtime`
 
 ---
 
