@@ -34,11 +34,11 @@
 **Interfaces:**
 - Produces: `meetups(id uuid pk default, created_by uuid not null → auth.users on delete cascade, title text not null, city text not null, starts_at timestamptz not null, description text, created_at timestamptz default now())`. RLS: select para authenticated (todos); insert para authenticated com `auth.uid() = created_by`; delete só do criador. Grants select/insert/delete para authenticated.
 
-- [ ] **Step 1: Write the failing pgTAP test** (`meetups.test.sql` — 4 asserções: criador insere o próprio encontro; outro usuário autenticado lê o encontro; insert com `created_by` de outro usuário falha (42501); delete por quem não criou não remove a linha).
-- [ ] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `relation "meetups" does not exist`.
-- [ ] **Step 3: Write the migration** (`0008_meetups.sql`).
-- [ ] **Step 4: Apply and verify** — reset + test db → PASS novos + 30 anteriores.
-- [ ] **Step 5: Commit** — `feat: add meetups table with owner-write RLS`
+- [x] **Step 1: Write the failing pgTAP test** (`meetups.test.sql` — 4 asserções: criador insere o próprio encontro; outro usuário autenticado lê o encontro; insert com `created_by` de outro usuário falha (42501); delete por quem não criou não remove a linha).
+- [x] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `relation "meetups" does not exist`.
+- [x] **Step 3: Write the migration** (`0008_meetups.sql`).
+- [x] **Step 4: Apply and verify** — reset + test db → PASS novos + 30 anteriores.
+- [x] **Step 5: Commit** — `feat: add meetups table with owner-write RLS`
 
 ---
 
