@@ -103,10 +103,10 @@
 
 **Interfaces:** Consumes Task 4.
 
-- [ ] Tela `home.tsx`: `useFocusEffect` recarrega `listNews()` e `listUndismissedSetReleases()`; topo mostra banner/card por set novo não dispensado ("Novo set: <nome>!" + botão "Ok, entendi" que chama `dismissSetRelease` e remove da lista local); abaixo, `FlatList` das notícias (`title`, `summary`, fonte, e ao tocar abre `url` externo via `Linking.openURL`); empty state para quando não há notícias ainda (ex: antes da primeira execução do `fetch-news`); testID `home-news-list` e `home-set-release-banner-<id>` para testabilidade.
-- [ ] Registrar `<Tabs.Screen name="home" options={{ title: "Início" }} />` como **primeira** aba (antes de `album`), já que é a tela inicial pós-login.
-- [ ] Teste de componente (RNTL) cobrindo: renderiza lista de notícias; renderiza banner de set novo e some ao tocar "Ok, entendi"; abre link externo ao tocar num item.
-- [ ] Full suite verde (`npx jest && npx tsc --noEmit`) → Commit `feat: add home tab with news feed and new set release banner`
+- [x] Tela `home.tsx`: `useFocusEffect` recarrega `listNews()` e `listUndismissedSetReleases()`; topo mostra banner/card por set novo não dispensado ("Novo set: <nome>!" + botão "Ok, entendi" que chama `dismissSetRelease` e remove da lista local); abaixo, `FlatList` das notícias (`title`, `summary`, fonte, e ao tocar abre `url` externo via `Linking.openURL`); empty state para quando não há notícias ainda (ex: antes da primeira execução do `fetch-news`); testID `home-news-list` e `home-set-release-banner-<id>` para testabilidade.
+- [x] Registrar `<Tabs.Screen name="home" options={{ title: "Início" }} />` como **primeira** aba (antes de `album`), já que é a tela inicial pós-login.
+- [x] Teste de componente (RNTL) cobrindo: renderiza lista de notícias; renderiza banner de set novo e some ao tocar "Ok, entendi"; abre link externo ao tocar num item.
+- [x] Full suite verde (`npx jest && npx tsc --noEmit` — 64 testes, 25 suites) → Commit `feat: add home tab with news feed and new set release banner`
 
 ---
 

@@ -1,0 +1,88 @@
+jest.mock("../../src/features/news/newsRepository", () => ({
+  listNews: jest.fn()
+}));
+jest.mock("../../src/features/news/setReleasesRepository", () => ({
+  listUndismissedSetReleases: jest.fn(),
+  dismissSetRelease: jest.fn()
+}));
+jest.mock("expo-router", () => ({
+  useFocusEffect: (callback: () => void) => {
+    const React = require("react");
+    React.useEffect(callback, []);
+  }
+}));
+
+import { fireEvent, render, waitFor } from "@testing-library/react-native";
+import { Linking } from "react-native";
+import { listNews } from "../../src/features/news/newsRepository";
+import {
+  dismissSetRelease,
+  listUndismissedSetReleases
+} from "../../src/features/news/setReleasesRepository";
+import HomeScreen from "./home";
+
+const NEWS = [
+  {
+    id: "news-1",
+    title: "Novo set anunciado",
+    summary: "Resumo curto.",
+    url: "https://example.com/noticia-1",
+    source: "PokéNews",
+    publishedAt: "2026-08-18T12:00:00Z"
+  }
+];
+
+const RELEASES = [
+  {
+    id: "release-1",
+    setId: "sv10",
+    setName: "Scarlet & Violet 10",
+    releasedDetectedAt: "2026-08-18T00:00:00Z"
+  }
+];
+
+describe("HomeScreen", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (listNews as jest.Mock).mockResolvedValue(NEWS);
+    (listUndismissedSetReleases as jest.Mock).mockResolvedValue(RELEASES);
+    (dismissSetRelease as jest.Mock).mockResolvedValue(undefined);
+  });
+
+  it("renders the news list", async () => {
+    const { getByText } = render(<HomeScreen />);
+
+    await waitFor(() => {
+      expect(getByText("Novo set anunciado")).toBeTruthy();
+      expect(getByText("Resumo curto.")).toBeTruthy();
+    });
+  });
+
+  it("renders the new set banner and hides it after dismissal", async () => {
+    const { getByTestId, queryByTestId } = render(<HomeScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("home-set-release-banner-release-1")).toBeTruthy();
+    });
+
+    fireEvent.press(getByTestId("home-set-release-dismiss-release-1"));
+
+    await waitFor(() => {
+      expect(dismissSetRelease).toHaveBeenCalledWith("release-1");
+      expect(queryByTestId("home-set-release-banner-release-1")).toBeNull();
+    });
+  });
+
+  it("opens the external link when a news item is pressed", async () => {
+    const openUrlSpy = jest.spyOn(Linking, "openURL").mockResolvedValue(undefined as any);
+    const { getByTestId } = render(<HomeScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("home-news-item-news-1")).toBeTruthy();
+    });
+
+    fireEvent.press(getByTestId("home-news-item-news-1"));
+
+    expect(openUrlSpy).toHaveBeenCalledWith("https://example.com/noticia-1");
+  });
+});
