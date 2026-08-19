@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { mapPokemonTcgCardToRow, type PokemonTcgApiCard } from "./transform.ts";
+import { extractUniqueSets, mapPokemonTcgCardToRow, type PokemonTcgApiCard } from "./transform.ts";
 
 Deno.serve(async () => {
   const supabase = createClient(
@@ -34,6 +34,19 @@ Deno.serve(async () => {
 
     if (error) {
       return new Response(`Upsert error: ${error.message}`, { status: 500 });
+    }
+
+    const sets = extractUniqueSets(cards).map((set) => ({
+      set_id: set.setId,
+      set_name: set.setName
+    }));
+
+    const { error: setReleasesError } = await supabase
+      .from("set_releases")
+      .upsert(sets, { onConflict: "set_id", ignoreDuplicates: true });
+
+    if (setReleasesError) {
+      return new Response(`Set releases upsert error: ${setReleasesError.message}`, { status: 500 });
     }
 
     totalUpserted += rows.length;

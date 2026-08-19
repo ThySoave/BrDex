@@ -17,6 +17,21 @@ export interface CardsCatalogRow {
   image_url: string;
 }
 
+export interface SetInfo {
+  setId: string;
+  setName: string;
+}
+
+export function extractUniqueSets(cards: PokemonTcgApiCard[]): SetInfo[] {
+  const seen = new Map<string, SetInfo>();
+  for (const card of cards) {
+    if (!seen.has(card.set.id)) {
+      seen.set(card.set.id, { setId: card.set.id, setName: card.set.name });
+    }
+  }
+  return [...seen.values()];
+}
+
 export function mapPokemonTcgCardToRow(card: PokemonTcgApiCard): CardsCatalogRow {
   return {
     external_id: card.id,

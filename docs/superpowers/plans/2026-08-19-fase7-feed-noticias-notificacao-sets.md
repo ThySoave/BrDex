@@ -75,11 +75,11 @@
 - Consumes: `set_releases` (Task 1).
 - Produces: dentro do loop de sync, após upsert de `cards_catalog`, extrai `set_id`/`set_name` únicos dos cards da página e faz upsert em `set_releases` com `onConflict: "set_id", ignoreDuplicates: true` — sets já existentes não são reinseridos (idempotente), sets novos aparecem automaticamente na próxima leitura do app.
 
-- [ ] **Step 1: Write the failing test** para a função pura que extrai `{set_id, set_name}` únicos de uma lista de cards (mesmo padrão de `mapPokemonTcgCardToRow` em `transform.ts` — adicionar `extractUniqueSets(cards): {setId, setName}[]`).
-- [ ] **Step 2: Run to verify it fails.**
-- [ ] **Step 3: Implement `extractUniqueSets` em `transform.ts`**, chamar em `index.ts` após cada upsert de página, fazer upsert em `set_releases` (ignora duplicata).
-- [ ] **Step 4: Apply and verify** — `deno test` verde; revisar que a lógica não quebra o fluxo existente de sync (paginação, upsert de cards continua igual).
-- [ ] **Step 5: Commit** — `feat: detect and record new set releases during catalog sync`
+- [x] **Step 1: Write the failing test** para a função pura que extrai `{set_id, set_name}` únicos de uma lista de cards (mesmo padrão de `mapPokemonTcgCardToRow` em `transform.ts` — adicionar `extractUniqueSets(cards): {setId, setName}[]`).
+- [x] **Step 2: Run to verify it fails.**
+- [x] **Step 3: Implement `extractUniqueSets` em `transform.ts`**, chamar em `index.ts` após cada upsert de página, fazer upsert em `set_releases` (ignora duplicata).
+- [x] **Step 4: Apply and verify** — `deno test` verde (4/4); paginação e upsert de cards inalterados, upsert de set_releases adicionado após o upsert de cada página.
+- [x] **Step 5: Commit** — `feat: detect and record new set releases during catalog sync`
 
 ---
 
