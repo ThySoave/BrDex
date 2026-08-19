@@ -48,8 +48,8 @@
 
 **Interfaces:** Produces `Meetup { id, title, city, startsAt, description }`; `listUpcomingMeetups(): Promise<Meetup[]>` — `client.from("meetups").select(...).gte("starts_at", <agora ISO>).order("starts_at")`, mapeia snake_case → camelCase, erro vira `throw new Error(message)`; `createMeetup(input: { title, city, startsAt, description }): Promise<void>` — insere com `created_by = user.id`, sem usuário lança `Error("Usuário não autenticado")`.
 
-- [ ] Teste (3 casos: lista mapeada com filtro/ordenação; erro propagado; createMeetup insere com created_by do usuário logado) → red → implementação → green.
-- [ ] Commit `feat: add meetups repository`.
+- [x] Teste (3 casos: lista mapeada com filtro/ordenação; erro propagado; createMeetup insere com created_by do usuário logado) → red → implementação → green.
+- [x] Commit `feat: add meetups repository`.
 
 ---
 
