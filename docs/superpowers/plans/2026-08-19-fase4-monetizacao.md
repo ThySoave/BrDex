@@ -51,8 +51,8 @@
 
 **Interfaces:** Produces `isPremium(): Promise<boolean>` — chama `client.rpc("is_premium", { uid: user.id })`, retorna `data === true`; erro vira `throw new Error(message)`; sem usuário logado retorna `false` (não lança).
 
-- [ ] Teste (3 casos: premium true; false; erro propagado) → red → implementação → green.
-- [ ] Commit `feat: add entitlements repository`.
+- [x] Teste (4 casos: premium true; false; erro propagado; sem usuário → false sem RPC) → red → implementação → green.
+- [x] Commit `feat: add entitlements repository`.
 
 ---
 
