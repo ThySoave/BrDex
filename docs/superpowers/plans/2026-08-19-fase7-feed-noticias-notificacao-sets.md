@@ -56,12 +56,12 @@
 - Consumes: `news_items` (Task 1).
 - Produces: função pura `parseFeed(xml: string, sourceName: string): NewsItemInput[]` — `NewsItemInput { title; summary; url; source; publishedAt }`; `summary` truncado a 300 chars (com reticências se cortado), extraído do `<description>`/`<summary>` do feed, tags HTML removidas.
 
-- [ ] **Step 1: Write the failing Deno test** (`parse.test.ts` — casos: parse de um RSS 2.0 válido de exemplo (fixture inline); parse de um Atom válido de exemplo; item sem `<description>` usa string vazia; descrição maior que 300 chars é truncada com reticências; tags HTML na descrição são removidas.) Rodar com `deno test supabase/functions/fetch-news/parse.test.ts`.
-- [ ] **Step 2: Run to verify it fails.**
-- [ ] **Step 3: Write `parse.ts`** — parser simples de RSS 2.0 e Atom via regex/DOMParser (Deno tem `DOMParser` via `deno_dom` ou parsing manual leve — escolher a opção mais simples sem dependência pesada; se precisar de import externo, usar `esm.sh` como já feito em `sync-catalog`).
-- [ ] **Step 4: Write `index.ts`** — lista fixa de 3-5 fontes RSS públicas do universo Pokémon TCG em `const FEEDS = [{name, url}, ...]` no topo do arquivo (ex: site oficial Pokémon notícias, blogs de TCG conhecidos — usar fontes que realmente publiquem RSS público; se alguma fonte não tiver RSS público válido, documentar no código e pular); para cada fonte, fetch → parseFeed → upsert em `news_items` com `onConflict: "url", ignoreDuplicates: true`.
-- [ ] **Step 5: Apply and verify** — `deno test` verde; testar upsert manualmente via `sg docker` se o ambiente permitir invocar a function localmente (senão, validar só a lógica de parse + upsert isoladamente).
-- [ ] **Step 6: Commit** — `feat: add fetch-news edge function to populate news feed from RSS sources`
+- [x] **Step 1: Write the failing Deno test** (`parse.test.ts` — casos: parse de um RSS 2.0 válido de exemplo (fixture inline); parse de um Atom válido de exemplo; item sem `<description>` usa string vazia; descrição maior que 300 chars é truncada com reticências; tags HTML na descrição são removidas.) Rodar com `deno test supabase/functions/fetch-news/parse.test.ts`.
+- [x] **Step 2: Run to verify it fails.**
+- [x] **Step 3: Write `parse.ts`** — parser simples de RSS 2.0 e Atom via regex/DOMParser (Deno tem `DOMParser` via `deno_dom` ou parsing manual leve — escolher a opção mais simples sem dependência pesada; se precisar de import externo, usar `esm.sh` como já feito em `sync-catalog`).
+- [x] **Step 4: Write `index.ts`** — lista fixa de 3-5 fontes RSS públicas do universo Pokémon TCG em `const FEEDS = [{name, url}, ...]` no topo do arquivo (ex: site oficial Pokémon notícias, blogs de TCG conhecidos — usar fontes que realmente publiquem RSS público; se alguma fonte não tiver RSS público válido, documentar no código e pular); para cada fonte, fetch → parseFeed → upsert em `news_items` com `onConflict: "url", ignoreDuplicates: true`.
+- [x] **Step 5: Apply and verify** — `deno test` verde (5/5) + `deno check index.ts` sem erros; invocação local da function não disponível no ambiente, lógica de parse validada isoladamente.
+- [x] **Step 6: Commit** — `feat: add fetch-news edge function to populate news feed from RSS sources`
 
 ---
 
