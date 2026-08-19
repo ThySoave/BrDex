@@ -35,11 +35,11 @@
 **Interfaces:**
 - Produces: função `public.set_progress(uid uuid)` returns table(`set_id text, set_name text, owned bigint, total bigint`) — security definer, `owned` = count(distinct catalog_card_id) das `user_cards` do usuário naquele set; `total` = count(*) de `cards_catalog` do set; retorna só sets onde o usuário tem ao menos 1 carta, ordenado por `set_name`.
 
-- [ ] **Step 1: Write the failing pgTAP test** (`set_progress.test.sql` — 3 asserções: usuário com 2 de 3 cartas do set vê owned=2/total=3; duplicata da mesma carta não infla owned; set sem carta do usuário não aparece).
-- [ ] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `function public.set_progress(uuid) does not exist`.
-- [ ] **Step 3: Write the migration** (`0007_set_progress.sql`).
-- [ ] **Step 4: Apply and verify** — reset + test db → PASS novos + 27 anteriores.
-- [ ] **Step 5: Commit** — `feat: add set_progress function for per-set collection progress`
+- [x] **Step 1: Write the failing pgTAP test** (`set_progress.test.sql` — 3 asserções: usuário com 2 de 3 cartas do set vê owned=2/total=3; duplicata da mesma carta não infla owned; set sem carta do usuário não aparece).
+- [x] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `function public.set_progress(uuid) does not exist`.
+- [x] **Step 3: Write the migration** (`0007_set_progress.sql`).
+- [x] **Step 4: Apply and verify** — reset + test db → PASS novos + 27 anteriores.
+- [x] **Step 5: Commit** — `feat: add set_progress function for per-set collection progress`
 
 ---
 
