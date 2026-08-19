@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { FlatList, TextInput, View } from "react-native";
+import { Alert, FlatList, Pressable, Text, TextInput, View } from "react-native";
 import { fetchCatalogPage } from "../../src/features/catalog/catalogRepository";
 import { filterCatalogCards } from "../../src/features/catalog/catalogSearch";
+import { addToWishlist } from "../../src/features/social/wishlistRepository";
 import { CardGridItem } from "../../src/components/CardGridItem";
 import type { CatalogCard } from "../../src/features/catalog/types";
 
@@ -28,7 +29,21 @@ export default function CatalogScreen() {
         data={visibleCards}
         keyExtractor={(item) => item.id}
         numColumns={3}
-        renderItem={({ item }) => <CardGridItem card={item} />}
+        renderItem={({ item }) => (
+          <View>
+            <CardGridItem card={item} />
+            <Pressable
+              testID={`wishlist-add-${item.id}`}
+              onPress={() =>
+                addToWishlist(item.id, null)
+                  .then(() => Alert.alert("Adicionado à lista de desejos"))
+                  .catch((error: Error) => Alert.alert("Erro", error.message))
+              }
+            >
+              <Text>Quero</Text>
+            </Pressable>
+          </View>
+        )}
       />
     </View>
   );

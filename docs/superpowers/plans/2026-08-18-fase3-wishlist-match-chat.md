@@ -70,9 +70,9 @@
 
 **Interfaces:** Produces `addToWishlist(catalogCardId: string, language: CardLanguage | null): Promise<void>` — insert `{user_id, catalog_card_id, language}` com o usuário logado, erro vira `throw new Error(message)`.
 
-- [ ] Teste (2 casos: insert correto; erro propagado) → red → implementação → green.
-- [ ] Wire: no `renderItem` do catálogo, envolver `CardGridItem` num `View` com `Pressable` "Quero" (`testID: wishlist-add-<id>`) chamando `addToWishlist(item.id, null)`.
-- [ ] Full suite verde → Commit `feat: add wishlist repository and Quero button on catalog`.
+- [x] Teste (2 casos: insert correto; erro propagado) → red → implementação → green.
+- [x] Wire: no `renderItem` do catálogo, envolver `CardGridItem` num `View` com `Pressable` "Quero" (`testID: wishlist-add-<id>`) chamando `addToWishlist(item.id, null)`.
+- [x] Full suite verde → Commit `feat: add wishlist repository and Quero button on catalog`.
 
 ---
 
