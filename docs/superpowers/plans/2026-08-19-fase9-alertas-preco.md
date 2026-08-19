@@ -50,8 +50,8 @@
 **Interfaces:**
 - Produces: `TriggeredPriceAlert { alertId; catalogCardId; cardName; language; thresholdBrl; currentPrice }`; `createPriceAlert(catalogCardId: string, language: string, thresholdBrl: number): Promise<void>` (insert com usuário atual); `listTriggeredPriceAlerts(): Promise<TriggeredPriceAlert[]>` (RPC `triggered_price_alerts`); `removePriceAlert(alertId: string): Promise<void>` (delete por id); erros viram `throw new Error(message)`.
 
-- [ ] Teste `priceAlertsRepository` (4 casos: createPriceAlert insere com usuário atual; listTriggeredPriceAlerts mapeia o retorno do RPC; removePriceAlert deleta pelo id; erro propagado) → red → implementação → green.
-- [ ] Commit `feat: add price alerts repository`
+- [x] Teste `priceAlertsRepository` (4 casos: createPriceAlert insere com usuário atual; listTriggeredPriceAlerts mapeia o retorno do RPC; removePriceAlert deleta pelo id; erro propagado) → red → implementação → green.
+- [x] Commit `feat: add price alerts repository`
 
 ---
 
