@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import { FlatList, Pressable, Share, Text, View } from "react-native";
+import { Alert, FlatList, Pressable, Share, Text, View } from "react-native";
+import * as Print from "expo-print";
+import * as Sharing from "expo-sharing";
 import { listUserCards } from "../../src/features/collection/collectionRepository";
+import { buildCollectionPdfHtml } from "../../src/features/collection/exportPdf";
 import { fetchSetProgress, type SetProgress } from "../../src/features/collection/setProgressRepository";
 import { buildCollectionShareMessage } from "../../src/features/collection/shareCollection";
 import { isPremium } from "../../src/features/premium/entitlementsRepository";
@@ -10,7 +13,20 @@ export default function AlbumScreen() {
   const [cards, setCards] = useState<UserCard[]>([]);
   const [premium, setPremium] = useState(false);
   const [progress, setProgress] = useState<SetProgress[]>([]);
+  const [showPdfUpsell, setShowPdfUpsell] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handleExportPdf = () => {
+    if (!premium) {
+      setShowPdfUpsell(true);
+      return;
+    }
+
+    const html = buildCollectionPdfHtml(cards, new Date().toISOString());
+    Print.printToFileAsync({ html })
+      .then(({ uri }) => Sharing.shareAsync(uri))
+      .catch((err: Error) => Alert.alert("Erro", err.message));
+  };
 
   useEffect(() => {
     listUserCards()
@@ -43,6 +59,15 @@ export default function AlbumScreen() {
       >
         <Text>Compartilhar</Text>
       </Pressable>
+      <Pressable testID="export-pdf" onPress={handleExportPdf} style={{ marginBottom: 8 }}>
+        <Text>Exportar PDF</Text>
+      </Pressable>
+      {showPdfUpsell ? (
+        <Text testID="export-pdf-upsell" style={{ color: "#666", marginBottom: 8 }}>
+          Exportar a coleção em PDF é um recurso premium. Assine para gerar a documentação da
+          sua coleção.
+        </Text>
+      ) : null}
       {premium ? (
         progress.map((set) => (
           <Text key={set.setId} testID={`set-progress-${set.setId}`}>

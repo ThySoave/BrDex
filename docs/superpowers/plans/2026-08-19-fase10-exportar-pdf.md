@@ -43,10 +43,10 @@
 
 **Interfaces:** Consumes Task 1 + `isPremium()`.
 
-- [ ] Instalar dependências: `npx expo install expo-print expo-sharing` (ou npm com `--legacy-peer-deps`).
-- [ ] Teste de componente (RNTL, mockando `expo-print`, `expo-sharing`, repositórios e `isPremium`): premium — tocar "Exportar PDF" (testID `export-pdf`) chama `printToFileAsync` com HTML contendo o nome da carta e depois `shareAsync` com a uri retornada; não-premium — tocar "Exportar PDF" mostra upsell (testID `export-pdf-upsell`) e não chama `printToFileAsync`. → red
-- [ ] Implementar no álbum: botão sempre visível; premium → `buildCollectionPdfHtml(cards, new Date().toISOString())` → `Print.printToFileAsync({ html })` → `Sharing.shareAsync(uri)`; não-premium → upsell. → green
-- [ ] Full suite verde (`npx jest && npx tsc --noEmit`) → Commit `feat: add premium collection PDF export to album`
+- [x] Instalar dependências: `npx expo install expo-print expo-sharing` (ou npm com `--legacy-peer-deps`).
+- [x] Teste de componente (RNTL, mockando `expo-print`, `expo-sharing`, repositórios e `isPremium`): premium — tocar "Exportar PDF" (testID `export-pdf`) chama `printToFileAsync` com HTML contendo o nome da carta e depois `shareAsync` com a uri retornada; não-premium — tocar "Exportar PDF" mostra upsell (testID `export-pdf-upsell`) e não chama `printToFileAsync`. → red
+- [x] Implementar no álbum: botão sempre visível; premium → `buildCollectionPdfHtml(cards, new Date().toISOString())` → `Print.printToFileAsync({ html })` → `Sharing.shareAsync(uri)`; não-premium → upsell. → green
+- [x] Full suite verde (`npx jest && npx tsc --noEmit` — 86 testes, 32 suites) → Commit `feat: add premium collection PDF export to album`
 
 ---
 
