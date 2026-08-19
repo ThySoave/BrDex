@@ -82,10 +82,10 @@
 
 **Interfaces:** Produces `listMatches(): Promise<MatchItem[]>`, `MatchItem { id; role: "quero"|"tenho"; otherUserId; cardName; cardImageUrl }` — select `id, wanter_id, owner_id, user_cards(cards_catalog(name, image_url))`; role comparando `wanter_id` com o usuário atual.
 
-- [ ] Teste (2 casos: mapeamento com role dos dois lados; erro) → red → implementação → green.
-- [ ] Tela `matches.tsx`: `useFocusEffect` recarrega `listMatches()`; item mostra "Você quer: <carta>" ou "Alguém quer sua: <carta>" + botão Conversar → `getOrCreateConversation(otherUserId)` → `router.push('/chat/<id>?other=<otherUserId>')`; empty state explicativo.
-- [ ] Registrar `<Tabs.Screen name="matches" options={{ title: "Trocas" }} />`.
-- [ ] Commit `feat: add matches repository and Trocas tab`.
+- [x] Teste (2 casos: mapeamento com role dos dois lados; erro) → red → implementação → green.
+- [x] Tela `matches.tsx`: `useFocusEffect` recarrega `listMatches()`; item mostra "Você quer: <carta>" ou "Alguém quer sua: <carta>" + botão Conversar → `getOrCreateConversation(otherUserId)` → `router.push('/chat/<id>?other=<otherUserId>')`; empty state explicativo.
+- [x] Registrar `<Tabs.Screen name="matches" options={{ title: "Trocas" }} />`.
+- [x] Commit `feat: add matches repository and Trocas tab`.
 
 ---
 
