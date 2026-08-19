@@ -91,9 +91,9 @@
 - Produces: `NewsItem { id; title; summary; url; source; publishedAt }`; `listNews(limit = 30): Promise<NewsItem[]>` — select `news_items` order `published_at desc` limit; erro vira `throw new Error(message)`.
 - Produces: `SetRelease { id; setId; setName; releasedDetectedAt }`; `listUndismissedSetReleases(): Promise<SetRelease[]>` — select `set_releases` que não têm linha correspondente em `user_dismissed_set_releases` para o usuário atual (join/`not in` subquery), order `released_detected_at desc`, limit razoável (ex: 10); `dismissSetRelease(setReleaseId: string): Promise<void>` — insert em `user_dismissed_set_releases` com o usuário atual.
 
-- [ ] Teste `newsRepository` (2 casos: listNews mapeado corretamente; erro propagado) → red → implementação → green.
-- [ ] Teste `setReleasesRepository` (3 casos: listUndismissedSetReleases mapeado; dismissSetRelease insere corretamente; erro propagado) → red → implementação → green.
-- [ ] Commit `feat: add news and set releases repositories`
+- [x] Teste `newsRepository` (2 casos: listNews mapeado corretamente; erro propagado) → red → implementação → green.
+- [x] Teste `setReleasesRepository` (3 casos: listUndismissedSetReleases mapeado; dismissSetRelease insere corretamente; erro propagado) → red → implementação → green.
+- [x] Commit `feat: add news and set releases repositories`
 
 ---
 
