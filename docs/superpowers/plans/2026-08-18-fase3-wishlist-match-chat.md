@@ -38,11 +38,11 @@
 **Interfaces:**
 - Produces: `wishlist(id, user_id, catalog_card_id, language, created_at)`; `matches(id, wishlist_id, user_card_id, wanter_id, owner_id, created_at)` com unique `(wishlist_id, user_card_id)`; `blocks(blocker_id, blocked_id)`; `reports(id, reporter_id, reported_id, reason, context, created_at)`; função `public.users_blocked(a uuid, b uuid): boolean`. Tasks 2–7 usam exatamente esses nomes.
 
-- [ ] **Step 1: Write the failing pgTAP test** (`supabase/tests/database/social_matching.test.sql` — 7 asserções: match por carta à venda; guardada não gera; idioma específico não casa com outro idioma; wishlist sem idioma casa com qualquer; bloqueio apaga matches; par bloqueado não gera match novo; denúncia registrada. Código completo na execução — ver arquivo de teste no repositório.)
-- [ ] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `relation "public.wishlist" does not exist`.
-- [ ] **Step 3: Write the migration** (`0004_social_schema.sql`): tabelas `wishlist` (unique nulls not distinct em user+carta+idioma, RLS dono), `blocks` (PK par, RLS blocker), função `users_blocked(a,b)` security definer, `reports` (RLS reporter), `matches` (unique wishlist+user_card, RLS select participantes, escrita só por trigger); triggers `user_cards_generate_matches` (after insert/update of status: cria matches para a_venda/troca respeitando idioma e bloqueio; deleta matches quando volta a guardada), `wishlist_generate_matches` (after insert), `blocks_remove_matches` (after insert).
-- [ ] **Step 4: Apply and verify** — reset + test db → PASS 7/7 novos + 12 anteriores.
-- [ ] **Step 5: Commit** — `feat: add wishlist, matches, blocks and reports with match triggers`
+- [x] **Step 1: Write the failing pgTAP test** (`supabase/tests/database/social_matching.test.sql` — 7 asserções: match por carta à venda; guardada não gera; idioma específico não casa com outro idioma; wishlist sem idioma casa com qualquer; bloqueio apaga matches; par bloqueado não gera match novo; denúncia registrada. Código completo na execução — ver arquivo de teste no repositório.)
+- [x] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `relation "public.wishlist" does not exist`.
+- [x] **Step 3: Write the migration** (`0004_social_schema.sql`): tabelas `wishlist` (unique nulls not distinct em user+carta+idioma, RLS dono), `blocks` (PK par, RLS blocker), função `users_blocked(a,b)` security definer, `reports` (RLS reporter), `matches` (unique wishlist+user_card, RLS select participantes, escrita só por trigger); triggers `user_cards_generate_matches` (after insert/update of status: cria matches para a_venda/troca respeitando idioma e bloqueio; deleta matches quando volta a guardada), `wishlist_generate_matches` (after insert), `blocks_remove_matches` (after insert).
+- [x] **Step 4: Apply and verify** — reset + test db → PASS 7/7 novos + 12 anteriores.
+- [x] **Step 5: Commit** — `feat: add wishlist, matches, blocks and reports with match triggers`
 
 ---
 
