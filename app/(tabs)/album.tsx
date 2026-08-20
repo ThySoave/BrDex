@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
-import { Alert, FlatList, Pressable, Share, Text, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Alert, FlatList, Pressable, Text, View } from "react-native";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { listUserCards } from "../../src/features/collection/collectionRepository";
 import { buildCollectionPdfHtml } from "../../src/features/collection/exportPdf";
 import { fetchSetProgress, type SetProgress } from "../../src/features/collection/setProgressRepository";
-import { buildCollectionShareMessage } from "../../src/features/collection/shareCollection";
+import { ShareCollectionCard, ShareSingleCard } from "../../src/features/collection/shareCards";
+import { captureAndShareView } from "../../src/features/collection/shareImage";
 import { isPremium } from "../../src/features/premium/entitlementsRepository";
 import type { UserCard } from "../../src/features/collection/types";
 
@@ -14,7 +15,14 @@ export default function AlbumScreen() {
   const [premium, setPremium] = useState(false);
   const [progress, setProgress] = useState<SetProgress[]>([]);
   const [showPdfUpsell, setShowPdfUpsell] = useState(false);
+  const [shareCard, setShareCard] = useState<UserCard | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const collectionShareRef = useRef<View>(null);
+  const cardShareRef = useRef<View>(null);
+
+  const handleShareCollection = () => {
+    captureAndShareView(collectionShareRef).catch((err: Error) => Alert.alert("Erro", err.message));
+  };
 
   const handleExportPdf = () => {
     if (!premium) {
@@ -27,6 +35,13 @@ export default function AlbumScreen() {
       .then(({ uri }) => Sharing.shareAsync(uri))
       .catch((err: Error) => Alert.alert("Erro", err.message));
   };
+
+  useEffect(() => {
+    if (!shareCard) return;
+    captureAndShareView(cardShareRef)
+      .catch((err: Error) => Alert.alert("Erro", err.message))
+      .finally(() => setShareCard(null));
+  }, [shareCard]);
 
   useEffect(() => {
     listUserCards()
@@ -52,11 +67,7 @@ export default function AlbumScreen() {
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
-      <Pressable
-        testID="share-collection"
-        onPress={() => Share.share({ message: buildCollectionShareMessage(cards.length, null) })}
-        style={{ marginBottom: 8 }}
-      >
+      <Pressable testID="share-collection" onPress={handleShareCollection} style={{ marginBottom: 8 }}>
         <Text>Compartilhar</Text>
       </Pressable>
       <Pressable testID="export-pdf" onPress={handleExportPdf} style={{ marginBottom: 8 }}>
@@ -85,11 +96,25 @@ export default function AlbumScreen() {
         keyExtractor={(item) => item.id}
         numColumns={3}
         renderItem={({ item }) => (
-          <View testID={`album-item-${item.id}`} style={{ width: 100, margin: 8 }}>
+          <Pressable
+            testID={`album-item-${item.id}`}
+            onLongPress={() => setShareCard(item)}
+            style={{ width: 100, margin: 8 }}
+          >
             <Text numberOfLines={1}>{item.cardName}</Text>
-          </View>
+          </Pressable>
         )}
       />
+      <View style={{ position: "absolute", left: -1000, top: 0 }}>
+        <View ref={collectionShareRef} collapsable={false}>
+          <ShareCollectionCard cardCount={cards.length} cardNames={cards.map((c) => c.cardName)} />
+        </View>
+        {shareCard ? (
+          <View ref={cardShareRef} collapsable={false}>
+            <ShareSingleCard card={shareCard} />
+          </View>
+        ) : null}
+      </View>
     </View>
   );
 }

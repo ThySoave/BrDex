@@ -63,11 +63,11 @@
 **Interfaces:**
 - Consumes: Tasks 1 e 2. O botão `share-collection` existente passa a capturar a imagem da coleção (`ShareCollectionCard` renderizado off-screen com `collapsable={false}` e `ref`) via `captureAndShareView`; o texto `Share.share` antigo sai (a imagem o substitui — spec pede imagem). Long-press num `album-item-{id}` define a carta destacada, renderiza `ShareSingleCard` off-screen e dispara a mesma captura. Erros → `Alert.alert("Erro", message)`.
 
-- [ ] **Step 1: Write the failing RNTL test** (estender `album.test.tsx`, mockando `shareImage` — casos: press em `share-collection` chama `captureAndShareView`; long-press em um item do álbum chama `captureAndShareView`; erro rejeitado vira `Alert.alert`.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest album` → FAIL.
-- [ ] **Step 3: Implement** a integração em `album.tsx` → GREEN.
-- [ ] **Step 4: Full suite** — `npx jest && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: share collection and single card as image from album`
+- [x] **Step 1: Write the failing RNTL test** (estender `album.test.tsx`, mockando `shareImage` — casos: press em `share-collection` chama `captureAndShareView`; long-press em um item do álbum chama `captureAndShareView`; erro rejeitado vira `Alert.alert`.)
+- [x] **Step 2: Run to verify it fails** — `npx jest album` → FAIL.
+- [x] **Step 3: Implement** a integração em `album.tsx` → GREEN.
+- [x] **Step 4: Full suite** — `npx jest && npx tsc --noEmit` verdes.
+- [x] **Step 5: Commit** — `feat: share collection and single card as image from album`
 
 ---
 
