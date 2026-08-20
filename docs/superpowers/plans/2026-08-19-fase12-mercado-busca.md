@@ -35,11 +35,11 @@
 **Interfaces:**
 - Produces: `search_market_listings(search_text text) returns table(user_card_id uuid, catalog_card_id uuid, card_name text, card_image_url text, language card_language, condition card_condition, status card_status, seller_id uuid, seller_verified boolean)` — security definer; filtros: `status <> 'guardada'`, `user_id <> auth.uid()`, `not users_blocked(auth.uid(), user_id)`, `card_name ilike '%'||search_text||'%'` (texto vazio retorna tudo); ordenação `seller_verified desc, card_name asc`; `limit 50`. Task 2 usa exatamente esses nomes.
 
-- [ ] **Step 1: Write the failing pgTAP test** (`market_search.test.sql` — 6 asserções: carta `a_venda` de outro usuário aparece; carta `guardada` de outro usuário não aparece; a própria carta não aparece; carta de usuário bloqueado não aparece; filtro de busca por nome funciona; vendedor verificado (premium ativo) vem antes do não verificado.)
-- [ ] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `function public.search_market_listings(...) does not exist` (ou equivalente).
-- [ ] **Step 3: Write the migration** (`0013_market_search.sql`): função security definer com joins em `cards_catalog`, filtros e ordenação acima; `revoke all ... from public` + `grant execute ... to authenticated`.
-- [ ] **Step 4: Apply and verify** — reset + test db → PASS 6/6 novos + suite anterior completa (52 pgTAP).
-- [ ] **Step 5: Commit** — `feat: add market search function for cards listed for sale or trade`
+- [x] **Step 1: Write the failing pgTAP test** (`market_search.test.sql` — 6 asserções: carta `a_venda` de outro usuário aparece; carta `guardada` de outro usuário não aparece; a própria carta não aparece; carta de usuário bloqueado não aparece; filtro de busca por nome funciona; vendedor verificado (premium ativo) vem antes do não verificado.)
+- [x] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `function public.search_market_listings(unknown) does not exist`.
+- [x] **Step 3: Write the migration** (`0013_market_search.sql`): função security definer com joins em `cards_catalog`, filtros e ordenação acima; `revoke all ... from public` + `grant execute ... to authenticated`.
+- [x] **Step 4: Apply and verify** — reset + test db → PASS 6/6 novos + suite completa (64 pgTAP total, incluindo os testes da Fase 12 paralela de preço de referência).
+- [x] **Step 5: Commit** — `feat: add market search function for cards listed for sale or trade`
 
 ---
 
