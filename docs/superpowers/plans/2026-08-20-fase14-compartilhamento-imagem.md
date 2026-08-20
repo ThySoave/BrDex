@@ -48,11 +48,11 @@
 - Consumes: `react-native-view-shot` (instalar primeiro — `npx expo install react-native-view-shot`), `expo-sharing`.
 - Produces: `captureAndShareView(ref: React.RefObject<View | null>): Promise<void>` — `captureRef(ref, { format: "png", quality: 1, result: "tmpfile" })` → `Sharing.shareAsync(uri, { mimeType: "image/png" })`; erro de captura/share propaga (`throw`) para o chamador exibir o Alert.
 
-- [ ] **Step 1: Install** `react-native-view-shot` e conferir que a suite existente segue verde (`npx jest`).
-- [ ] **Step 2: Write the failing Jest test** (`shareImage.test.ts`, mockando `react-native-view-shot` e `expo-sharing` — casos: `captureRef` chamado com o ref e opções PNG/tmpfile; `shareAsync` recebe a uri retornada com mimeType `image/png`; erro do `captureRef` propaga e `shareAsync` não é chamado.)
-- [ ] **Step 3: Run to verify it fails** — `npx jest shareImage` → FAIL (módulo não existe).
-- [ ] **Step 4: Implement `shareImage.ts`** → GREEN.
-- [ ] **Step 5: Commit** — `feat: add capture-and-share image helper`
+- [x] **Step 1: Install** `react-native-view-shot` e conferir que a suite existente segue verde (`npx jest`).
+- [x] **Step 2: Write the failing Jest test** (`shareImage.test.ts`, mockando `react-native-view-shot` e `expo-sharing` — casos: `captureRef` chamado com o ref e opções PNG/tmpfile; `shareAsync` recebe a uri retornada com mimeType `image/png`; erro do `captureRef` propaga e `shareAsync` não é chamado.)
+- [x] **Step 3: Run to verify it fails** — `npx jest shareImage` → FAIL (módulo não existe).
+- [x] **Step 4: Implement `shareImage.ts`** → GREEN.
+- [x] **Step 5: Commit** — `feat: add capture-and-share image helper`
 
 ---
 
