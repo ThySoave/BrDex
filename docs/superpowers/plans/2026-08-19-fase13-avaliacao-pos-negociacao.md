@@ -36,11 +36,11 @@
 **Interfaces:**
 - Produces: `trade_ratings(id, trade_id → trades, rater, rated_user, stars int check 1..5, comment text nullable check length <= 500, created_at)`, unique `(trade_id, rater)`; RLS select para `rater` ou `rated_user`; sem insert/update/delete direto (grant só de select). Função `rate_trade(trade_id uuid, stars int, comment text default null) returns void` security definer: erro se trade não existe, não confirmada, chamador não é participante, ou já avaliou; `rated_user` = o outro participante. Função `user_rating_summary(target_user uuid) returns table(avg_stars numeric, ratings_count int)` security definer, média arredondada a 1 casa. Task 2 usa exatamente esses nomes.
 
-- [ ] **Step 1: Write the failing pgTAP test** (`trade_ratings.test.sql` — 7 asserções: trade pendente não pode ser avaliada (erro "só trocas confirmadas podem ser avaliadas"); participante avalia trade confirmada e a linha grava `rated_user` = outro participante; nota fora de 1–5 falha; avaliar duas vezes a mesma trade falha (erro "troca já avaliada por você"); não-participante não avalia (erro "apenas participantes da conversa podem avaliar"); `user_rating_summary` retorna média e contagem corretas com duas avaliações; RLS: terceiro autenticado não lê a linha de avaliação.)
-- [ ] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `relation "public.trade_ratings" does not exist`.
-- [ ] **Step 3: Write the migration** (`0016_trade_ratings.sql`): tabela + constraints + RLS select + `rate_trade` + `user_rating_summary`, grants para `authenticated`.
-- [ ] **Step 4: Apply and verify** — reset + test db → PASS 7/7 novos + suite pgTAP anterior completa.
-- [ ] **Step 5: Commit** — `feat: add trade ratings with rate_trade and rating summary functions`
+- [x] **Step 1: Write the failing pgTAP test** (`trade_ratings.test.sql` — 7 asserções: trade pendente não pode ser avaliada (erro "só trocas confirmadas podem ser avaliadas"); participante avalia trade confirmada e a linha grava `rated_user` = outro participante; nota fora de 1–5 falha; avaliar duas vezes a mesma trade falha (erro "troca já avaliada por você"); não-participante não avalia (erro "apenas participantes da conversa podem avaliar"); `user_rating_summary` retorna média e contagem corretas com duas avaliações; RLS: terceiro autenticado não lê a linha de avaliação.)
+- [x] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `relation "public.trade_ratings" does not exist`.
+- [x] **Step 3: Write the migration** (`0016_trade_ratings.sql`): tabela + constraints + RLS select + `rate_trade` + `user_rating_summary`, grants para `authenticated`.
+- [x] **Step 4: Apply and verify** — reset + test db → PASS 7/7 novos + suite pgTAP anterior completa.
+- [x] **Step 5: Commit** — `feat: add trade ratings with rate_trade and rating summary functions`
 
 ---
 
