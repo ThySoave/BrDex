@@ -10,7 +10,8 @@ const card: UserCard = {
   language: "pt",
   condition: "near_mint",
   pricePaid: 500,
-  status: "guardada"
+  status: "guardada",
+  photoUrl: null
 };
 
 describe("ShareCollectionCard", () => {

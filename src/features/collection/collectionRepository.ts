@@ -17,7 +17,8 @@ export async function addUserCard(input: AddUserCardInput): Promise<void> {
     language: input.language,
     condition: input.condition,
     price_paid: input.pricePaid,
-    status: input.status
+    status: input.status,
+    photo_url: input.photoUrl
   });
 
   if (error) {
@@ -82,7 +83,7 @@ export async function listUserCards(): Promise<UserCard[]> {
   const { data, error } = await client
     .from("user_cards")
     .select(
-      "id, catalog_card_id, language, condition, price_paid, status, cards_catalog(name, image_url)"
+      "id, catalog_card_id, language, condition, price_paid, status, photo_url, cards_catalog(name, image_url)"
     )
     .eq("user_id", user.id)
     .neq("status", "vendida");
@@ -99,6 +100,7 @@ export async function listUserCards(): Promise<UserCard[]> {
     language: row.language,
     condition: row.condition,
     pricePaid: row.price_paid,
-    status: row.status
+    status: row.status,
+    photoUrl: row.photo_url
   }));
 }

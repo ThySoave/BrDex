@@ -26,7 +26,8 @@ describe("addUserCard", () => {
       language: "en",
       condition: "near_mint",
       pricePaid: 25.5,
-      status: "guardada"
+      status: "guardada",
+      photoUrl: "https://cdn.supabase.co/card-photos/user-1/1.jpg"
     });
 
     expect(fromMock).toHaveBeenCalledWith("user_cards");
@@ -36,7 +37,8 @@ describe("addUserCard", () => {
       language: "en",
       condition: "near_mint",
       price_paid: 25.5,
-      status: "guardada"
+      status: "guardada",
+      photo_url: "https://cdn.supabase.co/card-photos/user-1/1.jpg"
     });
   });
 });
@@ -52,6 +54,7 @@ describe("listUserCards", () => {
           condition: "near_mint",
           price_paid: 25.5,
           status: "guardada",
+          photo_url: "https://cdn.supabase.co/card-photos/user-1/1.jpg",
           cards_catalog: { name: "Pikachu", image_url: "https://x/pikachu.png" }
         }
       ],
@@ -70,7 +73,7 @@ describe("listUserCards", () => {
     const result = await listUserCards();
 
     expect(selectMock).toHaveBeenCalledWith(
-      "id, catalog_card_id, language, condition, price_paid, status, cards_catalog(name, image_url)"
+      "id, catalog_card_id, language, condition, price_paid, status, photo_url, cards_catalog(name, image_url)"
     );
     expect(eqMock).toHaveBeenCalledWith("user_id", "user-1");
     expect(neqMock).toHaveBeenCalledWith("status", "vendida");
@@ -83,7 +86,8 @@ describe("listUserCards", () => {
         language: "en",
         condition: "near_mint",
         pricePaid: 25.5,
-        status: "guardada"
+        status: "guardada",
+        photoUrl: "https://cdn.supabase.co/card-photos/user-1/1.jpg"
       }
     ]);
   });

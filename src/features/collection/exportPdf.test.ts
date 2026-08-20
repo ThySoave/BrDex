@@ -10,7 +10,8 @@ const CARDS: UserCard[] = [
     language: "en",
     condition: "near_mint",
     pricePaid: 100.5,
-    status: "guardada"
+    status: "guardada",
+    photoUrl: null
   },
   {
     id: "uc-2",
@@ -20,7 +21,8 @@ const CARDS: UserCard[] = [
     language: "pt",
     condition: "played",
     pricePaid: null,
-    status: "a_venda"
+    status: "a_venda",
+    photoUrl: null
   }
 ];
 

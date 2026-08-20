@@ -46,7 +46,8 @@ export default function AddCardScreen() {
         language,
         condition,
         pricePaid: pricePaid ? Number(pricePaid) : null,
-        status
+        status,
+        photoUrl: null
       });
       router.replace("/(tabs)/album");
     } catch (err) {

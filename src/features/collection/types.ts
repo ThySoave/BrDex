@@ -9,6 +9,7 @@ export interface AddUserCardInput {
   condition: CardCondition;
   pricePaid: number | null;
   status: CardStatus;
+  photoUrl: string | null;
 }
 
 export interface UserCard {
@@ -20,4 +21,5 @@ export interface UserCard {
   condition: CardCondition;
   pricePaid: number | null;
   status: CardStatus;
+  photoUrl: string | null;
 }

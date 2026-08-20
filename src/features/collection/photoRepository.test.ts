@@ -6,7 +6,7 @@ import { getSupabaseClient } from "../../lib/supabaseClient";
 import { uploadCardPhoto } from "./photoRepository";
 
 describe("uploadCardPhoto", () => {
-  const BASE64 = Buffer.from("foto").toString("base64");
+  const BASE64 = "Zm90bw==";
 
   function mockClient(uploadResponse: { error: { message: string } | null }) {
     const uploadMock = jest.fn().mockResolvedValue(uploadResponse);

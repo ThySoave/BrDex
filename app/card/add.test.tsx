@@ -57,7 +57,8 @@ describe("AddCardScreen", () => {
         language: "en",
         condition: "near_mint",
         pricePaid: null,
-        status: "guardada"
+        status: "guardada",
+        photoUrl: null
       });
     });
     expect(mockReplace).toHaveBeenCalledWith("/(tabs)/album");

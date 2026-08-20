@@ -50,10 +50,10 @@
 **Interfaces:**
 - Produces: `AddUserCardInput.photoUrl: string | null`; `UserCard.photoUrl: string | null`. `addUserCard` insere `photo_url: input.photoUrl`; `listUserCards` inclui `photo_url` no select e mapeia `photoUrl` — testes existentes atualizados (nenhum removido).
 
-- [ ] **Step 1: Write the failing Jest tests** (estender `collectionRepository.test.ts` — `addUserCard` insere `photo_url`; `listUserCards` seleciona e mapeia `photo_url` → `photoUrl`.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest collectionRepository` → FAIL.
-- [ ] **Step 3: Implement** (types + repositório) → GREEN; `npx tsc --noEmit` para achar chamadas de `addUserCard` a atualizar (`add.tsx` passa `photoUrl: null` por ora).
-- [ ] **Step 4: Commit** — `feat: persist user card photo url`
+- [x] **Step 1: Write the failing Jest tests** (estender `collectionRepository.test.ts` — `addUserCard` insere `photo_url`; `listUserCards` seleciona e mapeia `photo_url` → `photoUrl`.)
+- [x] **Step 2: Run to verify it fails** — `npx jest collectionRepository` → FAIL (2 falhas esperadas).
+- [x] **Step 3: Implement** (types + repositório) → GREEN; tsc apontou `add.tsx` (`photoUrl: null` por ora) e fixtures de `exportPdf.test.ts`/`shareCards.test.tsx`/`add.test.tsx`. Suite 157/157, tsc limpo.
+- [x] **Step 4: Commit** — `feat: persist user card photo url`
 
 ---
 
