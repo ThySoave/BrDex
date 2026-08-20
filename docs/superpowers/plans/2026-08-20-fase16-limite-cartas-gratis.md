@@ -32,10 +32,10 @@
 **Interfaces:**
 - Produces: `FREE_CARD_LIMIT = 50` e `canAddCard(cardCount: number, premium: boolean): boolean` — premium → sempre `true`; grátis → `true` enquanto `cardCount < FREE_CARD_LIMIT`, `false` a partir de 50.
 
-- [ ] **Step 1: Write the failing Jest test** (`cardLimit.test.ts` — casos: premium no limite e acima do limite → `true`; grátis abaixo do limite → `true`; grátis exatamente em `FREE_CARD_LIMIT` → `false`; grátis acima → `false`; grátis com 0 cartas → `true`.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest cardLimit` → FAIL (módulo não existe).
-- [ ] **Step 3: Implement `cardLimit.ts`** → GREEN.
-- [ ] **Step 4: Commit** — `feat: add free plan card limit rule`
+- [x] **Step 1: Write the failing Jest test** (`cardLimit.test.ts` — casos: premium no limite e acima do limite → `true`; grátis abaixo do limite → `true`; grátis exatamente em `FREE_CARD_LIMIT` → `false`; grátis acima → `false`; grátis com 0 cartas → `true`.)
+- [x] **Step 2: Run to verify it fails** — `npx jest cardLimit` → FAIL (módulo não existe).
+- [x] **Step 3: Implement `cardLimit.ts`** → GREEN (7/7).
+- [x] **Step 4: Commit** — `feat: add free plan card limit rule`
 
 ---
 
