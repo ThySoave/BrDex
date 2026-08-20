@@ -1,7 +1,7 @@
 import type { CardCondition } from "./conditionScale";
 
 export type CardLanguage = "en" | "pt" | "jp" | "other";
-export type CardStatus = "guardada" | "a_venda" | "disponivel_troca";
+export type CardStatus = "guardada" | "a_venda" | "disponivel_troca" | "vendida";
 
 export interface AddUserCardInput {
   catalogCardId: string;

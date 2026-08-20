@@ -33,10 +33,10 @@
 **Interfaces:**
 - Produces: enum `card_status` com valor `vendida`; view `price_community` agregando `price_paid` **e** `price_sold` como transações (union), mantendo colunas/outlier-filter idênticos; `snapshot_collection_values` ignorando cartas com `status::text = 'vendida'`. `CardStatus` = `"guardada" | "a_venda" | "disponivel_troca" | "vendida"`.
 
-- [ ] **Step 1: Write the migration** (`0020_card_sales.sql` — `alter type ... add value 'vendida'`; `create or replace view price_community` com CTE `priced` unindo compras e vendas; `create or replace function snapshot_collection_values` com `where uc.status::text <> 'vendida'`; comparações por `::text` para não referenciar o valor novo do enum na mesma transação.)
-- [ ] **Step 2: Update `CardStatus`** em `types.ts` com `"vendida"`.
-- [ ] **Step 3: Verify** — `npx jest && npx tsc --noEmit` verdes (mudança de tipo não quebra nada).
-- [ ] **Step 4: Commit** — `feat: add card sale schema and sale prices in community price`
+- [x] **Step 1: Write the migration** (`0020_card_sales.sql` — `alter type ... add value 'vendida'`; `create or replace view price_community` com CTE `priced` unindo compras e vendas; `create or replace function snapshot_collection_values` com `where uc.status::text <> 'vendida'`; comparações por `::text` para não referenciar o valor novo do enum na mesma transação.)
+- [x] **Step 2: Update `CardStatus`** em `types.ts` com `"vendida"`.
+- [x] **Step 3: Verify** — `npx jest && npx tsc --noEmit` verdes (147/147 testes, tsc limpo).
+- [x] **Step 4: Commit** — `feat: add card sale schema and sale prices in community price`
 
 ---
 
