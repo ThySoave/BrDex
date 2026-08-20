@@ -78,12 +78,12 @@
 **Interfaces:**
 - Consumes: Tasks 1 e 3, `expo-image-picker` (instalar primeiro), `isPremium`. Tela `/card/scan`: não-premium → texto `scanner-upsell` (sem botão de câmera); premium → botão `scan-capture` que pede permissão (`requestCameraPermissionsAsync`; negada → `Alert.alert`), captura (`launchCameraAsync({ mediaTypes: ["images"], base64: true, quality: 0.5 })`; `canceled` → volta ao estado inicial), chama `recognizeCard` → `searchCatalogByName` → `matchScannedCard`; match → `router.replace("/card/add?catalogCardId=...")` (formulário já preenche raridade/edição pelo catálogo, como no fluxo normal); sem match → `scan-no-match` ("Carta não reconhecida...") + botão `scan-manual-fallback` → `router.replace("/(tabs)/catalog")`; erro de function/rede → `Alert.alert("Erro", message)`. Catálogo ganha botão `open-scanner` → `router.push("/card/scan")`.
 
-- [ ] **Step 1: Install** `expo-image-picker` e conferir que a suite existente segue verde (`npx jest`).
-- [ ] **Step 2: Write the failing RNTL test** (`scan.test.tsx`, mockando `expo-image-picker`, `expo-router`, `isPremium`, `recognizeCard`, `searchCatalogByName` — casos: não-premium mostra upsell; premium com match navega para `/card/add?catalogCardId=`; sem match mostra `scan-no-match` e fallback navega ao catálogo; captura cancelada não chama `recognizeCard`; erro vira `Alert.alert`. `catalog.test.tsx` — estender: `open-scanner` navega para `/card/scan`.)
-- [ ] **Step 3: Run to verify it fails** — `npx jest scan catalog` → FAIL.
-- [ ] **Step 4: Implement** `scan.tsx` e o botão no catálogo → GREEN.
-- [ ] **Step 5: Full suite** — `npx jest && npx tsc --noEmit` verdes.
-- [ ] **Step 6: Commit** — `feat: add premium card scanner with photo recognition`
+- [x] **Step 1: Install** `expo-image-picker` (57.0.11) e conferir que a suite existente segue verde (`npx jest` — 127/127).
+- [x] **Step 2: Write the failing RNTL test** (`scan.test.tsx`, mockando `expo-image-picker`, `expo-router`, `isPremium`, `recognizeCard`, `searchCatalogByName` — casos: não-premium mostra upsell; premium com match navega para `/card/add?catalogCardId=`; sem match mostra `scan-no-match` e fallback navega ao catálogo; captura cancelada não chama `recognizeCard`; erro vira `Alert.alert`. `catalog.test.tsx` — estender: `open-scanner` navega para `/card/scan`.)
+- [x] **Step 3: Run to verify it fails** — `npx jest scan catalog` → FAIL.
+- [x] **Step 4: Implement** `scan.tsx` e o botão no catálogo → GREEN (8/8).
+- [x] **Step 5: Full suite** — `npx jest` (133/133) e `npx tsc --noEmit` verdes.
+- [x] **Step 6: Commit** — `feat: add premium card scanner with photo recognition`
 
 ---
 

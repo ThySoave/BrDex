@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Alert, FlatList, Linking, Pressable, Text, TextInput, View } from "react-native";
+import { useRouter } from "expo-router";
 import { fetchCatalogPage } from "../../src/features/catalog/catalogRepository";
 import { filterCatalogCards } from "../../src/features/catalog/catalogSearch";
 import { addToWishlist } from "../../src/features/social/wishlistRepository";
@@ -10,6 +11,7 @@ import { CardGridItem } from "../../src/components/CardGridItem";
 import type { CatalogCard } from "../../src/features/catalog/types";
 
 export default function CatalogScreen() {
+  const router = useRouter();
   const [cards, setCards] = useState<CatalogCard[]>([]);
   const [query, setQuery] = useState("");
   const [premium, setPremium] = useState(false);
@@ -58,6 +60,9 @@ export default function CatalogScreen() {
         value={query}
         onChangeText={setQuery}
       />
+      <Pressable testID="open-scanner" onPress={() => router.push("/card/scan")}>
+        <Text style={{ color: "#0a66c2", marginVertical: 8 }}>Escanear carta com a câmera</Text>
+      </Pressable>
       {showAlertUpsell ? (
         <Text testID="price-alert-upsell" style={{ color: "#666", marginVertical: 8 }}>
           Alertas de preço são um recurso premium. Assine para ser avisado quando uma carta

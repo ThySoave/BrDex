@@ -1,3 +1,8 @@
+const mockPush = jest.fn();
+
+jest.mock("expo-router", () => ({
+  useRouter: () => ({ push: mockPush })
+}));
 jest.mock("../../src/features/catalog/catalogRepository", () => ({
   fetchCatalogPage: jest.fn()
 }));
@@ -66,5 +71,14 @@ describe("CatalogScreen price alerts", () => {
       expect(getByTestId("price-alert-upsell")).toBeTruthy();
     });
     expect(createPriceAlert).not.toHaveBeenCalled();
+  });
+
+  it("navigates to the scanner screen from the scanner button", async () => {
+    (isPremium as jest.Mock).mockResolvedValue(true);
+    const { getByTestId } = render(<CatalogScreen />);
+
+    fireEvent.press(getByTestId("open-scanner"));
+
+    expect(mockPush).toHaveBeenCalledWith("/card/scan");
   });
 });
