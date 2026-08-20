@@ -57,11 +57,11 @@
 **Interfaces:**
 - Produces: `notification_queue (id uuid pk default gen_random_uuid(), user_id uuid not null references auth.users on delete cascade, title text not null, body text not null, data jsonb not null default '{}', created_at timestamptz not null default now(), sent_at timestamptz)`. RLS habilitado **sem policies e sem grants** (cliente não acessa). Trigger `matches_enqueue_push` (after insert on `matches`): 2 linhas — wanter: title `"Novo match!"`, body `"Uma carta da sua wishlist está disponível para negociação."`; owner: title `"Novo match!"`, body `"Alguém quer uma carta que você anunciou."`; `data = {"type":"match","matchId":...}`. Trigger `messages_enqueue_push` (after insert on `messages`): 1 linha para o participante que não é `sender_id`, title `"Nova mensagem"`, body `"Você recebeu uma nova mensagem."`, `data = {"type":"message","conversationId":...}`. Task 4 lê `sent_at is null` e marca `sent_at = now()`.
 
-- [ ] **Step 1: Write the failing pgTAP test** (`notification_queue.test.sql` — asserções: tabela existe; criar um match (via inserts em `user_cards` + `wishlist` de dois usuários) enfileira 2 notificações (uma por participante, com `data->>'type' = 'match'`); enviar uma mensagem enfileira 1 notificação para o outro participante (não para o remetente, `type = 'message'`, body sem o conteúdo da mensagem); `authenticated` não consegue ler a fila.)
-- [ ] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL.
-- [ ] **Step 3: Write the migration** (`0018_notification_queue.sql`): tabela + índice parcial `(sent_at) where sent_at is null` + as duas funções/triggers security definer.
-- [ ] **Step 4: Apply and verify** — reset + test db → novos testes PASS + suite completa verde.
-- [ ] **Step 5: Commit** — `feat: enqueue push notifications on new match and new message`
+- [x] **Step 1: Write the failing pgTAP test** (`notification_queue.test.sql` — asserções: tabela existe; criar um match (via inserts em `user_cards` + `wishlist` de dois usuários) enfileira 2 notificações (uma por participante, com `data->>'type' = 'match'`); enviar uma mensagem enfileira 1 notificação para o outro participante (não para o remetente, `type = 'message'`, body sem o conteúdo da mensagem); `authenticated` não consegue ler a fila.)
+- [x] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL.
+- [x] **Step 3: Write the migration** (`0018_notification_queue.sql`): tabela + índice parcial `(sent_at) where sent_at is null` + as duas funções/triggers security definer.
+- [x] **Step 4: Apply and verify** — reset + test db → novos testes PASS + suite completa verde.
+- [x] **Step 5: Commit** — `feat: enqueue push notifications on new match and new message`
 
 ---
 
