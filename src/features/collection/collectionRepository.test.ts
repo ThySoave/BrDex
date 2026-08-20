@@ -7,7 +7,8 @@ import {
   addUserCard,
   countUserCards,
   listUserCards,
-  markCardAsSold
+  markCardAsSold,
+  updateCardStatus
 } from "./collectionRepository";
 
 describe("addUserCard", () => {
@@ -165,5 +166,39 @@ describe("markCardAsSold", () => {
     mockClient({ error: { message: "boom" } });
 
     await expect(markCardAsSold("uc-1", 30.5)).rejects.toThrow("boom");
+  });
+});
+
+describe("updateCardStatus", () => {
+  function mockClient(response: { error: { message: string } | null }) {
+    const eqUserMock = jest.fn().mockResolvedValue(response);
+    const eqIdMock = jest.fn().mockReturnValue({ eq: eqUserMock });
+    const updateMock = jest.fn().mockReturnValue({ eq: eqIdMock });
+    const fromMock = jest.fn().mockReturnValue({ update: updateMock });
+    const getUserMock = jest.fn().mockResolvedValue({ data: { user: { id: "user-1" } } });
+
+    (getSupabaseClient as jest.Mock).mockReturnValue({
+      from: fromMock,
+      auth: { getUser: getUserMock }
+    });
+
+    return { fromMock, updateMock, eqIdMock, eqUserMock };
+  }
+
+  it("updates the card status scoped to the user", async () => {
+    const { fromMock, updateMock, eqIdMock, eqUserMock } = mockClient({ error: null });
+
+    await updateCardStatus("uc-1", "a_venda");
+
+    expect(fromMock).toHaveBeenCalledWith("user_cards");
+    expect(updateMock).toHaveBeenCalledWith({ status: "a_venda" });
+    expect(eqIdMock).toHaveBeenCalledWith("id", "uc-1");
+    expect(eqUserMock).toHaveBeenCalledWith("user_id", "user-1");
+  });
+
+  it("throws when the update fails", async () => {
+    mockClient({ error: { message: "boom" } });
+
+    await expect(updateCardStatus("uc-1", "guardada")).rejects.toThrow("boom");
   });
 });

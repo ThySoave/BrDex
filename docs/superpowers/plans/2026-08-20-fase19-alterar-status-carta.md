@@ -30,10 +30,10 @@
 **Interfaces:**
 - Produces: `updateCardStatus(cardId: string, status: CardStatus): Promise<void>` — exige usuário autenticado; `client.from("user_cards").update({ status }).eq("id", cardId).eq("user_id", user.id)`; `error` → `throw new Error(error.message)`.
 
-- [ ] **Step 1: Write the failing Jest tests** (estender `collectionRepository.test.ts` — casos: update de `status` filtrando por `id` e `user_id`; erro vira throw.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest collectionRepository` → FAIL.
-- [ ] **Step 3: Implement** → GREEN.
-- [ ] **Step 4: Commit** — `feat: add update card status to collection repository`
+- [x] **Step 1: Write the failing Jest tests** (estender `collectionRepository.test.ts` — casos: update de `status` filtrando por `id` e `user_id`; erro vira throw.)
+- [x] **Step 2: Run to verify it fails** — `npx jest collectionRepository` → FAIL (2 falhas esperadas).
+- [x] **Step 3: Implement** → GREEN (9/9).
+- [x] **Step 4: Commit** — `feat: add update card status to collection repository`
 
 ---
 

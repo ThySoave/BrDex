@@ -1,5 +1,5 @@
 import { getSupabaseClient } from "../../lib/supabaseClient";
-import type { AddUserCardInput, UserCard } from "./types";
+import type { AddUserCardInput, CardStatus, UserCard } from "./types";
 
 export async function addUserCard(input: AddUserCardInput): Promise<void> {
   const client = getSupabaseClient();
@@ -62,6 +62,27 @@ export async function markCardAsSold(cardId: string, priceSold: number): Promise
   const { error } = await client
     .from("user_cards")
     .update({ price_sold: priceSold, status: "vendida" })
+    .eq("id", cardId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function updateCardStatus(cardId: string, status: CardStatus): Promise<void> {
+  const client = getSupabaseClient();
+  const {
+    data: { user }
+  } = await client.auth.getUser();
+
+  if (!user) {
+    throw new Error("Usuário não autenticado");
+  }
+
+  const { error } = await client
+    .from("user_cards")
+    .update({ status })
     .eq("id", cardId)
     .eq("user_id", user.id);
 
