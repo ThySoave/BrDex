@@ -3,7 +3,12 @@ jest.mock("../../lib/supabaseClient", () => ({
 }));
 
 import { getSupabaseClient } from "../../lib/supabaseClient";
-import { addUserCard, countUserCards, listUserCards } from "./collectionRepository";
+import {
+  addUserCard,
+  countUserCards,
+  listUserCards,
+  markCardAsSold
+} from "./collectionRepository";
 
 describe("addUserCard", () => {
   it("inserts a row into user_cards with the current user's id", async () => {
@@ -37,8 +42,8 @@ describe("addUserCard", () => {
 });
 
 describe("listUserCards", () => {
-  it("joins user_cards with cards_catalog and maps to UserCard", async () => {
-    const eqMock = jest.fn().mockResolvedValue({
+  it("joins user_cards with cards_catalog, excludes sold cards and maps to UserCard", async () => {
+    const neqMock = jest.fn().mockResolvedValue({
       data: [
         {
           id: "uc-1",
@@ -52,6 +57,7 @@ describe("listUserCards", () => {
       ],
       error: null
     });
+    const eqMock = jest.fn().mockReturnValue({ neq: neqMock });
     const selectMock = jest.fn().mockReturnValue({ eq: eqMock });
     const fromMock = jest.fn().mockReturnValue({ select: selectMock });
     const getUserMock = jest.fn().mockResolvedValue({ data: { user: { id: "user-1" } } });
@@ -67,6 +73,7 @@ describe("listUserCards", () => {
       "id, catalog_card_id, language, condition, price_paid, status, cards_catalog(name, image_url)"
     );
     expect(eqMock).toHaveBeenCalledWith("user_id", "user-1");
+    expect(neqMock).toHaveBeenCalledWith("status", "vendida");
     expect(result).toEqual([
       {
         id: "uc-1",
@@ -84,7 +91,8 @@ describe("listUserCards", () => {
 
 describe("countUserCards", () => {
   function mockClient(response: { count: number | null; error: { message: string } | null }) {
-    const eqMock = jest.fn().mockResolvedValue(response);
+    const neqMock = jest.fn().mockResolvedValue(response);
+    const eqMock = jest.fn().mockReturnValue({ neq: neqMock });
     const selectMock = jest.fn().mockReturnValue({ eq: eqMock });
     const fromMock = jest.fn().mockReturnValue({ select: selectMock });
     const getUserMock = jest.fn().mockResolvedValue({ data: { user: { id: "user-1" } } });
@@ -94,17 +102,18 @@ describe("countUserCards", () => {
       auth: { getUser: getUserMock }
     });
 
-    return { fromMock, selectMock, eqMock };
+    return { fromMock, selectMock, eqMock, neqMock };
   }
 
-  it("counts user_cards rows without fetching them", async () => {
-    const { fromMock, selectMock, eqMock } = mockClient({ count: 42, error: null });
+  it("counts unsold user_cards rows without fetching them", async () => {
+    const { fromMock, selectMock, eqMock, neqMock } = mockClient({ count: 42, error: null });
 
     const result = await countUserCards();
 
     expect(fromMock).toHaveBeenCalledWith("user_cards");
     expect(selectMock).toHaveBeenCalledWith("id", { count: "exact", head: true });
     expect(eqMock).toHaveBeenCalledWith("user_id", "user-1");
+    expect(neqMock).toHaveBeenCalledWith("status", "vendida");
     expect(result).toBe(42);
   });
 
@@ -118,5 +127,39 @@ describe("countUserCards", () => {
     mockClient({ count: null, error: { message: "boom" } });
 
     await expect(countUserCards()).rejects.toThrow("boom");
+  });
+});
+
+describe("markCardAsSold", () => {
+  function mockClient(response: { error: { message: string } | null }) {
+    const eqUserMock = jest.fn().mockResolvedValue(response);
+    const eqIdMock = jest.fn().mockReturnValue({ eq: eqUserMock });
+    const updateMock = jest.fn().mockReturnValue({ eq: eqIdMock });
+    const fromMock = jest.fn().mockReturnValue({ update: updateMock });
+    const getUserMock = jest.fn().mockResolvedValue({ data: { user: { id: "user-1" } } });
+
+    (getSupabaseClient as jest.Mock).mockReturnValue({
+      from: fromMock,
+      auth: { getUser: getUserMock }
+    });
+
+    return { fromMock, updateMock, eqIdMock, eqUserMock };
+  }
+
+  it("updates the card with the sale price and sold status scoped to the user", async () => {
+    const { fromMock, updateMock, eqIdMock, eqUserMock } = mockClient({ error: null });
+
+    await markCardAsSold("uc-1", 30.5);
+
+    expect(fromMock).toHaveBeenCalledWith("user_cards");
+    expect(updateMock).toHaveBeenCalledWith({ price_sold: 30.5, status: "vendida" });
+    expect(eqIdMock).toHaveBeenCalledWith("id", "uc-1");
+    expect(eqUserMock).toHaveBeenCalledWith("user_id", "user-1");
+  });
+
+  it("throws when the update fails", async () => {
+    mockClient({ error: { message: "boom" } });
+
+    await expect(markCardAsSold("uc-1", 30.5)).rejects.toThrow("boom");
   });
 });

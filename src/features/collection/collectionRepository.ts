@@ -38,13 +38,35 @@ export async function countUserCards(): Promise<number> {
   const { count, error } = await client
     .from("user_cards")
     .select("id", { count: "exact", head: true })
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .neq("status", "vendida");
 
   if (error) {
     throw new Error(error.message);
   }
 
   return count ?? 0;
+}
+
+export async function markCardAsSold(cardId: string, priceSold: number): Promise<void> {
+  const client = getSupabaseClient();
+  const {
+    data: { user }
+  } = await client.auth.getUser();
+
+  if (!user) {
+    throw new Error("Usuário não autenticado");
+  }
+
+  const { error } = await client
+    .from("user_cards")
+    .update({ price_sold: priceSold, status: "vendida" })
+    .eq("id", cardId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
 }
 
 export async function listUserCards(): Promise<UserCard[]> {
@@ -62,7 +84,8 @@ export async function listUserCards(): Promise<UserCard[]> {
     .select(
       "id, catalog_card_id, language, condition, price_paid, status, cards_catalog(name, image_url)"
     )
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .neq("status", "vendida");
 
   if (error) {
     throw new Error(error.message);

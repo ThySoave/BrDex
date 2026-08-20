@@ -47,10 +47,10 @@
 **Interfaces:**
 - Produces: `markCardAsSold(cardId: string, priceSold: number): Promise<void>` — exige usuário autenticado; `client.from("user_cards").update({ price_sold: priceSold, status: "vendida" }).eq("id", cardId).eq("user_id", user.id)`; `error` → `throw new Error(error.message)`. `listUserCards` e `countUserCards` ganham `.neq("status", "vendida")` — testes existentes atualizados para a nova cadeia de mocks (nenhum teste removido).
 
-- [ ] **Step 1: Write the failing Jest tests** (estender `collectionRepository.test.ts` — casos: `markCardAsSold` faz update com `price_sold`/`status: "vendida"` filtrando por `id` e `user_id`; erro vira throw; `listUserCards` exclui vendidas via `.neq("status", "vendida")`; `countUserCards` idem.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest collectionRepository` → FAIL.
-- [ ] **Step 3: Implement** → GREEN.
-- [ ] **Step 4: Commit** — `feat: add mark card as sold to collection repository`
+- [x] **Step 1: Write the failing Jest tests** (estender `collectionRepository.test.ts` — casos: `markCardAsSold` faz update com `price_sold`/`status: "vendida"` filtrando por `id` e `user_id`; erro vira throw; `listUserCards` exclui vendidas via `.neq("status", "vendida")`; `countUserCards` idem.)
+- [x] **Step 2: Run to verify it fails** — `npx jest collectionRepository` → FAIL (5 falhas esperadas).
+- [x] **Step 3: Implement** → GREEN (7/7 testes).
+- [x] **Step 4: Commit** — `feat: add mark card as sold to collection repository`
 
 ---
 
