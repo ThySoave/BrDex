@@ -3,7 +3,7 @@ jest.mock("../../lib/supabaseClient", () => ({
 }));
 
 import { getSupabaseClient } from "../../lib/supabaseClient";
-import { fetchCatalogPage } from "./catalogRepository";
+import { fetchCatalogPage, searchCatalogByName } from "./catalogRepository";
 
 describe("fetchCatalogPage", () => {
   it("queries cards_catalog ordered by name and maps rows to CatalogCard", async () => {
@@ -51,5 +51,52 @@ describe("fetchCatalogPage", () => {
     (getSupabaseClient as jest.Mock).mockReturnValue({ from: fromMock });
 
     await expect(fetchCatalogPage(0)).rejects.toThrow("network down");
+  });
+});
+
+describe("searchCatalogByName", () => {
+  it("searches cards_catalog with ilike and maps rows to CatalogCard", async () => {
+    const limitMock = jest.fn().mockResolvedValue({
+      data: [
+        {
+          id: "base1-4",
+          name: "Charizard",
+          number: "4",
+          set_name: "Base",
+          rarity: "Rare Holo",
+          image_url: "https://x/charizard.png"
+        }
+      ],
+      error: null
+    });
+    const ilikeMock = jest.fn().mockReturnValue({ limit: limitMock });
+    const selectMock = jest.fn().mockReturnValue({ ilike: ilikeMock });
+    const fromMock = jest.fn().mockReturnValue({ select: selectMock });
+    (getSupabaseClient as jest.Mock).mockReturnValue({ from: fromMock });
+
+    const result = await searchCatalogByName("Charizard");
+
+    expect(fromMock).toHaveBeenCalledWith("cards_catalog");
+    expect(ilikeMock).toHaveBeenCalledWith("name", "%Charizard%");
+    expect(result).toEqual([
+      {
+        id: "base1-4",
+        name: "Charizard",
+        number: "4",
+        setName: "Base",
+        rarity: "Rare Holo",
+        imageUrl: "https://x/charizard.png"
+      }
+    ]);
+  });
+
+  it("throws when Supabase returns an error", async () => {
+    const limitMock = jest.fn().mockResolvedValue({ data: null, error: { message: "search failed" } });
+    const ilikeMock = jest.fn().mockReturnValue({ limit: limitMock });
+    const selectMock = jest.fn().mockReturnValue({ ilike: ilikeMock });
+    const fromMock = jest.fn().mockReturnValue({ select: selectMock });
+    (getSupabaseClient as jest.Mock).mockReturnValue({ from: fromMock });
+
+    await expect(searchCatalogByName("Charizard")).rejects.toThrow("search failed");
   });
 });

@@ -64,10 +64,10 @@
 **Interfaces:**
 - Produces: `recognizeCard(imageBase64: string): Promise<{ name: string | null; number: string | null }>` — `getSupabaseClient().functions.invoke("recognize-card", { body: { imageBase64 } })`; `error` → `throw new Error(error.message)`. `searchCatalogByName(name: string): Promise<CatalogCard[]>` — `.from("cards_catalog").select(...).ilike("name", "%name%").limit(25)`, mesmo mapeamento snake_case→camelCase de `fetchCatalogPage`.
 
-- [ ] **Step 1: Write the failing Jest tests** (`scannerRepository.test.ts` — invoke com nome da function e body certo; resultado repassado; erro vira throw. `catalogRepository.test.ts` — estender: `searchCatalogByName` usa ilike e mapeia os campos; erro vira throw.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest scannerRepository catalogRepository` → FAIL.
-- [ ] **Step 3: Implement** → GREEN.
-- [ ] **Step 4: Commit** — `feat: add card recognition and catalog name search repositories`
+- [x] **Step 1: Write the failing Jest tests** (`scannerRepository.test.ts` — invoke com nome da function e body certo; resultado repassado; erro vira throw. `catalogRepository.test.ts` — estender: `searchCatalogByName` usa ilike e mapeia os campos; erro vira throw.)
+- [x] **Step 2: Run to verify it fails** — `npx jest scannerRepository catalogRepository` → FAIL.
+- [x] **Step 3: Implement** → GREEN (6/6).
+- [x] **Step 4: Commit** — `feat: add card recognition and catalog name search repositories`
 
 ---
 
