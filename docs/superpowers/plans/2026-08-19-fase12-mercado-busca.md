@@ -61,9 +61,9 @@
 
 **Interfaces:** Consumes Task 2 + `getOrCreateConversation` (Fase 3).
 
-- [ ] Teste de componente (RNTL, mockando `marketRepository`, `chatRepository` e `expo-router`): digitar no campo de busca (testID `market-search-input`) e submeter chama `searchMarketListings` com o texto e renderiza os resultados (nome + status em pt-BR); listing de vendedor verificado mostra badge (testID `market-verified-<userCardId>`); tocar "Conversar" (testID `market-chat-<userCardId>`) chama `getOrCreateConversation(sellerId)` e navega para o chat. → red
-- [ ] Implementar `market.tsx`: campo de busca com botão "Buscar" (busca inicial vazia no `useFocusEffect`), lista com imagem/nome/status ("À venda" / "Para troca"), badge "✓ Verificado", botão "Conversar" → `router.push` para o chat; empty state em pt-BR. Registrar `<Tabs.Screen name="market" options={{ title: "Mercado" }} />` após `catalog`. → green
-- [ ] Full suite verde (`npx jest && npx tsc --noEmit`) → Commit `feat: add market tab to browse cards for sale or trade`
+- [x] Teste de componente (RNTL, mockando `marketRepository`, `chatRepository` e `expo-router`): digitar no campo de busca (testID `market-search-input`) e submeter chama `searchMarketListings` com o texto e renderiza os resultados (nome + status em pt-BR); listing de vendedor verificado mostra badge (testID `market-verified-<userCardId>`); tocar "Conversar" (testID `market-chat-<userCardId>`) chama `getOrCreateConversation(sellerId)` e navega para o chat. → red
+- [x] Implementar `market.tsx`: campo de busca com botão "Buscar" (busca inicial vazia no `useFocusEffect`), lista com imagem/nome/status ("À venda" / "Para troca"), badge "✓ Verificado", botão "Conversar" → `router.push` para o chat; empty state em pt-BR. Registrar `<Tabs.Screen name="market" options={{ title: "Mercado" }} />` após `catalog`. → green
+- [x] Full suite verde (`npx jest && npx tsc --noEmit` — 95 testes, 35 suites) → Commit `feat: add market tab to browse cards for sale or trade`
 
 ---
 
