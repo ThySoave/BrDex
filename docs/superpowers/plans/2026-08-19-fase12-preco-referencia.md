@@ -50,10 +50,10 @@
 **Interfaces:**
 - Produces: `extractTcgplayerMarketUsd(card): number | null` — pega `card.tcgplayer.prices.<variant>.market` na ordem de preferência `normal` → `holofoil` → `reverseHolofoil` → primeira variante disponível; `null` se não houver tcgplayer/prices/market. `toBrl(usd: number, rate: number): number` — arredondado a 2 casas.
 
-- [ ] **Step 1: Write the failing Deno test** (5 casos: usa `normal.market`; cai para `holofoil.market` quando não há normal; usa a primeira variante disponível quando não há normal/holofoil/reverse; retorna `null` sem bloco tcgplayer ou sem market; `toBrl(10, 5.25) === 52.5` e arredonda 2 casas.)
-- [ ] **Step 2: Run to verify it fails.**
-- [ ] **Step 3: Implement `transform.ts`** → `deno test` verde.
-- [ ] **Step 4: Commit** — `feat: add tcgplayer price extraction and BRL conversion helpers`
+- [x] **Step 1: Write the failing Deno test** (5 casos: usa `normal.market`; cai para `holofoil.market` quando não há normal; usa a primeira variante disponível quando não há normal/holofoil/reverse; retorna `null` sem bloco tcgplayer ou sem market; `toBrl(10, 5.25) === 52.5` e arredonda 2 casas.)
+- [x] **Step 2: Run to verify it fails.**
+- [x] **Step 3: Implement `transform.ts`** → `deno test` verde (5/5).
+- [x] **Step 4: Commit** — `feat: add tcgplayer price extraction and BRL conversion helpers`
 
 ---
 
