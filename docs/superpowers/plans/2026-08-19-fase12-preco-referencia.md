@@ -72,9 +72,9 @@
 
 **Files:** Create `supabase/migrations/0015_sync_prices_schedule.sql`.
 
-- [ ] Migration com pg_cron + pg_net chamando `/functions/v1/sync-prices` 1×/dia (ex: `30 3 * * *`, após o snapshot diário), URL/service key via Vault — mesmo padrão de `0010_fetch_news_schedule.sql`.
-- [ ] Apply and verify — reset sem erros; job `sync-prices-daily` listado em `cron.job`; suite pgTAP completa verde.
-- [ ] Commit `feat: schedule sync-prices edge function via pg_cron`
+- [x] Migration com pg_cron + pg_net chamando `/functions/v1/sync-prices` 1×/dia (`30 3 * * *`, após o snapshot diário), URL/service key via Vault — mesmo padrão de `0010_fetch_news_schedule.sql`.
+- [x] Apply and verify — reset sem erros; job `sync-prices-daily` listado em `cron.job`; suite pgTAP completa verde (64 asserções).
+- [x] Commit `feat: schedule sync-prices edge function via pg_cron`
 
 ---
 
