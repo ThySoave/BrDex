@@ -1,10 +1,12 @@
-import { useState } from "react";
-import { View, Text, Pressable, ScrollView, TextInput } from "react-native";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, View, Text, Pressable, ScrollView, TextInput } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { addUserCard } from "../../src/features/collection/collectionRepository";
+import { addUserCard, countUserCards } from "../../src/features/collection/collectionRepository";
 import { CardPrices } from "../../src/components/CardPrices";
 import { CARD_CONDITIONS, type CardCondition } from "../../src/features/collection/conditionScale";
 import type { CardLanguage, CardStatus } from "../../src/features/collection/types";
+import { isPremium } from "../../src/features/premium/entitlementsRepository";
+import { canAddCard, FREE_CARD_LIMIT } from "../../src/features/premium/cardLimit";
 
 const LANGUAGES: { value: CardLanguage; label: string }[] = [
   { value: "en", label: "Inglês" },
@@ -28,6 +30,13 @@ export default function AddCardScreen() {
   const [status, setStatus] = useState<CardStatus>("guardada");
   const [pricePaid, setPricePaid] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [allowed, setAllowed] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    Promise.all([isPremium(), countUserCards()])
+      .then(([premium, count]) => setAllowed(canAddCard(count, premium)))
+      .catch(() => setAllowed(true));
+  }, []);
 
   async function handleSubmit() {
     setError(null);
@@ -43,6 +52,25 @@ export default function AddCardScreen() {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao cadastrar carta");
     }
+  }
+
+  if (allowed === null) {
+    return (
+      <View style={{ flex: 1, padding: 16 }}>
+        <ActivityIndicator testID="add-card-loading" />
+      </View>
+    );
+  }
+
+  if (!allowed) {
+    return (
+      <View style={{ flex: 1, padding: 16 }}>
+        <Text testID="card-limit-upsell" style={{ color: "#666" }}>
+          Você chegou ao limite de {FREE_CARD_LIMIT} cartas do plano grátis. Assine o premium para
+          cadastrar cartas ilimitadas.
+        </Text>
+      </View>
+    );
   }
 
   return (

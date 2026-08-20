@@ -60,11 +60,11 @@
 **Interfaces:**
 - Consumes: Tasks 1 e 2, `isPremium`. No mount: `Promise.all([isPremium(), countUserCards()])`; qualquer rejeição → trata como liberado (fail-open). Enquanto checa → `ActivityIndicator` (testID `add-card-loading`). `canAddCard(count, premium)` `false` → tela mostra só o texto `card-limit-upsell` ("Você chegou ao limite de 50 cartas do plano grátis. Assine o premium para cadastrar cartas ilimitadas.") — sem formulário nem botão salvar. Caso liberado → formulário atual intacto (idioma, estado, status, preço, salvar).
 
-- [ ] **Step 1: Write the failing RNTL test** (**novo** `add.test.tsx`, mockando `expo-router`, `isPremium`, `countUserCards`, `addUserCard`, `CardPrices` — casos: grátis no limite mostra `card-limit-upsell` e não mostra `add-card-submit`; grátis abaixo do limite mostra o formulário e salvar chama `addUserCard`; premium no limite mostra o formulário; `countUserCards` rejeitando mostra o formulário (fail-open).)
-- [ ] **Step 2: Run to verify it fails** — `npx jest add` (pattern `app/card/add`) → FAIL.
-- [ ] **Step 3: Implement o gating em `add.tsx`** → GREEN.
-- [ ] **Step 4: Full suite** — `npx jest && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: gate card registration behind free plan limit`
+- [x] **Step 1: Write the failing RNTL test** (**novo** `add.test.tsx`, mockando `expo-router`, `isPremium`, `countUserCards`, `addUserCard`, `CardPrices` — casos: grátis no limite mostra `card-limit-upsell` e não mostra `add-card-submit`; grátis abaixo do limite mostra o formulário e salvar chama `addUserCard`; premium no limite mostra o formulário; `countUserCards` rejeitando mostra o formulário (fail-open).)
+- [x] **Step 2: Run to verify it fails** — `npx jest app/card/add` → FAIL (upsell inexistente).
+- [x] **Step 3: Implement o gating em `add.tsx`** → GREEN (4/4).
+- [x] **Step 4: Full suite** — `npx jest` (147/147) e `npx tsc --noEmit` verdes.
+- [x] **Step 5: Commit** — `feat: gate card registration behind free plan limit`
 
 ---
 
