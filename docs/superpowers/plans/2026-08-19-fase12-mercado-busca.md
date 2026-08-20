@@ -50,8 +50,8 @@
 **Interfaces:**
 - Produces: `MarketListing { userCardId; catalogCardId; cardName; cardImageUrl; language; condition; status; sellerId; sellerVerified }`; `searchMarketListings(query: string): Promise<MarketListing[]>` — RPC `search_market_listings` com `{ search_text: query }`; erro vira `throw new Error(message)`.
 
-- [ ] Teste `marketRepository` (2 casos: mapeia as linhas do RPC chamado com `{ search_text }`; erro propagado) → red → implementação → green.
-- [ ] Commit `feat: add market repository`
+- [x] Teste `marketRepository` (2 casos: mapeia as linhas do RPC chamado com `{ search_text }`; erro propagado) → red → implementação → green.
+- [x] Commit `feat: add market repository`
 
 ---
 
