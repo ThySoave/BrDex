@@ -63,8 +63,8 @@
 
 **Interfaces:** Consumes Tasks 1–2. Pagina `https://api.pokemontcg.io/v2/cards?select=id,tcgplayer&page=N&pageSize=250` (mesmo header de API key do `sync-catalog`); lê `USD_BRL_RATE` da env (sem valor → responde 500 explicando a config, não grava nada); para cada carta com preço extraível, chama `supabase.rpc("upsert_reference_price", { p_external_id, p_language: "en", p_price_brl, p_source: "tcgplayer" })`; responde `{ upserted, skipped }`.
 
-- [ ] Implementar `index.ts` seguindo o padrão de `sync-catalog`; verificar com `deno check supabase/functions/sync-prices/index.ts` (sem teste de rede — a lógica testável está toda em `transform.ts`/Task 1).
-- [ ] Commit `feat: add sync-prices edge function to populate reference prices`
+- [x] Implementar `index.ts` seguindo o padrão de `sync-catalog`; verificar com `deno check supabase/functions/sync-prices/index.ts` (sem teste de rede — a lógica testável está toda em `transform.ts`/Task 1).
+- [x] Commit `feat: add sync-prices edge function to populate reference prices`
 
 ---
 
