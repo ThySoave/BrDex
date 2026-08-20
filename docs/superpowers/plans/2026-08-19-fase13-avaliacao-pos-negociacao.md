@@ -51,8 +51,8 @@
 **Interfaces:**
 - Produces: `RatingSummary { avgStars: number | null; ratingsCount: number }`; `rateTrade(tradeId: string, stars: number, comment?: string): Promise<void>` (RPC `rate_trade`); `myRatedTradeIds(tradeIds: string[]): Promise<string[]>` (select `trade_id` de `trade_ratings` com `rater` = usuário atual e `trade_id in tradeIds`; retorna `[]` se `tradeIds` vazio sem consultar); `userRatingSummary(userId: string): Promise<RatingSummary>` (RPC `user_rating_summary`); erros viram `throw new Error(message)`.
 
-- [ ] Teste `ratingsRepository` (5 casos: rateTrade chama RPC com id/nota/comentário; erro de RPC propagado; myRatedTradeIds filtra por usuário atual e mapeia ids; myRatedTradeIds com lista vazia devolve [] sem consultar; userRatingSummary mapeia avg_stars/ratings_count) → red → implementação → green.
-- [ ] Commit `feat: add ratings repository`
+- [x] Teste `ratingsRepository` (5 casos: rateTrade chama RPC com id/nota/comentário; erro de RPC propagado; myRatedTradeIds filtra por usuário atual e mapeia ids; myRatedTradeIds com lista vazia devolve [] sem consultar; userRatingSummary mapeia avg_stars/ratings_count) → red → implementação → green.
+- [x] Commit `feat: add ratings repository`
 
 ---
 
