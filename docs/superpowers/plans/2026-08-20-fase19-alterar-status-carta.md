@@ -44,11 +44,11 @@
 **Interfaces:**
 - Consumes: Task 1. Cada item do álbum ganha botão `card-status-<id>`; tocar abre painel com opções `status-option-guardada` / `status-option-a_venda` / `status-option-disponivel_troca`; escolher chama `updateCardStatus(id, status)`, atualiza o status da carta na lista local e fecha o painel; erro → `Alert.alert("Erro", message)`; botão `cancel-status` fecha sem chamar o repositório.
 
-- [ ] **Step 1: Write the failing RNTL tests** (estender `album.test.tsx` — casos: botão abre o painel; escolher opção chama `updateCardStatus` e fecha o painel; erro vira `Alert.alert`; cancelar fecha sem chamar o repositório.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest album` → FAIL.
-- [ ] **Step 3: Implement** → GREEN (lembrar do `act` assíncrono no press, como na Fase 17).
-- [ ] **Step 4: Full suite** — `npx jest && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: change card status from the album`
+- [x] **Step 1: Write the failing RNTL tests** (estender `album.test.tsx` — casos: botão abre o painel; escolher opção chama `updateCardStatus` e fecha o painel; erro vira `Alert.alert`; cancelar fecha sem chamar o repositório.)
+- [x] **Step 2: Run to verify it fails** — `npx jest album` → FAIL (4 falhas esperadas).
+- [x] **Step 3: Implement** → GREEN (16/16 no álbum, com `act` assíncrono no press).
+- [x] **Step 4: Full suite** — `npx jest && npx tsc --noEmit` verdes (168/168, tsc limpo).
+- [x] **Step 5: Commit** — `feat: change card status from the album`
 
 ---
 

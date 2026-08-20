@@ -2,13 +2,23 @@ import { useEffect, useRef, useState } from "react";
 import { Alert, FlatList, Image, Pressable, Text, TextInput, View } from "react-native";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
-import { listUserCards, markCardAsSold } from "../../src/features/collection/collectionRepository";
+import {
+  listUserCards,
+  markCardAsSold,
+  updateCardStatus
+} from "../../src/features/collection/collectionRepository";
 import { buildCollectionPdfHtml } from "../../src/features/collection/exportPdf";
 import { fetchSetProgress, type SetProgress } from "../../src/features/collection/setProgressRepository";
 import { ShareCollectionCard, ShareSingleCard } from "../../src/features/collection/shareCards";
 import { captureAndShareView } from "../../src/features/collection/shareImage";
 import { isPremium } from "../../src/features/premium/entitlementsRepository";
-import type { UserCard } from "../../src/features/collection/types";
+import type { CardStatus, UserCard } from "../../src/features/collection/types";
+
+const STATUS_OPTIONS: { value: CardStatus; label: string }[] = [
+  { value: "guardada", label: "Guardada" },
+  { value: "a_venda", label: "À venda" },
+  { value: "disponivel_troca", label: "Disponível para troca" }
+];
 
 export default function AlbumScreen() {
   const [cards, setCards] = useState<UserCard[]>([]);
@@ -18,6 +28,7 @@ export default function AlbumScreen() {
   const [shareCard, setShareCard] = useState<UserCard | null>(null);
   const [sellingCard, setSellingCard] = useState<UserCard | null>(null);
   const [salePrice, setSalePrice] = useState("");
+  const [statusCard, setStatusCard] = useState<UserCard | null>(null);
   const [error, setError] = useState<string | null>(null);
   const collectionShareRef = useRef<View>(null);
   const cardShareRef = useRef<View>(null);
@@ -53,6 +64,19 @@ export default function AlbumScreen() {
       .then(() => {
         setCards((current) => current.filter((card) => card.id !== cardId));
         setSellingCard(null);
+      })
+      .catch((err: Error) => Alert.alert("Erro", err.message));
+  };
+
+  const handleChangeStatus = (status: CardStatus) => {
+    if (!statusCard) return;
+    const cardId = statusCard.id;
+    updateCardStatus(cardId, status)
+      .then(() => {
+        setCards((current) =>
+          current.map((card) => (card.id === cardId ? { ...card, status } : card))
+        );
+        setStatusCard(null);
       })
       .catch((err: Error) => Alert.alert("Erro", err.message));
   };
@@ -131,9 +155,32 @@ export default function AlbumScreen() {
             <Pressable testID={`sell-card-${item.id}`} onPress={() => handleOpenSale(item)}>
               <Text style={{ color: "#c00" }}>Vender</Text>
             </Pressable>
+            <Pressable testID={`card-status-${item.id}`} onPress={() => setStatusCard(item)}>
+              <Text style={{ color: "#06c" }}>Status</Text>
+            </Pressable>
           </Pressable>
         )}
       />
+      {statusCard ? (
+        <View style={{ padding: 12, borderWidth: 1, borderColor: "#ccc", borderRadius: 8 }}>
+          <Text>{`Status de ${statusCard.cardName}`}</Text>
+          {STATUS_OPTIONS.map((option) => (
+            <Pressable
+              key={option.value}
+              testID={`status-option-${option.value}`}
+              onPress={() => handleChangeStatus(option.value)}
+              style={{ marginVertical: 4 }}
+            >
+              <Text style={{ fontWeight: statusCard.status === option.value ? "bold" : "normal" }}>
+                {option.label}
+              </Text>
+            </Pressable>
+          ))}
+          <Pressable testID="cancel-status" onPress={() => setStatusCard(null)}>
+            <Text>Cancelar</Text>
+          </Pressable>
+        </View>
+      ) : null}
       {sellingCard ? (
         <View style={{ padding: 12, borderWidth: 1, borderColor: "#ccc", borderRadius: 8 }}>
           <Text>{`Vender ${sellingCard.cardName}`}</Text>

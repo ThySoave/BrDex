@@ -1,6 +1,7 @@
 jest.mock("../../src/features/collection/collectionRepository", () => ({
   listUserCards: jest.fn(),
-  markCardAsSold: jest.fn()
+  markCardAsSold: jest.fn(),
+  updateCardStatus: jest.fn()
 }));
 jest.mock("../../src/features/collection/setProgressRepository", () => ({
   fetchSetProgress: jest.fn()
@@ -23,7 +24,11 @@ import { Alert } from "react-native";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { captureAndShareView } from "../../src/features/collection/shareImage";
-import { listUserCards, markCardAsSold } from "../../src/features/collection/collectionRepository";
+import {
+  listUserCards,
+  markCardAsSold,
+  updateCardStatus
+} from "../../src/features/collection/collectionRepository";
 import { fetchSetProgress } from "../../src/features/collection/setProgressRepository";
 import { isPremium } from "../../src/features/premium/entitlementsRepository";
 import AlbumScreen from "./album";
@@ -215,6 +220,74 @@ describe("AlbumScreen card sale", () => {
       expect(queryByTestId("sale-price-input")).toBeNull();
     });
     expect(markCardAsSold).not.toHaveBeenCalled();
+  });
+});
+
+describe("AlbumScreen card status", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (listUserCards as jest.Mock).mockResolvedValue(CARDS);
+    (fetchSetProgress as jest.Mock).mockResolvedValue([]);
+    (isPremium as jest.Mock).mockResolvedValue(false);
+    (updateCardStatus as jest.Mock).mockResolvedValue(undefined);
+  });
+
+  async function openStatusPanel() {
+    const screen = render(<AlbumScreen />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("card-status-uc-1")).toBeTruthy();
+    });
+
+    fireEvent.press(screen.getByTestId("card-status-uc-1"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("status-option-a_venda")).toBeTruthy();
+    });
+
+    return screen;
+  }
+
+  it("abre o painel de status ao tocar em Status", async () => {
+    const { getByTestId } = await openStatusPanel();
+
+    expect(getByTestId("status-option-guardada")).toBeTruthy();
+    expect(getByTestId("status-option-disponivel_troca")).toBeTruthy();
+    expect(getByTestId("cancel-status")).toBeTruthy();
+  });
+
+  it("atualiza o status e fecha o painel ao escolher uma opção", async () => {
+    const { getByTestId, queryByTestId } = await openStatusPanel();
+
+    await act(async () => {
+      fireEvent.press(getByTestId("status-option-a_venda"));
+    });
+
+    expect(updateCardStatus).toHaveBeenCalledWith("uc-1", "a_venda");
+    expect(queryByTestId("status-option-a_venda")).toBeNull();
+  });
+
+  it("mostra alerta quando a atualização falha", async () => {
+    (updateCardStatus as jest.Mock).mockRejectedValue(new Error("status falhou"));
+    const alertSpy = jest.spyOn(Alert, "alert").mockImplementation(() => {});
+    const { getByTestId } = await openStatusPanel();
+
+    await act(async () => {
+      fireEvent.press(getByTestId("status-option-a_venda"));
+    });
+
+    expect(alertSpy).toHaveBeenCalledWith("Erro", "status falhou");
+  });
+
+  it("cancela fechando o painel sem chamar o repositório", async () => {
+    const { getByTestId, queryByTestId } = await openStatusPanel();
+
+    fireEvent.press(getByTestId("cancel-status"));
+
+    await waitFor(() => {
+      expect(queryByTestId("status-option-a_venda")).toBeNull();
+    });
+    expect(updateCardStatus).not.toHaveBeenCalled();
   });
 });
 
