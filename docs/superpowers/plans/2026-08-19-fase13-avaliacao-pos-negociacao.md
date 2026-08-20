@@ -62,9 +62,9 @@
 
 **Interfaces:** Consumes Task 2. A tela já carrega `trades` e `reputation` do outro usuário.
 
-- [ ] Teste de componente (RNTL, mockando `ratingsRepository` junto dos mocks existentes): linha de média (testID `chat-rating-summary`) mostra "4.5 ★ (2 avaliações)" quando `userRatingSummary` retorna dados; quando há trade confirmada ainda não avaliada por mim, aparecem as estrelas (testIDs `chat-rate-1`..`chat-rate-5`) e tocar em `chat-rate-5` chama `rateTrade` com nota 5; quando a trade confirmada já foi avaliada, as estrelas não aparecem. → red
-- [ ] Implementar na tela: carregar `userRatingSummary(other)` + `myRatedTradeIds` das trades confirmadas junto de `loadTrades()`; linha `chat-rating-summary` ao lado da reputação (some quando `ratingsCount` = 0); bloco "Avaliar negociação" com 5 estrelas para a trade confirmada mais recente sem avaliação minha; após avaliar, recarregar. → green
-- [ ] Full suite verde (`npx jest && npx tsc --noEmit`) → Commit `feat: add post-trade rating flow and rating summary in chat`
+- [x] Teste de componente (RNTL, mockando `ratingsRepository` junto dos mocks existentes): linha de média (testID `chat-rating-summary`) mostra "4.5 ★ (2 avaliações)" quando `userRatingSummary` retorna dados; quando há trade confirmada ainda não avaliada por mim, aparecem as estrelas (testIDs `chat-rate-1`..`chat-rate-5`) e tocar em `chat-rate-5` chama `rateTrade` com nota 5; quando a trade confirmada já foi avaliada, as estrelas não aparecem. → red
+- [x] Implementar na tela: carregar `userRatingSummary(other)` + `myRatedTradeIds` das trades confirmadas junto de `loadTrades()`; linha `chat-rating-summary` ao lado da reputação (some quando `ratingsCount` = 0); bloco "Avaliar negociação" com 5 estrelas para a trade confirmada mais recente sem avaliação minha; após avaliar, recarregar. → green
+- [x] Full suite verde (`npx jest && npx tsc --noEmit`) → Commit `feat: add post-trade rating flow and rating summary in chat`
 
 ---
 

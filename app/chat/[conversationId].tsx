@@ -7,6 +7,12 @@ import {
   subscribeToMessages,
   type ChatMessage
 } from "../../src/features/social/chatRepository";
+import {
+  myRatedTradeIds,
+  rateTrade,
+  userRatingSummary,
+  type RatingSummary
+} from "../../src/features/social/ratingsRepository";
 import { blockUser, reportUser } from "../../src/features/social/safetyRepository";
 import {
   completedTradesCount,
@@ -25,18 +31,27 @@ export default function ChatScreen() {
   const [draft, setDraft] = useState("");
   const [trades, setTrades] = useState<Trade[]>([]);
   const [reputation, setReputation] = useState<number | null>(null);
+  const [ratingSummary, setRatingSummary] = useState<RatingSummary | null>(null);
+  const [ratedTradeIds, setRatedTradeIds] = useState<string[]>([]);
 
   const loadTrades = () => {
     if (!conversationId) {
       return;
     }
     listTrades(conversationId)
-      .then(setTrades)
+      .then((loaded) => {
+        setTrades(loaded);
+        const confirmedIds = loaded.filter((t) => t.confirmedAt).map((t) => t.id);
+        return myRatedTradeIds(confirmedIds).then(setRatedTradeIds);
+      })
       .catch(() => setTrades([]));
     if (other) {
       completedTradesCount(other)
         .then(setReputation)
         .catch(() => setReputation(null));
+      userRatingSummary(other)
+        .then(setRatingSummary)
+        .catch(() => setRatingSummary(null));
     }
   };
 
@@ -116,8 +131,18 @@ export default function ChatScreen() {
       .catch((err: Error) => Alert.alert("Erro", err.message));
   };
 
+  const handleRateTrade = (tradeId: string, stars: number) => {
+    rateTrade(tradeId, stars)
+      .then(() => {
+        Alert.alert("Avaliação enviada", "Obrigado por avaliar a negociação.");
+        loadTrades();
+      })
+      .catch((err: Error) => Alert.alert("Erro", err.message));
+  };
+
   const pendingFromOther = trades.find((t) => !t.confirmedAt && t.proposedBy === other);
   const pendingOwn = trades.find((t) => !t.confirmedAt && t.proposedBy !== other);
+  const unratedConfirmed = trades.find((t) => t.confirmedAt && !ratedTradeIds.includes(t.id));
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
@@ -125,6 +150,29 @@ export default function ChatScreen() {
         <Text testID="chat-reputation" style={{ color: "#666" }}>
           {`${reputation} ${reputation === 1 ? "negociação concluída" : "negociações concluídas"}`}
         </Text>
+      ) : null}
+      {ratingSummary && ratingSummary.ratingsCount > 0 ? (
+        <Text testID="chat-rating-summary" style={{ color: "#666" }}>
+          {`${ratingSummary.avgStars} ★ (${ratingSummary.ratingsCount} ${
+            ratingSummary.ratingsCount === 1 ? "avaliação" : "avaliações"
+          })`}
+        </Text>
+      ) : null}
+      {unratedConfirmed ? (
+        <View style={{ marginVertical: 4 }}>
+          <Text style={{ color: "#666" }}>Avaliar negociação:</Text>
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            {[1, 2, 3, 4, 5].map((stars) => (
+              <Pressable
+                key={stars}
+                testID={`chat-rate-${stars}`}
+                onPress={() => handleRateTrade(unratedConfirmed.id, stars)}
+              >
+                <Text style={{ color: "#0a66c2" }}>{`${stars}★`}</Text>
+              </Pressable>
+            ))}
+          </View>
+        </View>
       ) : null}
       {pendingFromOther ? (
         <Pressable
