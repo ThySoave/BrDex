@@ -111,9 +111,9 @@
 
 **Interfaces:** Consumes Task 5 + `expo-notifications` (instalar com `npx expo install expo-notifications` — conferir docs v57 antes; fallback `npm install expo-notifications --legacy-peer-deps`).
 
-- [ ] Teste de componente (RNTL, mockando `expo-notifications` e `pushTokensRepository` nos mocks já existentes do `home.test.tsx`): ao montar a Home com permissão concedida, `getExpoPushTokenAsync` é chamado e `registerPushToken` recebe o token; com permissão negada, `registerPushToken` não é chamado (e a Home renderiza normalmente — registro nunca quebra a tela). → red
-- [ ] Implementar: helper `registerForPushNotifications()` em `src/features/notifications/registerForPush.ts`: `getPermissionsAsync` → se não concedida, `requestPermissionsAsync` → se concedida, `getExpoPushTokenAsync()` → `registerPushToken(token, Platform.OS)`; qualquer erro é engolido com `console.warn` (push é best-effort); chamado em `useEffect` na Home. → green
-- [ ] Full suite verde (`npx jest && npx tsc --noEmit`) → Commit `feat: register device push token on app home`
+- [x] Teste de componente (RNTL, mockando `expo-notifications` e `pushTokensRepository` nos mocks já existentes do `home.test.tsx`): ao montar a Home com permissão concedida, `getExpoPushTokenAsync` é chamado e `registerPushToken` recebe o token; com permissão negada, `registerPushToken` não é chamado (e a Home renderiza normalmente — registro nunca quebra a tela). → red
+- [x] Implementar: helper `registerForPushNotifications()` em `src/features/notifications/registerForPush.ts`: `getPermissionsAsync` → se não concedida, `requestPermissionsAsync` → se concedida, `getExpoPushTokenAsync()` → `registerPushToken(token, Platform.OS)`; qualquer erro é engolido com `console.warn` (push é best-effort); chamado em `useEffect` na Home. → green
+- [x] Full suite verde (`npx jest && npx tsc --noEmit`) → Commit `feat: register device push token on app home`
 
 ---
 

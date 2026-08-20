@@ -1,7 +1,8 @@
 import { useFocusEffect } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert, FlatList, Linking, Pressable, Text, View } from "react-native";
 import { listNews, type NewsItem } from "../../src/features/news/newsRepository";
+import { registerForPushNotifications } from "../../src/features/notifications/registerForPush";
 import {
   dismissSetRelease,
   listUndismissedSetReleases,
@@ -16,6 +17,10 @@ export default function HomeScreen() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [releases, setReleases] = useState<SetRelease[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    registerForPushNotifications();
+  }, []);
 
   useFocusEffect(
     useCallback(() => {

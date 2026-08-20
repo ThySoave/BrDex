@@ -11,9 +11,21 @@ jest.mock("expo-router", () => ({
     React.useEffect(callback, []);
   }
 }));
+jest.mock("expo-notifications", () => ({
+  getPermissionsAsync: jest.fn(),
+  requestPermissionsAsync: jest.fn(),
+  getExpoPushTokenAsync: jest.fn(),
+  setNotificationChannelAsync: jest.fn(),
+  AndroidImportance: { MAX: 5 }
+}));
+jest.mock("../../src/features/notifications/pushTokensRepository", () => ({
+  registerPushToken: jest.fn()
+}));
 
 import { fireEvent, render, waitFor } from "@testing-library/react-native";
+import * as Notifications from "expo-notifications";
 import { Linking } from "react-native";
+import { registerPushToken } from "../../src/features/notifications/pushTokensRepository";
 import { listNews } from "../../src/features/news/newsRepository";
 import {
   dismissSetRelease,
@@ -47,6 +59,33 @@ describe("HomeScreen", () => {
     (listNews as jest.Mock).mockResolvedValue(NEWS);
     (listUndismissedSetReleases as jest.Mock).mockResolvedValue(RELEASES);
     (dismissSetRelease as jest.Mock).mockResolvedValue(undefined);
+    (Notifications.getPermissionsAsync as jest.Mock).mockResolvedValue({ status: "granted" });
+    (Notifications.requestPermissionsAsync as jest.Mock).mockResolvedValue({ status: "granted" });
+    (Notifications.getExpoPushTokenAsync as jest.Mock).mockResolvedValue({
+      data: "ExponentPushToken[device-1]"
+    });
+    (registerPushToken as jest.Mock).mockResolvedValue(undefined);
+  });
+
+  it("registers the device push token when permission is granted", async () => {
+    render(<HomeScreen />);
+
+    await waitFor(() => {
+      expect(Notifications.getExpoPushTokenAsync).toHaveBeenCalled();
+      expect(registerPushToken).toHaveBeenCalledWith("ExponentPushToken[device-1]", "ios");
+    });
+  });
+
+  it("does not register a push token when permission is denied", async () => {
+    (Notifications.getPermissionsAsync as jest.Mock).mockResolvedValue({ status: "denied" });
+    (Notifications.requestPermissionsAsync as jest.Mock).mockResolvedValue({ status: "denied" });
+
+    const { getByText } = render(<HomeScreen />);
+
+    await waitFor(() => {
+      expect(getByText("Novo set anunciado")).toBeTruthy();
+    });
+    expect(registerPushToken).not.toHaveBeenCalled();
   });
 
   it("renders the news list", async () => {
