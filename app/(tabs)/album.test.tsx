@@ -217,3 +217,35 @@ describe("AlbumScreen card sale", () => {
     expect(markCardAsSold).not.toHaveBeenCalled();
   });
 });
+
+describe("AlbumScreen card images", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (fetchSetProgress as jest.Mock).mockResolvedValue([]);
+    (isPremium as jest.Mock).mockResolvedValue(false);
+  });
+
+  it("mostra a foto própria da carta quando existe", async () => {
+    (listUserCards as jest.Mock).mockResolvedValue([
+      { ...CARDS[0], photoUrl: "https://cdn.supabase.co/card-photos/user-1/1.jpg" }
+    ]);
+    const { getByTestId } = render(<AlbumScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("album-image-uc-1").props.source).toEqual({
+        uri: "https://cdn.supabase.co/card-photos/user-1/1.jpg"
+      });
+    });
+  });
+
+  it("usa a imagem oficial do catálogo quando não há foto própria", async () => {
+    (listUserCards as jest.Mock).mockResolvedValue([{ ...CARDS[0], photoUrl: null }]);
+    const { getByTestId } = render(<AlbumScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("album-image-uc-1").props.source).toEqual({
+        uri: "https://example.com/25.png"
+      });
+    });
+  });
+});

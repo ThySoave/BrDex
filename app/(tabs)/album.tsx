@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Alert, FlatList, Pressable, Text, TextInput, View } from "react-native";
+import { Alert, FlatList, Image, Pressable, Text, TextInput, View } from "react-native";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { listUserCards, markCardAsSold } from "../../src/features/collection/collectionRepository";
@@ -122,6 +122,11 @@ export default function AlbumScreen() {
             onLongPress={() => setShareCard(item)}
             style={{ width: 100, margin: 8 }}
           >
+            <Image
+              testID={`album-image-${item.id}`}
+              source={{ uri: item.photoUrl ?? item.cardImageUrl }}
+              style={{ width: 84, height: 117, borderRadius: 4 }}
+            />
             <Text numberOfLines={1}>{item.cardName}</Text>
             <Pressable testID={`sell-card-${item.id}`} onPress={() => handleOpenSale(item)}>
               <Text style={{ color: "#c00" }}>Vender</Text>

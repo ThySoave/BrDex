@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator, View, Text, Pressable, ScrollView, TextInput } from "react-native";
+import { ActivityIndicator, Alert, View, Text, Pressable, ScrollView, TextInput } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
 import { addUserCard, countUserCards } from "../../src/features/collection/collectionRepository";
+import { uploadCardPhoto } from "../../src/features/collection/photoRepository";
 import { CardPrices } from "../../src/components/CardPrices";
 import { CARD_CONDITIONS, type CardCondition } from "../../src/features/collection/conditionScale";
 import type { CardLanguage, CardStatus } from "../../src/features/collection/types";
@@ -29,6 +31,7 @@ export default function AddCardScreen() {
   const [condition, setCondition] = useState<CardCondition>("near_mint");
   const [status, setStatus] = useState<CardStatus>("guardada");
   const [pricePaid, setPricePaid] = useState("");
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [allowed, setAllowed] = useState<boolean | null>(null);
 
@@ -37,6 +40,31 @@ export default function AddCardScreen() {
       .then(([premium, count]) => setAllowed(canAddCard(count, premium)))
       .catch(() => setAllowed(true));
   }, []);
+
+  async function handleTakePhoto() {
+    const permission = await ImagePicker.requestCameraPermissionsAsync();
+    if (!permission.granted) {
+      Alert.alert("Permissão negada", "Autorize o uso da câmera para fotografar a carta.");
+      return;
+    }
+
+    const capture = await ImagePicker.launchCameraAsync({
+      mediaTypes: ["images"],
+      base64: true,
+      quality: 0.5
+    });
+
+    const imageBase64 = capture.canceled ? null : capture.assets?.[0]?.base64;
+    if (!imageBase64) {
+      return;
+    }
+
+    try {
+      setPhotoUrl(await uploadCardPhoto(imageBase64));
+    } catch (err) {
+      Alert.alert("Erro", err instanceof Error ? err.message : "Erro ao enviar a foto");
+    }
+  }
 
   async function handleSubmit() {
     setError(null);
@@ -47,7 +75,7 @@ export default function AddCardScreen() {
         condition,
         pricePaid: pricePaid ? Number(pricePaid) : null,
         status,
-        photoUrl: null
+        photoUrl
       });
       router.replace("/(tabs)/album");
     } catch (err) {
@@ -97,6 +125,12 @@ export default function AddCardScreen() {
           <Text style={{ fontWeight: status === s.value ? "bold" : "normal" }}>{s.label}</Text>
         </Pressable>
       ))}
+
+      <Text>Foto da carta (opcional)</Text>
+      <Pressable testID="add-card-photo" onPress={handleTakePhoto}>
+        <Text>Tirar foto da carta</Text>
+      </Pressable>
+      {photoUrl ? <Text testID="add-card-photo-done">Foto adicionada</Text> : null}
 
       <Text>Preço pago (R$)</Text>
       <TextInput

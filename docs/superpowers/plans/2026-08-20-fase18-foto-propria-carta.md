@@ -64,11 +64,11 @@
 **Interfaces:**
 - Consumes: Tasks 1–2. No `add.tsx`: botão `add-card-photo` pede permissão de câmera e abre `ImagePicker.launchCameraAsync({ mediaTypes: ["images"], base64: true, quality: 0.5 })` (padrão do `scan.tsx`); com base64, chama `uploadCardPhoto` e guarda a URL em estado (texto `add-card-photo-done` visível); cancelar/sem base64 → nada; erro de upload → `Alert.alert("Erro", message)` e cadastro segue sem foto; `handleSubmit` passa `photoUrl` (ou null). No `album.tsx`: cada item renderiza `<Image testID={`album-image-<id>`} source={{ uri: photoUrl ?? cardImageUrl }}>`.
 
-- [ ] **Step 1: Write the failing RNTL tests** (estender `add.test.tsx` — capturar foto faz upload e submit envia `photoUrl`; erro de upload vira Alert e submit envia `photoUrl: null`; sem foto, submit envia `photoUrl: null`. Estender `album.test.tsx` — item mostra `album-image-uc-1` com a foto própria quando `photoUrl` existe; com a imagem do catálogo quando é null.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest "add|album"` → FAIL.
-- [ ] **Step 3: Implement** (`add.tsx` + `album.tsx`) → GREEN.
-- [ ] **Step 4: Full suite** — `npx jest && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: capture card photo on add and show it in the album`
+- [x] **Step 1: Write the failing RNTL tests** (estender `add.test.tsx` — capturar foto faz upload e submit envia `photoUrl`; captura cancelada não faz upload; erro de upload vira Alert e submit envia `photoUrl: null`. Estender `album.test.tsx` — item mostra `album-image-uc-1` com a foto própria quando `photoUrl` existe; com a imagem do catálogo quando é null.)
+- [x] **Step 2: Run to verify it fails** — `npx jest "add|album"` → FAIL (5 falhas esperadas).
+- [x] **Step 3: Implement** (`add.tsx` + `album.tsx`) → GREEN (19/19 nas duas suítes).
+- [x] **Step 4: Full suite** — `npx jest && npx tsc --noEmit` verdes (162/162, tsc limpo).
+- [x] **Step 5: Commit** — `feat: capture card photo on add and show it in the album`
 
 ---
 
