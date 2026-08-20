@@ -25,6 +25,28 @@ export async function addUserCard(input: AddUserCardInput): Promise<void> {
   }
 }
 
+export async function countUserCards(): Promise<number> {
+  const client = getSupabaseClient();
+  const {
+    data: { user }
+  } = await client.auth.getUser();
+
+  if (!user) {
+    throw new Error("Usuário não autenticado");
+  }
+
+  const { count, error } = await client
+    .from("user_cards")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return count ?? 0;
+}
+
 export async function listUserCards(): Promise<UserCard[]> {
   const client = getSupabaseClient();
   const {

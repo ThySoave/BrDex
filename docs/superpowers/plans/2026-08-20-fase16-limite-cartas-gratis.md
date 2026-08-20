@@ -46,10 +46,10 @@
 **Interfaces:**
 - Produces: `countUserCards(): Promise<number>` — exige usuário autenticado (throw "Usuário não autenticado" como as demais); `client.from("user_cards").select("id", { count: "exact", head: true }).eq("user_id", user.id)`; `error` → `throw new Error(error.message)`; retorna `count ?? 0`.
 
-- [ ] **Step 1: Write the failing Jest tests** (estender `collectionRepository.test.ts` — casos: usa `select` com `{ count: "exact", head: true }` e `eq("user_id", ...)` e retorna o `count`; `count: null` → 0; erro vira throw.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest collectionRepository` → FAIL.
-- [ ] **Step 3: Implement** → GREEN.
-- [ ] **Step 4: Commit** — `feat: add user card count to collection repository`
+- [x] **Step 1: Write the failing Jest tests** (estender `collectionRepository.test.ts` — casos: usa `select` com `{ count: "exact", head: true }` e `eq("user_id", ...)` e retorna o `count`; `count: null` → 0; erro vira throw.)
+- [x] **Step 2: Run to verify it fails** — `npx jest collectionRepository` → FAIL (3 novos falham, 2 antigos verdes).
+- [x] **Step 3: Implement** → GREEN (5/5).
+- [x] **Step 4: Commit** — `feat: add user card count to collection repository`
 
 ---
 
