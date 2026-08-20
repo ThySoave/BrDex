@@ -72,10 +72,10 @@
 **Interfaces:**
 - Produces: `QueueRow { id: string; user_id: string; title: string; body: string; data: Record<string, unknown> }`; `PushTokenRow { user_id: string; token: string }`; `buildPushMessages(rows: QueueRow[], tokens: PushTokenRow[]): { messages: ExpoPushMessage[]; deliveredIds: string[]; skippedIds: string[] }` — agrupa tokens por usuário; cada linha da fila vira uma mensagem `{ to, title, body, data }` por token do destinatário; linhas de usuários sem token vão para `skippedIds` (marcadas como enviadas para não acumular); `chunk<T>(items: T[], size: number): T[][]` — Expo aceita no máx. 100 mensagens por request. Task 4 usa exatamente esses nomes.
 
-- [ ] **Step 1: Write the failing Deno test** (`transform.test.ts` — casos: linha vira uma mensagem por token do destinatário (usuário com 2 dispositivos → 2 mensagens); usuário sem token → linha em `skippedIds` e nenhuma mensagem; `data` preservado no payload; `chunk` divide em blocos de 100.)
-- [ ] **Step 2: Run to verify it fails** — `deno test supabase/functions/send-push/` → FAIL (módulo não existe).
-- [ ] **Step 3: Implement `transform.ts`** → GREEN.
-- [ ] **Step 4: Commit** — `feat: add expo push message builder for send-push function`
+- [x] **Step 1: Write the failing Deno test** (`transform.test.ts` — casos: linha vira uma mensagem por token do destinatário (usuário com 2 dispositivos → 2 mensagens); usuário sem token → linha em `skippedIds` e nenhuma mensagem; `data` preservado no payload; `chunk` divide em blocos de 100.)
+- [x] **Step 2: Run to verify it fails** — `deno test supabase/functions/send-push/` → FAIL (módulo não existe).
+- [x] **Step 3: Implement `transform.ts`** → GREEN.
+- [x] **Step 4: Commit** — `feat: add expo push message builder for send-push function`
 
 ---
 
