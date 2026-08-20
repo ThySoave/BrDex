@@ -86,10 +86,10 @@
 **Interfaces:**
 - Consumes: Task 3. `index.ts` (padrão do `sync-prices/index.ts`): service role client → select `notification_queue` where `sent_at is null` (limit 500, ordem `created_at`) → select `push_tokens` dos destinatários → `buildPushMessages` → POST `https://exp.host/--/api/v2/push/send` por chunk de 100 (header `Content-Type: application/json`) → update `sent_at = now()` para `deliveredIds` + `skippedIds`; fila vazia responde 200 `"0 notificações pendentes"`. Agendamento: mesmo padrão do 0015 (pg_cron + pg_net + Vault), job `send-push-every-minute`, cron `* * * * *`.
 
-- [ ] **Step 1: Implement `index.ts`** e verificar com `deno check supabase/functions/send-push/index.ts` (sem teste de rede — a lógica testável está toda no transform, igual às Fases 7/12).
-- [ ] **Step 2: Write `0019_send_push_schedule.sql`** (copiar padrão do 0015 trocando nome/URL/cron).
-- [ ] **Step 3: Apply and verify** — reset; `select jobname from cron.job` inclui `send-push-every-minute`; suite pgTAP completa verde.
-- [ ] **Step 4: Commit** — `feat: add send-push edge function scheduled via pg_cron`
+- [x] **Step 1: Implement `index.ts`** e verificar com `deno check supabase/functions/send-push/index.ts` (sem teste de rede — a lógica testável está toda no transform, igual às Fases 7/12).
+- [x] **Step 2: Write `0019_send_push_schedule.sql`** (copiar padrão do 0015 trocando nome/URL/cron).
+- [x] **Step 3: Apply and verify** — reset; `select jobname from cron.job` inclui `send-push-every-minute`; suite pgTAP completa verde.
+- [x] **Step 4: Commit** — `feat: add send-push edge function scheduled via pg_cron`
 
 ---
 
