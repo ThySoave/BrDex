@@ -100,8 +100,8 @@
 **Interfaces:**
 - Produces: `registerPushToken(token: string, platform: string): Promise<void>` — usuário autenticado via `supabase.auth.getUser()`; upsert em `push_tokens` `{ user_id, token, platform }` com `{ onConflict: "user_id,token" }`; erro vira `throw new Error(message)`. Padrão idêntico ao `priceAlertsRepository`.
 
-- [ ] Teste `pushTokensRepository` (2 casos: upsert chamado com `{ user_id, token, platform }` e `onConflict`; erro do supabase propagado) → red → implementação → green (`npx jest pushTokensRepository`).
-- [ ] Commit `feat: add push tokens repository`
+- [x] Teste `pushTokensRepository` (2 casos: upsert chamado com `{ user_id, token, platform }` e `onConflict`; erro do supabase propagado) → red → implementação → green (`npx jest pushTokensRepository`).
+- [x] Commit `feat: add push tokens repository`
 
 ---
 
