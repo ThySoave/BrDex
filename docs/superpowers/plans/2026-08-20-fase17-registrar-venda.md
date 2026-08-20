@@ -61,11 +61,11 @@
 **Interfaces:**
 - Consumes: Task 2. Cada item do álbum ganha botão `sell-card-<id>`; tocar abre painel com `TextInput` `sale-price-input` (teclado numérico) + botão `confirm-sale`; confirmar com preço válido chama `markCardAsSold(id, preço)` e remove a carta da lista local; preço vazio/inválido → não chama o repositório; erro → `Alert.alert("Erro", message)`; botão `cancel-sale` fecha o painel sem vender.
 
-- [ ] **Step 1: Write the failing RNTL test** (estender `album.test.tsx` — casos: botão `sell-card-<id>` abre o painel; confirmar com preço chama `markCardAsSold` e a carta some da lista; preço vazio não chama o repositório; erro do repositório vira `Alert.alert`; cancelar fecha o painel sem chamar o repositório.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest album` → FAIL.
-- [ ] **Step 3: Implement o fluxo em `album.tsx`** → GREEN.
-- [ ] **Step 4: Full suite** — `npx jest && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: register card sales from the album`
+- [x] **Step 1: Write the failing RNTL test** (estender `album.test.tsx` — casos: botão `sell-card-<id>` abre o painel; confirmar com preço chama `markCardAsSold` e a carta some da lista; preço vazio não chama o repositório; erro do repositório vira `Alert.alert`; cancelar fecha o painel sem chamar o repositório.)
+- [x] **Step 2: Run to verify it fails** — `npx jest album` → FAIL (5 novos testes falhando).
+- [x] **Step 3: Implement o fluxo em `album.tsx`** → GREEN (10/10 no álbum; confirmação do teste de remoção precisa de `act` assíncrono no press para o commit de estado do React 19).
+- [x] **Step 4: Full suite** — `npx jest && npx tsc --noEmit` verdes (154/154, tsc limpo).
+- [x] **Step 5: Commit** — `feat: register card sales from the album`
 
 ---
 

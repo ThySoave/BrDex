@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { Alert, FlatList, Pressable, Text, View } from "react-native";
+import { Alert, FlatList, Pressable, Text, TextInput, View } from "react-native";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
-import { listUserCards } from "../../src/features/collection/collectionRepository";
+import { listUserCards, markCardAsSold } from "../../src/features/collection/collectionRepository";
 import { buildCollectionPdfHtml } from "../../src/features/collection/exportPdf";
 import { fetchSetProgress, type SetProgress } from "../../src/features/collection/setProgressRepository";
 import { ShareCollectionCard, ShareSingleCard } from "../../src/features/collection/shareCards";
@@ -16,6 +16,8 @@ export default function AlbumScreen() {
   const [progress, setProgress] = useState<SetProgress[]>([]);
   const [showPdfUpsell, setShowPdfUpsell] = useState(false);
   const [shareCard, setShareCard] = useState<UserCard | null>(null);
+  const [sellingCard, setSellingCard] = useState<UserCard | null>(null);
+  const [salePrice, setSalePrice] = useState("");
   const [error, setError] = useState<string | null>(null);
   const collectionShareRef = useRef<View>(null);
   const cardShareRef = useRef<View>(null);
@@ -33,6 +35,25 @@ export default function AlbumScreen() {
     const html = buildCollectionPdfHtml(cards, new Date().toISOString());
     Print.printToFileAsync({ html })
       .then(({ uri }) => Sharing.shareAsync(uri))
+      .catch((err: Error) => Alert.alert("Erro", err.message));
+  };
+
+  const handleOpenSale = (card: UserCard) => {
+    setSellingCard(card);
+    setSalePrice("");
+  };
+
+  const handleConfirmSale = () => {
+    if (!sellingCard) return;
+    const price = Number.parseFloat(salePrice.replace(",", "."));
+    if (!Number.isFinite(price) || price <= 0) return;
+
+    const cardId = sellingCard.id;
+    markCardAsSold(cardId, price)
+      .then(() => {
+        setCards((current) => current.filter((card) => card.id !== cardId));
+        setSellingCard(null);
+      })
       .catch((err: Error) => Alert.alert("Erro", err.message));
   };
 
@@ -102,9 +123,31 @@ export default function AlbumScreen() {
             style={{ width: 100, margin: 8 }}
           >
             <Text numberOfLines={1}>{item.cardName}</Text>
+            <Pressable testID={`sell-card-${item.id}`} onPress={() => handleOpenSale(item)}>
+              <Text style={{ color: "#c00" }}>Vender</Text>
+            </Pressable>
           </Pressable>
         )}
       />
+      {sellingCard ? (
+        <View style={{ padding: 12, borderWidth: 1, borderColor: "#ccc", borderRadius: 8 }}>
+          <Text>{`Vender ${sellingCard.cardName}`}</Text>
+          <TextInput
+            testID="sale-price-input"
+            keyboardType="numeric"
+            placeholder="Preço de venda (R$)"
+            value={salePrice}
+            onChangeText={setSalePrice}
+            style={{ borderWidth: 1, borderColor: "#ccc", marginVertical: 8, padding: 8 }}
+          />
+          <Pressable testID="confirm-sale" onPress={handleConfirmSale} style={{ marginBottom: 8 }}>
+            <Text>Confirmar venda</Text>
+          </Pressable>
+          <Pressable testID="cancel-sale" onPress={() => setSellingCard(null)}>
+            <Text>Cancelar</Text>
+          </Pressable>
+        </View>
+      ) : null}
       <View style={{ position: "absolute", left: -1000, top: 0 }}>
         <View ref={collectionShareRef} collapsable={false}>
           <ShareCollectionCard cardCount={cards.length} cardNames={cards.map((c) => c.cardName)} />

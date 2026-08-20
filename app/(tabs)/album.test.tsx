@@ -1,5 +1,6 @@
 jest.mock("../../src/features/collection/collectionRepository", () => ({
-  listUserCards: jest.fn()
+  listUserCards: jest.fn(),
+  markCardAsSold: jest.fn()
 }));
 jest.mock("../../src/features/collection/setProgressRepository", () => ({
   fetchSetProgress: jest.fn()
@@ -17,12 +18,12 @@ jest.mock("../../src/features/collection/shareImage", () => ({
   captureAndShareView: jest.fn()
 }));
 
-import { fireEvent, render, waitFor } from "@testing-library/react-native";
+import { act, fireEvent, render, waitFor } from "@testing-library/react-native";
 import { Alert } from "react-native";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { captureAndShareView } from "../../src/features/collection/shareImage";
-import { listUserCards } from "../../src/features/collection/collectionRepository";
+import { listUserCards, markCardAsSold } from "../../src/features/collection/collectionRepository";
 import { fetchSetProgress } from "../../src/features/collection/setProgressRepository";
 import { isPremium } from "../../src/features/premium/entitlementsRepository";
 import AlbumScreen from "./album";
@@ -135,5 +136,84 @@ describe("AlbumScreen image sharing", () => {
     await waitFor(() => {
       expect(alertSpy).toHaveBeenCalledWith("Erro", "captura falhou");
     });
+  });
+});
+
+describe("AlbumScreen card sale", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (listUserCards as jest.Mock).mockResolvedValue(CARDS);
+    (fetchSetProgress as jest.Mock).mockResolvedValue([]);
+    (isPremium as jest.Mock).mockResolvedValue(false);
+    (markCardAsSold as jest.Mock).mockResolvedValue(undefined);
+  });
+
+  async function openSalePanel() {
+    const screen = render(<AlbumScreen />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("sell-card-uc-1")).toBeTruthy();
+    });
+
+    fireEvent.press(screen.getByTestId("sell-card-uc-1"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("sale-price-input")).toBeTruthy();
+    });
+
+    return screen;
+  }
+
+  it("abre o painel de venda ao tocar em Vender", async () => {
+    const { getByTestId } = await openSalePanel();
+
+    expect(getByTestId("confirm-sale")).toBeTruthy();
+    expect(getByTestId("cancel-sale")).toBeTruthy();
+  });
+
+  it("confirma a venda com preço e remove a carta da lista", async () => {
+    const { getByTestId, queryByTestId } = await openSalePanel();
+
+    fireEvent.changeText(getByTestId("sale-price-input"), "30.5");
+    await act(async () => {
+      fireEvent.press(getByTestId("confirm-sale"));
+    });
+
+    expect(markCardAsSold).toHaveBeenCalledWith("uc-1", 30.5);
+    await waitFor(() => {
+      expect(queryByTestId("album-item-uc-1")).toBeNull();
+    });
+  });
+
+  it("não chama o repositório com preço vazio", async () => {
+    const { getByTestId } = await openSalePanel();
+
+    fireEvent.press(getByTestId("confirm-sale"));
+
+    expect(markCardAsSold).not.toHaveBeenCalled();
+  });
+
+  it("mostra alerta quando a venda falha", async () => {
+    (markCardAsSold as jest.Mock).mockRejectedValue(new Error("venda falhou"));
+    const alertSpy = jest.spyOn(Alert, "alert").mockImplementation(() => {});
+    const { getByTestId } = await openSalePanel();
+
+    fireEvent.changeText(getByTestId("sale-price-input"), "30.5");
+    fireEvent.press(getByTestId("confirm-sale"));
+
+    await waitFor(() => {
+      expect(alertSpy).toHaveBeenCalledWith("Erro", "venda falhou");
+    });
+  });
+
+  it("cancela a venda fechando o painel sem chamar o repositório", async () => {
+    const { getByTestId, queryByTestId } = await openSalePanel();
+
+    fireEvent.press(getByTestId("cancel-sale"));
+
+    await waitFor(() => {
+      expect(queryByTestId("sale-price-input")).toBeNull();
+    });
+    expect(markCardAsSold).not.toHaveBeenCalled();
   });
 });
