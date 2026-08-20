@@ -18,28 +18,28 @@
 
 ## File Structure
 
-- `supabase/migrations/0013_upsert_reference_price.sql` — função SQL + grants.
+- `supabase/migrations/0014_upsert_reference_price.sql` — função SQL + grants.
 - `supabase/tests/database/upsert_reference_price.test.sql` — pgTAP.
 - `supabase/functions/sync-prices/transform.ts` (+ `transform.test.ts`) — extração/conversão puras.
 - `supabase/functions/sync-prices/index.ts` — job (paginação + RPC).
-- `supabase/migrations/0014_sync_prices_schedule.sql` — agendamento pg_cron.
+- `supabase/migrations/0015_sync_prices_schedule.sql` — agendamento pg_cron.
 
 ---
 
 ### Task 1: Função SQL upsert_reference_price
 
 **Files:**
-- Create: `supabase/migrations/0013_upsert_reference_price.sql`
+- Create: `supabase/migrations/0014_upsert_reference_price.sql`
 - Test: `supabase/tests/database/upsert_reference_price.test.sql`
 
 **Interfaces:**
 - Produces: `upsert_reference_price(p_external_id text, p_language public.card_language, p_price_brl numeric, p_source text) returns boolean` — `true` se gravou/atualizou, `false` se `external_id` desconhecido; security definer; execute só service role.
 
-- [ ] **Step 1: Write the failing pgTAP test** (`upsert_reference_price.test.sql` — 5 asserções: insere linha nova em `price_reference` com preço e fonte; chamada repetida atualiza `price_brl` sem duplicar (count continua 1); external_id desconhecido retorna `false` e não insere; `authenticated` não consegue executar a função (throws permission denied); linha gravada tem `language = 'en'` e `catalog_card_id` resolvido corretamente.)
-- [ ] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `function ... does not exist`.
-- [ ] **Step 3: Write the migration** (`0013_upsert_reference_price.sql`).
-- [ ] **Step 4: Apply and verify** — reset + test db → PASS 5/5 novos + suite anterior completa (52 pgTAP).
-- [ ] **Step 5: Commit** — `feat: add upsert_reference_price function for external price sync`
+- [x] **Step 1: Write the failing pgTAP test** (`upsert_reference_price.test.sql` — 5 asserções: insere linha nova em `price_reference` com preço e fonte; chamada repetida atualiza `price_brl` sem duplicar (count continua 1); external_id desconhecido retorna `false` e não insere; `authenticated` não consegue executar a função (throws permission denied); linha gravada tem `language = 'en'` e `catalog_card_id` resolvido corretamente.)
+- [x] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL `function ... does not exist`.
+- [x] **Step 3: Write the migration** (`0014_upsert_reference_price.sql` — renomeada de 0013 para evitar colisão com `0013_market_search.sql`, trabalho paralelo não commitado encontrado no working tree).
+- [x] **Step 4: Apply and verify** — reset + test db → PASS 6/6 novos + suite completa (64 pgTAP, incluindo market_search paralelo).
+- [x] **Step 5: Commit** — `feat: add upsert_reference_price function for external price sync`
 
 ---
 
@@ -70,7 +70,7 @@
 
 ### Task 4: Agendamento diário
 
-**Files:** Create `supabase/migrations/0014_sync_prices_schedule.sql`.
+**Files:** Create `supabase/migrations/0015_sync_prices_schedule.sql`.
 
 - [ ] Migration com pg_cron + pg_net chamando `/functions/v1/sync-prices` 1×/dia (ex: `30 3 * * *`, após o snapshot diário), URL/service key via Vault — mesmo padrão de `0010_fetch_news_schedule.sql`.
 - [ ] Apply and verify — reset sem erros; job `sync-prices-daily` listado em `cron.job`; suite pgTAP completa verde.
