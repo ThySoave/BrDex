@@ -36,10 +36,10 @@
 **Interfaces:**
 - Produces: `matchScannedCard(cards: CatalogCard[], recognition: { name: string | null; number: string | null }): CatalogCard | null` — sem nome reconhecido → `null`; compara nome normalizado (trim/lowercase/sem acentos via `normalize("NFD")`); entre os que batem por nome, o `number` reconhecido desempata (match exato de número ganha); sem número ou número sem match → primeiro candidato por nome. Nenhum match de nome → `null`.
 
-- [ ] **Step 1: Write the failing Jest test** (`matchCard.test.ts` — casos: nome exato acha a carta; nome com acento/caixa diferente acha; número desempata entre duas cartas de mesmo nome; sem número retorna o primeiro candidato; nome não existente → `null`; `name: null` → `null`.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest matchCard` → FAIL (módulo não existe).
-- [ ] **Step 3: Implement `matchCard.ts`** → GREEN.
-- [ ] **Step 4: Commit** — `feat: add scanned card matching against catalog`
+- [x] **Step 1: Write the failing Jest test** (`matchCard.test.ts` — casos: nome exato acha a carta; nome com acento/caixa diferente acha; número desempata entre duas cartas de mesmo nome; sem número retorna o primeiro candidato; nome não existente → `null`; `name: null` → `null`.)
+- [x] **Step 2: Run to verify it fails** — `npx jest matchCard` → FAIL (módulo não existe).
+- [x] **Step 3: Implement `matchCard.ts`** → GREEN (7/7).
+- [x] **Step 4: Commit** — `feat: add scanned card matching against catalog`
 
 ---
 
