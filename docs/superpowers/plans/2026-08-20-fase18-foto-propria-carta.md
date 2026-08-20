@@ -35,11 +35,11 @@
 **Interfaces:**
 - Produces: bucket público `card-photos` (`insert into storage.buckets ... on conflict do nothing`); policy `users upload their own card photos` (insert para `authenticated`, `bucket_id = 'card-photos'` e primeira pasta do path = `auth.uid()::text`). `uploadCardPhoto(base64: string): Promise<string>` — exige usuário autenticado; decodifica base64 com `atob` → `Uint8Array`; `client.storage.from("card-photos").upload("<user_id>/<timestamp>.jpg", bytes, { contentType: "image/jpeg" })`; `error` → `throw new Error(error.message)`; retorna `getPublicUrl(path).data.publicUrl`.
 
-- [ ] **Step 1: Write the migration** (`0021_card_photos.sql` — bucket + policy de insert; sem policy de select, bucket é público.)
-- [ ] **Step 2: Write the failing Jest tests** (`photoRepository.test.ts` — casos: upload vai para `card-photos` com path iniciando em `user-1/` e `contentType: "image/jpeg"`; retorna a URL pública; erro de upload vira throw; sem usuário autenticado vira throw.)
-- [ ] **Step 3: Run to verify it fails** — `npx jest photoRepository` → FAIL.
-- [ ] **Step 4: Implement** `photoRepository.ts` → GREEN.
-- [ ] **Step 5: Commit** — `feat: add card photo storage and upload repository`
+- [x] **Step 1: Write the migration** (`0021_card_photos.sql` — bucket + policy de insert; sem policy de select, bucket é público.)
+- [x] **Step 2: Write the failing Jest tests** (`photoRepository.test.ts` — casos: upload vai para `card-photos` com path iniciando em `user-1/` e `contentType: "image/jpeg"`; retorna a URL pública; erro de upload vira throw; sem usuário autenticado vira throw.)
+- [x] **Step 3: Run to verify it fails** — `npx jest photoRepository` → FAIL (módulo inexistente).
+- [x] **Step 4: Implement** `photoRepository.ts` → GREEN (3/3).
+- [x] **Step 5: Commit** — `feat: add card photo storage and upload repository`
 
 ---
 
