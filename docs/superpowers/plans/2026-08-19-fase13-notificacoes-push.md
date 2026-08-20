@@ -20,9 +20,9 @@
 
 ## File Structure
 
-- `supabase/migrations/0016_push_tokens.sql` — tabela `push_tokens` (RLS dono-somente).
-- `supabase/migrations/0017_notification_queue.sql` — tabela `notification_queue` + triggers em `matches` e `messages`.
-- `supabase/migrations/0018_send_push_schedule.sql` — pg_cron a cada minuto (padrão 0010/0015).
+- `supabase/migrations/0017_push_tokens.sql` — tabela `push_tokens` (RLS dono-somente).
+- `supabase/migrations/0018_notification_queue.sql` — tabela `notification_queue` + triggers em `matches` e `messages`.
+- `supabase/migrations/0019_send_push_schedule.sql` — pg_cron a cada minuto (padrão 0010/0015).
 - `supabase/tests/database/push_tokens.test.sql` / `notification_queue.test.sql` — pgTAP.
 - `supabase/functions/send-push/transform.ts` (+ `transform.test.ts`) — helpers puros.
 - `supabase/functions/send-push/index.ts` — entrypoint Deno.
@@ -34,24 +34,24 @@
 ### Task 1: Tabela push_tokens
 
 **Files:**
-- Create: `supabase/migrations/0016_push_tokens.sql`
+- Create: `supabase/migrations/0017_push_tokens.sql`
 - Test: `supabase/tests/database/push_tokens.test.sql`
 
 **Interfaces:**
 - Produces: `push_tokens (user_id uuid references auth.users on delete cascade, token text not null, platform text, updated_at timestamptz default now(), primary key (user_id, token))`; RLS: select/insert/update/delete apenas do próprio usuário; grant select, insert, update, delete to authenticated. Task 5 faz upsert `{ user_id, token, platform }` com `on_conflict` na PK.
 
-- [ ] **Step 1: Write the failing pgTAP test** (`push_tokens.test.sql` — asserções: tabela existe; usuário insere e lê o próprio token; não lê token de outro usuário; upsert do mesmo `(user_id, token)` não duplica.)
-- [ ] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL (tabela não existe).
-- [ ] **Step 3: Write the migration** (`0016_push_tokens.sql`).
-- [ ] **Step 4: Apply and verify** — reset + test db → novos testes PASS + suite pgTAP completa verde.
-- [ ] **Step 5: Commit** — `feat: add push_tokens table for device push registration`
+- [x] **Step 1: Write the failing pgTAP test** (`push_tokens.test.sql` — asserções: tabela existe; usuário insere e lê o próprio token; não lê token de outro usuário; upsert do mesmo `(user_id, token)` não duplica.)
+- [x] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL (tabela não existe).
+- [x] **Step 3: Write the migration** (`0017_push_tokens.sql`).
+- [x] **Step 4: Apply and verify** — reset + test db → novos testes PASS + suite pgTAP completa verde.
+- [x] **Step 5: Commit** — `feat: add push_tokens table for device push registration`
 
 ---
 
 ### Task 2: notification_queue + triggers
 
 **Files:**
-- Create: `supabase/migrations/0017_notification_queue.sql`
+- Create: `supabase/migrations/0018_notification_queue.sql`
 - Test: `supabase/tests/database/notification_queue.test.sql`
 
 **Interfaces:**
@@ -59,7 +59,7 @@
 
 - [ ] **Step 1: Write the failing pgTAP test** (`notification_queue.test.sql` — asserções: tabela existe; criar um match (via inserts em `user_cards` + `wishlist` de dois usuários) enfileira 2 notificações (uma por participante, com `data->>'type' = 'match'`); enviar uma mensagem enfileira 1 notificação para o outro participante (não para o remetente, `type = 'message'`, body sem o conteúdo da mensagem); `authenticated` não consegue ler a fila.)
 - [ ] **Step 2: Run to verify it fails** — `sg docker -c "npx supabase test db"` → FAIL.
-- [ ] **Step 3: Write the migration** (`0017_notification_queue.sql`): tabela + índice parcial `(sent_at) where sent_at is null` + as duas funções/triggers security definer.
+- [ ] **Step 3: Write the migration** (`0018_notification_queue.sql`): tabela + índice parcial `(sent_at) where sent_at is null` + as duas funções/triggers security definer.
 - [ ] **Step 4: Apply and verify** — reset + test db → novos testes PASS + suite completa verde.
 - [ ] **Step 5: Commit** — `feat: enqueue push notifications on new match and new message`
 
@@ -81,13 +81,13 @@
 
 ### Task 4: send-push entrypoint + agendamento
 
-**Files:** Create `supabase/functions/send-push/index.ts`; Create `supabase/migrations/0018_send_push_schedule.sql`.
+**Files:** Create `supabase/functions/send-push/index.ts`; Create `supabase/migrations/0019_send_push_schedule.sql`.
 
 **Interfaces:**
 - Consumes: Task 3. `index.ts` (padrão do `sync-prices/index.ts`): service role client → select `notification_queue` where `sent_at is null` (limit 500, ordem `created_at`) → select `push_tokens` dos destinatários → `buildPushMessages` → POST `https://exp.host/--/api/v2/push/send` por chunk de 100 (header `Content-Type: application/json`) → update `sent_at = now()` para `deliveredIds` + `skippedIds`; fila vazia responde 200 `"0 notificações pendentes"`. Agendamento: mesmo padrão do 0015 (pg_cron + pg_net + Vault), job `send-push-every-minute`, cron `* * * * *`.
 
 - [ ] **Step 1: Implement `index.ts`** e verificar com `deno check supabase/functions/send-push/index.ts` (sem teste de rede — a lógica testável está toda no transform, igual às Fases 7/12).
-- [ ] **Step 2: Write `0018_send_push_schedule.sql`** (copiar padrão do 0015 trocando nome/URL/cron).
+- [ ] **Step 2: Write `0019_send_push_schedule.sql`** (copiar padrão do 0015 trocando nome/URL/cron).
 - [ ] **Step 3: Apply and verify** — reset; `select jobname from cron.job` inclui `send-push-every-minute`; suite pgTAP completa verde.
 - [ ] **Step 4: Commit** — `feat: add send-push edge function scheduled via pg_cron`
 
