@@ -33,10 +33,10 @@
 **Interfaces:**
 - Produces: `ShareCollectionCard({ cardCount, cardNames }: { cardCount: number; cardNames: string[] })` — cartão com marca "BrDex", texto `"Minha coleção: {cardCount} cartas"` (testID `share-card-summary`) e até 4 nomes de cartas (testID `share-card-name-{i}`; excedente vira `"+N outras"`, testID `share-card-more`). `ShareSingleCard({ card }: { card: UserCard })` — cartão com marca "BrDex", `card.cardName` (testID `share-single-name`) e linha `"{estado} · {idioma}"` usando os labels de `conditionScale` (testID `share-single-details`). Componentes puros, sem fetch — Task 3 renderiza ambos off-screen.
 
-- [ ] **Step 1: Write the failing RNTL test** (`shareCards.test.tsx` — casos: coleção mostra contagem; coleção com 6 nomes mostra 4 + `"+2 outras"`; coleção com 2 nomes não mostra `share-card-more`; carta única mostra nome e detalhes com label do estado em pt-BR.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest shareCards` → FAIL (módulo não existe).
-- [ ] **Step 3: Implement `shareCards.tsx`** → GREEN.
-- [ ] **Step 4: Commit** — `feat: add shareable collection and card image components`
+- [x] **Step 1: Write the failing RNTL test** (`shareCards.test.tsx` — casos: coleção mostra contagem; coleção com 6 nomes mostra 4 + `"+2 outras"`; coleção com 2 nomes não mostra `share-card-more`; carta única mostra nome e detalhes com label do estado em pt-BR.)
+- [x] **Step 2: Run to verify it fails** — `npx jest shareCards` → FAIL (módulo não existe).
+- [x] **Step 3: Implement `shareCards.tsx`** → GREEN.
+- [x] **Step 4: Commit** — `feat: add shareable collection and card image components`
 
 ---
 
