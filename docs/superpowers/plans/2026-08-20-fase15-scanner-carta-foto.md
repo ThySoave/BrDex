@@ -50,10 +50,10 @@
 **Interfaces:**
 - Produces: `parseRecognition(text: string): { name: string | null; number: string | null }` — extrai o JSON da resposta do modelo (tolerante a cercas ```json e texto em volta); campos ausentes/vazios/não-string → `null`; texto sem JSON válido → `{ name: null, number: null }`. `index.ts`: POST `{ imageBase64: string }` → chama Anthropic Messages API (modelo com visão, imagem base64 + prompt pedindo só JSON `{"name","number"}`) com `ANTHROPIC_API_KEY` das secrets → responde `parseRecognition(...)` como JSON; body sem `imageBase64` → 400; secret ausente → 500 com mensagem clara; erro da API → 502.
 
-- [ ] **Step 1: Write the failing Deno test** (`transform.test.ts` — casos: JSON puro; JSON com cerca de código; campos faltando → null; texto sem JSON → tudo null.)
-- [ ] **Step 2: Run to verify it fails** — `deno test supabase/functions/recognize-card/transform.test.ts` → FAIL.
-- [ ] **Step 3: Implement `transform.ts`** → GREEN; implement `index.ts` no padrão de `sync-prices` e verificar com `deno check` (sem teste de rede — a lógica testável está em `transform.ts`).
-- [ ] **Step 4: Commit** — `feat: add recognize-card edge function`
+- [x] **Step 1: Write the failing Deno test** (`transform.test.ts` — casos: JSON puro; JSON com cerca de código; campos faltando → null; texto sem JSON → tudo null.)
+- [x] **Step 2: Run to verify it fails** — `deno test supabase/functions/recognize-card/transform.test.ts` → FAIL.
+- [x] **Step 3: Implement `transform.ts`** → GREEN (4/4); implement `index.ts` no padrão de `sync-prices` e verificado com `deno check`.
+- [x] **Step 4: Commit** — `feat: add recognize-card edge function`
 
 ---
 
