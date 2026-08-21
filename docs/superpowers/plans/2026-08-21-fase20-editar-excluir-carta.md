@@ -63,11 +63,11 @@
 **Interfaces:**
 - Consumes: Task 1 (`deleteUserCard`). Cada item do álbum ganha botão `delete-card-<id>`; tocar abre painel de confirmação com o nome da carta; botão `confirm-delete` chama `deleteUserCard(id)`, remove a carta da lista local e fecha o painel; erro → `Alert.alert("Erro", message)` (carta permanece na lista); botão `cancel-delete` fecha sem chamar o repositório.
 
-- [ ] **Step 1: Write the failing RNTL tests** (estender `album.test.tsx` — casos: botão abre a confirmação; confirmar chama `deleteUserCard`, remove a carta da lista e fecha o painel; erro vira `Alert.alert` e a carta continua na lista; cancelar fecha sem chamar o repositório.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest album` → FAIL (falhas esperadas da confirmação nova).
-- [ ] **Step 3: Implement** — estado `deletingCard` + painel de confirmação → GREEN.
-- [ ] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: delete card from the album with confirmation`
+- [x] **Step 1: Write the failing RNTL tests** (estender `album.test.tsx` — casos: botão abre a confirmação; confirmar chama `deleteUserCard`, remove a carta da lista e fecha o painel; erro vira `Alert.alert` e a carta continua na lista; cancelar fecha sem chamar o repositório.)
+- [x] **Step 2: Run to verify it fails** — `npx jest album` → FAIL (4 falhas esperadas).
+- [x] **Step 3: Implement** — estado `deletingCard` + painel de confirmação → GREEN (25/25 no álbum).
+- [x] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes (181/181, tsc limpo).
+- [x] **Step 5: Commit** — `feat: delete card from the album with confirmation`
 
 ---
 

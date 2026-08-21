@@ -3,6 +3,7 @@ import { Alert, FlatList, Image, Pressable, Text, TextInput, View } from "react-
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import {
+  deleteUserCard,
   listUserCards,
   markCardAsSold,
   updateCardStatus,
@@ -42,6 +43,7 @@ export default function AlbumScreen() {
   const [editLanguage, setEditLanguage] = useState<CardLanguage>("en");
   const [editCondition, setEditCondition] = useState<CardCondition>("near_mint");
   const [editPrice, setEditPrice] = useState("");
+  const [deletingCard, setDeletingCard] = useState<UserCard | null>(null);
   const [error, setError] = useState<string | null>(null);
   const collectionShareRef = useRef<View>(null);
   const cardShareRef = useRef<View>(null);
@@ -101,6 +103,17 @@ export default function AlbumScreen() {
           current.map((card) => (card.id === cardId ? { ...card, ...updates } : card))
         );
         setEditingCard(null);
+      })
+      .catch((err: Error) => Alert.alert("Erro", err.message));
+  };
+
+  const handleConfirmDelete = () => {
+    if (!deletingCard) return;
+    const cardId = deletingCard.id;
+    deleteUserCard(cardId)
+      .then(() => {
+        setCards((current) => current.filter((card) => card.id !== cardId));
+        setDeletingCard(null);
       })
       .catch((err: Error) => Alert.alert("Erro", err.message));
   };
@@ -198,6 +211,9 @@ export default function AlbumScreen() {
             <Pressable testID={`edit-card-${item.id}`} onPress={() => handleOpenEdit(item)}>
               <Text style={{ color: "#090" }}>Editar</Text>
             </Pressable>
+            <Pressable testID={`delete-card-${item.id}`} onPress={() => setDeletingCard(item)}>
+              <Text style={{ color: "#900" }}>Excluir</Text>
+            </Pressable>
           </Pressable>
         )}
       />
@@ -217,6 +233,17 @@ export default function AlbumScreen() {
             </Pressable>
           ))}
           <Pressable testID="cancel-status" onPress={() => setStatusCard(null)}>
+            <Text>Cancelar</Text>
+          </Pressable>
+        </View>
+      ) : null}
+      {deletingCard ? (
+        <View style={{ padding: 12, borderWidth: 1, borderColor: "#ccc", borderRadius: 8 }}>
+          <Text>{`Excluir ${deletingCard.cardName} da coleção? Essa ação não pode ser desfeita.`}</Text>
+          <Pressable testID="confirm-delete" onPress={handleConfirmDelete} style={{ marginVertical: 8 }}>
+            <Text style={{ color: "#900" }}>Excluir carta</Text>
+          </Pressable>
+          <Pressable testID="cancel-delete" onPress={() => setDeletingCard(null)}>
             <Text>Cancelar</Text>
           </Pressable>
         </View>

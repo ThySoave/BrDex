@@ -27,6 +27,7 @@ import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { captureAndShareView } from "../../src/features/collection/shareImage";
 import {
+  deleteUserCard,
   listUserCards,
   markCardAsSold,
   updateCardStatus,
@@ -383,6 +384,76 @@ describe("AlbumScreen card edit", () => {
       expect(queryByTestId("edit-price-input")).toBeNull();
     });
     expect(updateUserCard).not.toHaveBeenCalled();
+  });
+});
+
+describe("AlbumScreen card delete", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (listUserCards as jest.Mock).mockResolvedValue(CARDS);
+    (fetchSetProgress as jest.Mock).mockResolvedValue([]);
+    (isPremium as jest.Mock).mockResolvedValue(false);
+    (deleteUserCard as jest.Mock).mockResolvedValue(undefined);
+  });
+
+  async function openDeletePanel() {
+    const screen = render(<AlbumScreen />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("delete-card-uc-1")).toBeTruthy();
+    });
+
+    fireEvent.press(screen.getByTestId("delete-card-uc-1"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("confirm-delete")).toBeTruthy();
+    });
+
+    return screen;
+  }
+
+  it("abre a confirmação de exclusão ao tocar em Excluir", async () => {
+    const { getByTestId } = await openDeletePanel();
+
+    expect(getByTestId("confirm-delete")).toBeTruthy();
+    expect(getByTestId("cancel-delete")).toBeTruthy();
+    expect(deleteUserCard).not.toHaveBeenCalled();
+  });
+
+  it("confirma a exclusão, remove a carta da lista e fecha o painel", async () => {
+    const { getByTestId, queryByTestId } = await openDeletePanel();
+
+    await act(async () => {
+      fireEvent.press(getByTestId("confirm-delete"));
+    });
+
+    expect(deleteUserCard).toHaveBeenCalledWith("uc-1");
+    expect(queryByTestId("album-item-uc-1")).toBeNull();
+    expect(queryByTestId("confirm-delete")).toBeNull();
+  });
+
+  it("mostra alerta quando a exclusão falha e mantém a carta na lista", async () => {
+    (deleteUserCard as jest.Mock).mockRejectedValue(new Error("exclusão falhou"));
+    const alertSpy = jest.spyOn(Alert, "alert").mockImplementation(() => {});
+    const { getByTestId } = await openDeletePanel();
+
+    await act(async () => {
+      fireEvent.press(getByTestId("confirm-delete"));
+    });
+
+    expect(alertSpy).toHaveBeenCalledWith("Erro", "exclusão falhou");
+    expect(getByTestId("album-item-uc-1")).toBeTruthy();
+  });
+
+  it("cancela fechando o painel sem chamar o repositório", async () => {
+    const { getByTestId, queryByTestId } = await openDeletePanel();
+
+    fireEvent.press(getByTestId("cancel-delete"));
+
+    await waitFor(() => {
+      expect(queryByTestId("confirm-delete")).toBeNull();
+    });
+    expect(deleteUserCard).not.toHaveBeenCalled();
   });
 });
 
