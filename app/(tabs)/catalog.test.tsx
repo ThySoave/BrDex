@@ -82,3 +82,74 @@ describe("CatalogScreen price alerts", () => {
     expect(mockPush).toHaveBeenCalledWith("/card/scan");
   });
 });
+
+describe("CatalogScreen wishlist language", () => {
+  const { addToWishlist } = require("../../src/features/social/wishlistRepository");
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (fetchCatalogPage as jest.Mock).mockResolvedValue(CARDS);
+    (isPremium as jest.Mock).mockResolvedValue(false);
+    (addToWishlist as jest.Mock).mockResolvedValue(undefined);
+  });
+
+  it("opens the language panel instead of adding directly", async () => {
+    const { getByTestId } = render(<CatalogScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("wishlist-add-card-1")).toBeTruthy();
+    });
+
+    fireEvent.press(getByTestId("wishlist-add-card-1"));
+
+    expect(getByTestId("wishlist-language-any")).toBeTruthy();
+    expect(addToWishlist).not.toHaveBeenCalled();
+  });
+
+  it("adds with null language when choosing any language", async () => {
+    const { getByTestId, queryByTestId } = render(<CatalogScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("wishlist-add-card-1")).toBeTruthy();
+    });
+
+    fireEvent.press(getByTestId("wishlist-add-card-1"));
+    fireEvent.press(getByTestId("wishlist-language-any"));
+
+    await waitFor(() => {
+      expect(addToWishlist).toHaveBeenCalledWith("card-1", null);
+    });
+    await waitFor(() => {
+      expect(queryByTestId("wishlist-language-any")).toBeNull();
+    });
+  });
+
+  it("adds with a specific language", async () => {
+    const { getByTestId } = render(<CatalogScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("wishlist-add-card-1")).toBeTruthy();
+    });
+
+    fireEvent.press(getByTestId("wishlist-add-card-1"));
+    fireEvent.press(getByTestId("wishlist-language-pt"));
+
+    await waitFor(() => {
+      expect(addToWishlist).toHaveBeenCalledWith("card-1", "pt");
+    });
+  });
+
+  it("cancels without adding", async () => {
+    const { getByTestId, queryByTestId } = render(<CatalogScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("wishlist-add-card-1")).toBeTruthy();
+    });
+
+    fireEvent.press(getByTestId("wishlist-add-card-1"));
+    fireEvent.press(getByTestId("wishlist-language-cancel"));
+
+    expect(queryByTestId("wishlist-language-any")).toBeNull();
+    expect(addToWishlist).not.toHaveBeenCalled();
+  });
+});

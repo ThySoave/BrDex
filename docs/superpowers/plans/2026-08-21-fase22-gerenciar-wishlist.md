@@ -78,11 +78,11 @@
 **Interfaces:**
 - Consumes: `addToWishlist` (existente). Tocar `wishlist-add-<id>` deixa de gravar direto: abre painel de idioma para aquela carta com opções `wishlist-language-any` ("Qualquer idioma") e `wishlist-language-<value>` (en/pt/jp/other, mesmos rótulos do cadastro); escolher chama `addToWishlist(cardId, value | null)`, fecha o painel e mostra a confirmação existente ("Adicionado à lista de desejos"); erro → `Alert.alert("Erro", message)`; botão `wishlist-language-cancel` fecha sem gravar.
 
-- [ ] **Step 1: Write the failing RNTL tests** (estender `catalog.test.tsx` — casos: "Quero" abre o painel em vez de gravar; "Qualquer idioma" chama `addToWishlist(id, null)`; um idioma específico chama `addToWishlist(id, "pt")`; cancelar fecha sem chamar o repositório.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest catalog` → FAIL.
-- [ ] **Step 3: Implement** — estado `wishlistCardId` + painel no padrão do painel de alerta de preço → GREEN.
-- [ ] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: choose wishlist language when adding from catalog`
+- [x] **Step 1: Write the failing RNTL tests** (estender `catalog.test.tsx` — casos: "Quero" abre o painel em vez de gravar; "Qualquer idioma" chama `addToWishlist(id, null)`; um idioma específico chama `addToWishlist(id, "pt")`; cancelar fecha sem chamar o repositório.)
+- [x] **Step 2: Run to verify it fails** — `npx jest catalog` → FAIL (4 falhas).
+- [x] **Step 3: Implement** — estado `wishlistCardId` + painel no padrão do painel de alerta de preço → GREEN.
+- [x] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes (213/213, tsc limpo).
+- [x] **Step 5: Commit** — `feat: choose wishlist language when adding from catalog`
 
 ---
 

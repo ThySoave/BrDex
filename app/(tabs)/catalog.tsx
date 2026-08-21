@@ -9,6 +9,14 @@ import { isPremium } from "../../src/features/premium/entitlementsRepository";
 import { createPriceAlert } from "../../src/features/premium/priceAlertsRepository";
 import { CardGridItem } from "../../src/components/CardGridItem";
 import type { CatalogCard } from "../../src/features/catalog/types";
+import type { CardLanguage } from "../../src/features/collection/types";
+
+const WISHLIST_LANGUAGES: { value: CardLanguage; label: string }[] = [
+  { value: "en", label: "Inglês" },
+  { value: "pt", label: "Português" },
+  { value: "jp", label: "Japonês" },
+  { value: "other", label: "Outro" }
+];
 
 export default function CatalogScreen() {
   const router = useRouter();
@@ -18,6 +26,7 @@ export default function CatalogScreen() {
   const [alertCardId, setAlertCardId] = useState<string | null>(null);
   const [threshold, setThreshold] = useState("");
   const [showAlertUpsell, setShowAlertUpsell] = useState(false);
+  const [wishlistCardId, setWishlistCardId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchCatalogPage(0).then(setCards).catch(() => setCards([]));
@@ -52,6 +61,19 @@ export default function CatalogScreen() {
       .catch((err: Error) => Alert.alert("Erro", err.message));
   };
 
+  const handleChooseLanguage = (language: CardLanguage | null) => {
+    if (!wishlistCardId) {
+      return;
+    }
+
+    addToWishlist(wishlistCardId, language)
+      .then(() => {
+        setWishlistCardId(null);
+        Alert.alert("Adicionado à lista de desejos");
+      })
+      .catch((error: Error) => Alert.alert("Erro", error.message));
+  };
+
   return (
     <View style={{ flex: 1, padding: 16 }}>
       <TextInput
@@ -68,6 +90,26 @@ export default function CatalogScreen() {
           Alertas de preço são um recurso premium. Assine para ser avisado quando uma carta
           passar do valor que você definir.
         </Text>
+      ) : null}
+      {wishlistCardId ? (
+        <View style={{ marginVertical: 8 }}>
+          <Text>Em qual idioma você quer essa carta?</Text>
+          <Pressable testID="wishlist-language-any" onPress={() => handleChooseLanguage(null)}>
+            <Text style={{ color: "#0a66c2" }}>Qualquer idioma</Text>
+          </Pressable>
+          {WISHLIST_LANGUAGES.map((lang) => (
+            <Pressable
+              key={lang.value}
+              testID={`wishlist-language-${lang.value}`}
+              onPress={() => handleChooseLanguage(lang.value)}
+            >
+              <Text style={{ color: "#0a66c2" }}>{lang.label}</Text>
+            </Pressable>
+          ))}
+          <Pressable testID="wishlist-language-cancel" onPress={() => setWishlistCardId(null)}>
+            <Text style={{ color: "#666" }}>Cancelar</Text>
+          </Pressable>
+        </View>
       ) : null}
       {alertCardId ? (
         <View style={{ marginVertical: 8 }}>
@@ -93,11 +135,7 @@ export default function CatalogScreen() {
             <CardGridItem card={item} />
             <Pressable
               testID={`wishlist-add-${item.id}`}
-              onPress={() =>
-                addToWishlist(item.id, null)
-                  .then(() => Alert.alert("Adicionado à lista de desejos"))
-                  .catch((error: Error) => Alert.alert("Erro", error.message))
-              }
+              onPress={() => setWishlistCardId(item.id)}
             >
               <Text>Quero</Text>
             </Pressable>
