@@ -54,6 +54,14 @@ describe("ScanCardScreen", () => {
     expect(queryByTestId("scan-capture")).toBeNull();
   });
 
+  it("expõe escanear carta como botão", async () => {
+    (isPremium as jest.Mock).mockResolvedValue(true);
+
+    const { findByRole } = render(<ScanCardScreen />);
+
+    await findByRole("button", { name: "Escanear carta" });
+  });
+
   it("captures a photo, recognizes the card and opens the add form with the match", async () => {
     (isPremium as jest.Mock).mockResolvedValue(true);
     (recognizeCard as jest.Mock).mockResolvedValue({ name: "Charizard", number: "4" });

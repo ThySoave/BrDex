@@ -96,27 +96,42 @@ export default function AddCardScreen() {
       {catalogCardId ? <CardPrices catalogCardId={catalogCardId} language={language} /> : null}
       <Text>Idioma</Text>
       {LANGUAGE_OPTIONS.map((lang) => (
-        <Pressable key={lang.value} testID={`language-${lang.value}`} onPress={() => setLanguage(lang.value)}>
+        <Pressable
+          key={lang.value}
+          testID={`language-${lang.value}`}
+          accessibilityRole="button"
+          onPress={() => setLanguage(lang.value)}
+        >
           <Text style={{ fontWeight: language === lang.value ? "bold" : "normal" }}>{lang.label}</Text>
         </Pressable>
       ))}
 
       <Text>Estado de conservação</Text>
       {CARD_CONDITIONS.map((cond) => (
-        <Pressable key={cond.value} testID={`condition-${cond.value}`} onPress={() => setCondition(cond.value)}>
+        <Pressable
+          key={cond.value}
+          testID={`condition-${cond.value}`}
+          accessibilityRole="button"
+          onPress={() => setCondition(cond.value)}
+        >
           <Text style={{ fontWeight: condition === cond.value ? "bold" : "normal" }}>{cond.label}</Text>
         </Pressable>
       ))}
 
       <Text>Status</Text>
       {STATUS_OPTIONS.map((s) => (
-        <Pressable key={s.value} testID={`status-${s.value}`} onPress={() => setStatus(s.value)}>
+        <Pressable
+          key={s.value}
+          testID={`status-${s.value}`}
+          accessibilityRole="button"
+          onPress={() => setStatus(s.value)}
+        >
           <Text style={{ fontWeight: status === s.value ? "bold" : "normal" }}>{s.label}</Text>
         </Pressable>
       ))}
 
       <Text>Foto da carta (opcional)</Text>
-      <Pressable testID="add-card-photo" onPress={handleTakePhoto}>
+      <Pressable testID="add-card-photo" accessibilityRole="button" onPress={handleTakePhoto}>
         <Text>Tirar foto da carta</Text>
       </Pressable>
       {photoUrl ? <Text testID="add-card-photo-done">Foto adicionada</Text> : null}
@@ -131,7 +146,7 @@ export default function AddCardScreen() {
 
       {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
 
-      <Pressable testID="add-card-submit" onPress={handleSubmit}>
+      <Pressable testID="add-card-submit" accessibilityRole="button" onPress={handleSubmit}>
         <Text>Salvar carta</Text>
       </Pressable>
     </ScrollView>

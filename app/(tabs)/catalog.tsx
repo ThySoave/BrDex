@@ -77,7 +77,7 @@ export default function CatalogScreen() {
         value={query}
         onChangeText={setQuery}
       />
-      <Pressable testID="open-scanner" onPress={() => router.push("/card/scan")}>
+      <Pressable testID="open-scanner" accessibilityRole="button" onPress={() => router.push("/card/scan")}>
         <Text style={{ color: "#0a66c2", marginVertical: 8 }}>Escanear carta com a câmera</Text>
       </Pressable>
       {showAlertUpsell ? (
@@ -89,19 +89,28 @@ export default function CatalogScreen() {
       {wishlistCardId ? (
         <View style={{ marginVertical: 8 }}>
           <Text>Em qual idioma você quer essa carta?</Text>
-          <Pressable testID="wishlist-language-any" onPress={() => handleChooseLanguage(null)}>
+          <Pressable
+            testID="wishlist-language-any"
+            accessibilityRole="button"
+            onPress={() => handleChooseLanguage(null)}
+          >
             <Text style={{ color: "#0a66c2" }}>Qualquer idioma</Text>
           </Pressable>
           {LANGUAGE_OPTIONS.map((lang) => (
             <Pressable
               key={lang.value}
               testID={`wishlist-language-${lang.value}`}
+              accessibilityRole="button"
               onPress={() => handleChooseLanguage(lang.value)}
             >
               <Text style={{ color: "#0a66c2" }}>{lang.label}</Text>
             </Pressable>
           ))}
-          <Pressable testID="wishlist-language-cancel" onPress={() => setWishlistCardId(null)}>
+          <Pressable
+            testID="wishlist-language-cancel"
+            accessibilityRole="button"
+            onPress={() => setWishlistCardId(null)}
+          >
             <Text style={{ color: "#666" }}>Cancelar</Text>
           </Pressable>
         </View>
@@ -115,7 +124,7 @@ export default function CatalogScreen() {
             value={threshold}
             onChangeText={setThreshold}
           />
-          <Pressable testID="price-alert-confirm" onPress={handleConfirmAlert}>
+          <Pressable testID="price-alert-confirm" accessibilityRole="button" onPress={handleConfirmAlert}>
             <Text style={{ color: "#0a66c2" }}>Criar alerta</Text>
           </Pressable>
         </View>
@@ -130,17 +139,26 @@ export default function CatalogScreen() {
             <CardGridItem card={item} />
             <Pressable
               testID={`wishlist-add-${item.id}`}
+              accessibilityRole="button"
+              accessibilityLabel={`Quero ${item.name}`}
               onPress={() => setWishlistCardId(item.id)}
             >
               <Text>Quero</Text>
             </Pressable>
             <Pressable
               testID={`buy-${item.id}`}
+              accessibilityRole="button"
+              accessibilityLabel={`Comprar ${item.name}`}
               onPress={() => Linking.openURL(buildTcgplayerSearchUrl(item.name))}
             >
               <Text>Comprar</Text>
             </Pressable>
-            <Pressable testID={`price-alert-add-${item.id}`} onPress={() => handleOpenAlert(item.id)}>
+            <Pressable
+              testID={`price-alert-add-${item.id}`}
+              accessibilityRole="button"
+              accessibilityLabel={`Alerta de preço para ${item.name}`}
+              onPress={() => handleOpenAlert(item.id)}
+            >
               <Text>Alerta</Text>
             </Pressable>
           </View>

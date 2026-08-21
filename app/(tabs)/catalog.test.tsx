@@ -40,6 +40,16 @@ describe("CatalogScreen price alerts", () => {
     (createPriceAlert as jest.Mock).mockResolvedValue(undefined);
   });
 
+  it("expõe as ações por carta e o scanner como botões rotulados", async () => {
+    (isPremium as jest.Mock).mockResolvedValue(false);
+    const { findByRole, getByRole } = render(<CatalogScreen />);
+
+    await findByRole("button", { name: "Quero Pikachu" });
+    expect(getByRole("button", { name: "Comprar Pikachu" })).toBeTruthy();
+    expect(getByRole("button", { name: "Alerta de preço para Pikachu" })).toBeTruthy();
+    expect(getByRole("button", { name: "Escanear carta com a câmera" })).toBeTruthy();
+  });
+
   it("lets a premium user create a price alert with a threshold", async () => {
     (isPremium as jest.Mock).mockResolvedValue(true);
     const { getByTestId } = render(<CatalogScreen />);

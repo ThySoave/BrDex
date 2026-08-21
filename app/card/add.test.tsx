@@ -74,6 +74,16 @@ describe("AddCardScreen", () => {
     expect(mockReplace).toHaveBeenCalledWith("/(tabs)/album");
   });
 
+  it("expõe tirar foto e salvar como botões", async () => {
+    (isPremium as jest.Mock).mockResolvedValue(false);
+    (countUserCards as jest.Mock).mockResolvedValue(FREE_CARD_LIMIT - 1);
+
+    const { findByRole, getByRole } = render(<AddCardScreen />);
+
+    await findByRole("button", { name: "Salvar carta" });
+    expect(getByRole("button", { name: "Tirar foto da carta" })).toBeTruthy();
+  });
+
   it("parses a decimal comma price before saving", async () => {
     (isPremium as jest.Mock).mockResolvedValue(false);
     (countUserCards as jest.Mock).mockResolvedValue(FREE_CARD_LIMIT - 1);

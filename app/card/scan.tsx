@@ -83,7 +83,7 @@ export default function ScanCardScreen() {
         Tire uma foto da carta para reconhecê-la e preencher o cadastro automaticamente.
       </Text>
 
-      <Pressable testID="scan-capture" disabled={scanning} onPress={handleCapture}>
+      <Pressable testID="scan-capture" accessibilityRole="button" disabled={scanning} onPress={handleCapture}>
         <Text style={{ color: "#0a66c2" }}>{scanning ? "Reconhecendo..." : "Escanear carta"}</Text>
       </Pressable>
 
@@ -92,7 +92,11 @@ export default function ScanCardScreen() {
           <Text testID="scan-no-match" style={{ color: "#666" }}>
             Carta não reconhecida. Tente outra foto ou busque manualmente no catálogo.
           </Text>
-          <Pressable testID="scan-manual-fallback" onPress={() => router.replace("/(tabs)/catalog")}>
+          <Pressable
+            testID="scan-manual-fallback"
+            accessibilityRole="button"
+            onPress={() => router.replace("/(tabs)/catalog")}
+          >
             <Text style={{ color: "#0a66c2" }}>Buscar no catálogo</Text>
           </Pressable>
         </View>

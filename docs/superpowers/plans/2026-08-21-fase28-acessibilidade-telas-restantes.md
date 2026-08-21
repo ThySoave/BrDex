@@ -34,10 +34,10 @@
 
 ### Task 2: Catálogo e cartas (catalog, add, scan)
 
-- [ ] **Step 1: Write the failing RNTL tests** (casos: quero/comprar/alerta por carta no catálogo (labels com o nome da carta), painel de idioma como botões; seleções e salvar no add; escanear/confirmar no scan.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest catalog add.test scan` → FAIL.
-- [ ] **Step 3: Implement** as props → GREEN sem editar testes existentes.
-- [ ] **Step 4: Commit** — `feat: add accessibility roles to catalog and card screens`
+- [x] **Step 1: Write the failing RNTL tests** (casos: quero/comprar/alerta por carta no catálogo com labels "Quero/Comprar/Alerta de preço para <carta>" + scanner; tirar foto/salvar no add; escanear no scan.)
+- [x] **Step 2: Run to verify it fails** — `npx jest catalog.test add.test scan.test` → FAIL (3 falhas novas).
+- [x] **Step 3: Implement** as props (15 Pressables: 8 catálogo com labels por carta, 5 add, 2 scan) → GREEN (24/24) sem editar testes existentes.
+- [x] **Step 4: Commit** — `feat: add accessibility roles to catalog and card screens`
 
 ---
 
