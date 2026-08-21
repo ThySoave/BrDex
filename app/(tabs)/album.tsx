@@ -5,19 +5,28 @@ import * as Sharing from "expo-sharing";
 import {
   listUserCards,
   markCardAsSold,
-  updateCardStatus
+  updateCardStatus,
+  updateUserCard
 } from "../../src/features/collection/collectionRepository";
+import { CARD_CONDITIONS, type CardCondition } from "../../src/features/collection/conditionScale";
 import { buildCollectionPdfHtml } from "../../src/features/collection/exportPdf";
 import { fetchSetProgress, type SetProgress } from "../../src/features/collection/setProgressRepository";
 import { ShareCollectionCard, ShareSingleCard } from "../../src/features/collection/shareCards";
 import { captureAndShareView } from "../../src/features/collection/shareImage";
 import { isPremium } from "../../src/features/premium/entitlementsRepository";
-import type { CardStatus, UserCard } from "../../src/features/collection/types";
+import type { CardLanguage, CardStatus, UserCard } from "../../src/features/collection/types";
 
 const STATUS_OPTIONS: { value: CardStatus; label: string }[] = [
   { value: "guardada", label: "Guardada" },
   { value: "a_venda", label: "À venda" },
   { value: "disponivel_troca", label: "Disponível para troca" }
+];
+
+const LANGUAGES: { value: CardLanguage; label: string }[] = [
+  { value: "en", label: "Inglês" },
+  { value: "pt", label: "Português" },
+  { value: "jp", label: "Japonês" },
+  { value: "other", label: "Outro" }
 ];
 
 export default function AlbumScreen() {
@@ -29,6 +38,10 @@ export default function AlbumScreen() {
   const [sellingCard, setSellingCard] = useState<UserCard | null>(null);
   const [salePrice, setSalePrice] = useState("");
   const [statusCard, setStatusCard] = useState<UserCard | null>(null);
+  const [editingCard, setEditingCard] = useState<UserCard | null>(null);
+  const [editLanguage, setEditLanguage] = useState<CardLanguage>("en");
+  const [editCondition, setEditCondition] = useState<CardCondition>("near_mint");
+  const [editPrice, setEditPrice] = useState("");
   const [error, setError] = useState<string | null>(null);
   const collectionShareRef = useRef<View>(null);
   const cardShareRef = useRef<View>(null);
@@ -64,6 +77,30 @@ export default function AlbumScreen() {
       .then(() => {
         setCards((current) => current.filter((card) => card.id !== cardId));
         setSellingCard(null);
+      })
+      .catch((err: Error) => Alert.alert("Erro", err.message));
+  };
+
+  const handleOpenEdit = (card: UserCard) => {
+    setEditingCard(card);
+    setEditLanguage(card.language);
+    setEditCondition(card.condition);
+    setEditPrice(card.pricePaid != null ? String(card.pricePaid) : "");
+  };
+
+  const handleSaveEdit = () => {
+    if (!editingCard) return;
+    const parsed = Number.parseFloat(editPrice.replace(",", "."));
+    const pricePaid = Number.isFinite(parsed) ? parsed : null;
+
+    const cardId = editingCard.id;
+    const updates = { language: editLanguage, condition: editCondition, pricePaid };
+    updateUserCard(cardId, updates)
+      .then(() => {
+        setCards((current) =>
+          current.map((card) => (card.id === cardId ? { ...card, ...updates } : card))
+        );
+        setEditingCard(null);
       })
       .catch((err: Error) => Alert.alert("Erro", err.message));
   };
@@ -158,6 +195,9 @@ export default function AlbumScreen() {
             <Pressable testID={`card-status-${item.id}`} onPress={() => setStatusCard(item)}>
               <Text style={{ color: "#06c" }}>Status</Text>
             </Pressable>
+            <Pressable testID={`edit-card-${item.id}`} onPress={() => handleOpenEdit(item)}>
+              <Text style={{ color: "#090" }}>Editar</Text>
+            </Pressable>
           </Pressable>
         )}
       />
@@ -177,6 +217,49 @@ export default function AlbumScreen() {
             </Pressable>
           ))}
           <Pressable testID="cancel-status" onPress={() => setStatusCard(null)}>
+            <Text>Cancelar</Text>
+          </Pressable>
+        </View>
+      ) : null}
+      {editingCard ? (
+        <View style={{ padding: 12, borderWidth: 1, borderColor: "#ccc", borderRadius: 8 }}>
+          <Text>{`Editar ${editingCard.cardName}`}</Text>
+          <Text>Idioma</Text>
+          {LANGUAGES.map((lang) => (
+            <Pressable
+              key={lang.value}
+              testID={`edit-language-${lang.value}`}
+              onPress={() => setEditLanguage(lang.value)}
+            >
+              <Text style={{ fontWeight: editLanguage === lang.value ? "bold" : "normal" }}>
+                {lang.label}
+              </Text>
+            </Pressable>
+          ))}
+          <Text>Estado de conservação</Text>
+          {CARD_CONDITIONS.map((cond) => (
+            <Pressable
+              key={cond.value}
+              testID={`edit-condition-${cond.value}`}
+              onPress={() => setEditCondition(cond.value)}
+            >
+              <Text style={{ fontWeight: editCondition === cond.value ? "bold" : "normal" }}>
+                {cond.label}
+              </Text>
+            </Pressable>
+          ))}
+          <Text>Preço pago (R$)</Text>
+          <TextInput
+            testID="edit-price-input"
+            keyboardType="numeric"
+            value={editPrice}
+            onChangeText={setEditPrice}
+            style={{ borderWidth: 1, borderColor: "#ccc", marginVertical: 8, padding: 8 }}
+          />
+          <Pressable testID="save-edit" onPress={handleSaveEdit} style={{ marginBottom: 8 }}>
+            <Text>Salvar</Text>
+          </Pressable>
+          <Pressable testID="cancel-edit" onPress={() => setEditingCard(null)}>
             <Text>Cancelar</Text>
           </Pressable>
         </View>

@@ -49,10 +49,10 @@
 **Interfaces:**
 - Consumes: Task 1 (`updateUserCard`). Cada item do álbum ganha botão `edit-card-<id>`; tocar abre painel pré-preenchido com os valores atuais da carta: opções `edit-language-<value>` (LANGUAGES), `edit-condition-<value>` (CARD_CONDITIONS), input `edit-price-input` (aceita vírgula; vazio → `null`); botão `save-edit` chama `updateUserCard(id, updates)`, atualiza a carta na lista local e fecha o painel; erro → `Alert.alert("Erro", message)`; botão `cancel-edit` fecha sem chamar o repositório.
 
-- [ ] **Step 1: Write the failing RNTL tests** (estender `album.test.tsx` — casos: botão abre o painel; salvar com novos valores chama `updateUserCard` com `updates` corretos, atualiza a lista e fecha o painel; preço vazio vira `null`; erro vira `Alert.alert`; cancelar fecha sem chamar o repositório.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest album` → FAIL (falhas esperadas do painel novo).
-- [ ] **Step 3: Implement** — estado `editingCard` + painel no padrão dos painéis de venda/status → GREEN (com `act` assíncrono no press).
-- [ ] **Step 4: Commit** — `feat: edit card details from the album`
+- [x] **Step 1: Write the failing RNTL tests** (estender `album.test.tsx` — casos: botão abre o painel; salvar com novos valores chama `updateUserCard` com `updates` corretos, atualiza a lista e fecha o painel; preço vazio vira `null`; erro vira `Alert.alert`; cancelar fecha sem chamar o repositório.)
+- [x] **Step 2: Run to verify it fails** — `npx jest album` → FAIL (5 falhas esperadas).
+- [x] **Step 3: Implement** — estado `editingCard` + painel no padrão dos painéis de venda/status → GREEN (21/21, com `act` assíncrono no press).
+- [x] **Step 4: Commit** — `feat: edit card details from the album`
 
 ---
 

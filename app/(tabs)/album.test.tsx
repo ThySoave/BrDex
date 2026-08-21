@@ -1,7 +1,9 @@
 jest.mock("../../src/features/collection/collectionRepository", () => ({
   listUserCards: jest.fn(),
   markCardAsSold: jest.fn(),
-  updateCardStatus: jest.fn()
+  updateCardStatus: jest.fn(),
+  updateUserCard: jest.fn(),
+  deleteUserCard: jest.fn()
 }));
 jest.mock("../../src/features/collection/setProgressRepository", () => ({
   fetchSetProgress: jest.fn()
@@ -27,7 +29,8 @@ import { captureAndShareView } from "../../src/features/collection/shareImage";
 import {
   listUserCards,
   markCardAsSold,
-  updateCardStatus
+  updateCardStatus,
+  updateUserCard
 } from "../../src/features/collection/collectionRepository";
 import { fetchSetProgress } from "../../src/features/collection/setProgressRepository";
 import { isPremium } from "../../src/features/premium/entitlementsRepository";
@@ -288,6 +291,98 @@ describe("AlbumScreen card status", () => {
       expect(queryByTestId("status-option-a_venda")).toBeNull();
     });
     expect(updateCardStatus).not.toHaveBeenCalled();
+  });
+});
+
+describe("AlbumScreen card edit", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (listUserCards as jest.Mock).mockResolvedValue(CARDS);
+    (fetchSetProgress as jest.Mock).mockResolvedValue([]);
+    (isPremium as jest.Mock).mockResolvedValue(false);
+    (updateUserCard as jest.Mock).mockResolvedValue(undefined);
+  });
+
+  async function openEditPanel() {
+    const screen = render(<AlbumScreen />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("edit-card-uc-1")).toBeTruthy();
+    });
+
+    fireEvent.press(screen.getByTestId("edit-card-uc-1"));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("edit-price-input")).toBeTruthy();
+    });
+
+    return screen;
+  }
+
+  it("abre o painel de edição com os valores atuais da carta", async () => {
+    const { getByTestId } = await openEditPanel();
+
+    expect(getByTestId("edit-language-pt")).toBeTruthy();
+    expect(getByTestId("edit-condition-excellent")).toBeTruthy();
+    expect(getByTestId("edit-price-input").props.value).toBe("100.5");
+    expect(getByTestId("save-edit")).toBeTruthy();
+    expect(getByTestId("cancel-edit")).toBeTruthy();
+  });
+
+  it("salva novos valores, atualiza a lista e fecha o painel", async () => {
+    const { getByTestId, queryByTestId } = await openEditPanel();
+
+    fireEvent.press(getByTestId("edit-language-pt"));
+    fireEvent.press(getByTestId("edit-condition-excellent"));
+    fireEvent.changeText(getByTestId("edit-price-input"), "12,5");
+    await act(async () => {
+      fireEvent.press(getByTestId("save-edit"));
+    });
+
+    expect(updateUserCard).toHaveBeenCalledWith("uc-1", {
+      language: "pt",
+      condition: "excellent",
+      pricePaid: 12.5
+    });
+    expect(queryByTestId("edit-price-input")).toBeNull();
+  });
+
+  it("salva preço vazio como null", async () => {
+    const { getByTestId } = await openEditPanel();
+
+    fireEvent.changeText(getByTestId("edit-price-input"), "");
+    await act(async () => {
+      fireEvent.press(getByTestId("save-edit"));
+    });
+
+    expect(updateUserCard).toHaveBeenCalledWith("uc-1", {
+      language: "en",
+      condition: "near_mint",
+      pricePaid: null
+    });
+  });
+
+  it("mostra alerta quando a edição falha", async () => {
+    (updateUserCard as jest.Mock).mockRejectedValue(new Error("edição falhou"));
+    const alertSpy = jest.spyOn(Alert, "alert").mockImplementation(() => {});
+    const { getByTestId } = await openEditPanel();
+
+    await act(async () => {
+      fireEvent.press(getByTestId("save-edit"));
+    });
+
+    expect(alertSpy).toHaveBeenCalledWith("Erro", "edição falhou");
+  });
+
+  it("cancela fechando o painel sem chamar o repositório", async () => {
+    const { getByTestId, queryByTestId } = await openEditPanel();
+
+    fireEvent.press(getByTestId("cancel-edit"));
+
+    await waitFor(() => {
+      expect(queryByTestId("edit-price-input")).toBeNull();
+    });
+    expect(updateUserCard).not.toHaveBeenCalled();
   });
 });
 
