@@ -35,10 +35,10 @@
 - `handleSubmit` valida antes de chamar `signUp`: email vazio ou sem `@` → erro "Informe um email válido."; senha com menos de 6 caracteres → erro "A senha precisa de pelo menos 6 caracteres."; em ambos os casos `signUp` NÃO é chamado e a mensagem aparece no `<Text>` de erro existente (`testID="signup-error"` a adicionar).
 - Fluxo feliz inalterado: `signUp(email, password)` e `router.replace("/(tabs)/album")`; erro do repositório continua indo para o mesmo `<Text>` de erro.
 
-- [ ] **Step 1: Write the failing RNTL tests** (novo `signup.test.tsx`, mocks no padrão de `login.test.tsx` — casos: submit com email inválido mostra a mensagem e não chama `signUp`; senha curta mostra a mensagem e não chama `signUp`; dados válidos chamam `signUp` e navegam; erro do `signUp` aparece na tela.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest signup` → FAIL (casos de validação).
-- [ ] **Step 3: Implement** — validação no topo do `handleSubmit` + `testID="signup-error"` → GREEN.
-- [ ] **Step 4: Commit** — `feat: validate signup fields before submitting`
+- [x] **Step 1: Write the failing RNTL tests** (novo `signup.test.tsx`, mocks no padrão de `login.test.tsx` — casos: submit com email inválido mostra a mensagem e não chama `signUp`; senha curta mostra a mensagem e não chama `signUp`; dados válidos chamam `signUp` e navegam; erro do `signUp` aparece na tela.)
+- [x] **Step 2: Run to verify it fails** — `npx jest signup` → FAIL (2 falhas de validação; 2 casos de caracterização já verdes).
+- [x] **Step 3: Implement** — validação no topo do `handleSubmit` + `testID="signup-error"` → GREEN (4/4).
+- [x] **Step 4: Commit** — `feat: validate signup fields before submitting`
 
 ---
 
