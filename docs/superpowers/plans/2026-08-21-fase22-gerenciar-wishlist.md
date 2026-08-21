@@ -36,10 +36,10 @@
 - Produces: `listWishlist(): Promise<WishlistItem[]>` — exige usuário autenticado; `client.from("wishlist").select("id, catalog_card_id, language, cards_catalog(name, image_url)").eq("user_id", user.id).order("created_at", { ascending: false })`; `error` → `throw new Error(error.message)`; mapeia linhas para `WishlistItem`.
 - Produces: `removeFromWishlist(wishlistId: string): Promise<void>` — exige usuário autenticado; `client.from("wishlist").delete().eq("id", wishlistId).eq("user_id", user.id)`; `error` → `throw new Error(error.message)`.
 
-- [ ] **Step 1: Write the failing Jest tests** (estender `wishlistRepository.test.ts` — casos: `listWishlist` consulta `wishlist` com join no catálogo filtrando por `user_id` e mapeia para `WishlistItem`; erro do select vira throw; `removeFromWishlist` deleta filtrando por `id` e `user_id`; erro do delete vira throw.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest wishlistRepository` → FAIL.
-- [ ] **Step 3: Implement** — tipo + duas funções no shape de `listUserCards`/`deleteUserCard` → GREEN.
-- [ ] **Step 4: Commit** — `feat: add list and remove to wishlist repository`
+- [x] **Step 1: Write the failing Jest tests** (estender `wishlistRepository.test.ts` — casos: `listWishlist` consulta `wishlist` com join no catálogo filtrando por `user_id` e mapeia para `WishlistItem`; erro do select vira throw; `removeFromWishlist` deleta filtrando por `id` e `user_id`; erro do delete vira throw.)
+- [x] **Step 2: Run to verify it fails** — `npx jest wishlistRepository` → FAIL (4 falhas).
+- [x] **Step 3: Implement** — tipo + duas funções no shape de `listUserCards`/`deleteUserCard` → GREEN.
+- [x] **Step 4: Commit** — `feat: add list and remove to wishlist repository`
 
 ---
 
