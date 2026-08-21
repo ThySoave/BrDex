@@ -33,10 +33,10 @@
 - `handleSubmit` valida antes de chamar `signIn`: email vazio/sem `@` → "Informe um email válido."; senha < 6 caracteres → "A senha precisa de pelo menos 6 caracteres."; nos dois casos `signIn` NÃO é chamado e a mensagem vai para o `<Text>` de erro existente (adicionar `testID="login-error"`).
 - Fluxo feliz inalterado (`signIn` + `router.replace("/(tabs)/album")`); erro do `signIn` continua indo para o mesmo `<Text>`.
 
-- [ ] **Step 1: Write the failing RNTL tests** (estender `login.test.tsx` — casos: email inválido mostra a mensagem e não chama `signIn`; senha curta mostra a mensagem e não chama `signIn`; erro do `signIn` ("Credenciais inválidas") aparece na tela.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest login` → FAIL (2 casos de validação; o caso de erro do `signIn` é caracterização e nasce verde).
-- [ ] **Step 3: Implement** — validação no topo do `handleSubmit` + `testID="login-error"` → GREEN.
-- [ ] **Step 4: Commit** — `feat: validate login fields before submitting`
+- [x] **Step 1: Write the failing RNTL tests** (estender `login.test.tsx` — casos: email inválido mostra a mensagem e não chama `signIn`; senha curta mostra a mensagem e não chama `signIn`; erro do `signIn` ("Credenciais inválidas") aparece na tela; + `beforeEach(clearAllMocks)` para isolar os casos.)
+- [x] **Step 2: Run to verify it fails** — `npx jest login.test` → FAIL (2 falhas de validação; caracterização verde).
+- [x] **Step 3: Implement** — validação no topo do `handleSubmit` + `testID="login-error"` → GREEN (4/4).
+- [x] **Step 4: Commit** — `feat: validate login fields before submitting`
 
 ---
 

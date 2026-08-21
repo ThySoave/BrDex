@@ -11,6 +11,14 @@ export default function LoginScreen() {
 
   async function handleSubmit() {
     setError(null);
+    if (!email.trim() || !email.includes("@")) {
+      setError("Informe um email válido.");
+      return;
+    }
+    if (password.length < 6) {
+      setError("A senha precisa de pelo menos 6 caracteres.");
+      return;
+    }
     try {
       await signIn(email, password);
       router.replace("/(tabs)/album");
@@ -37,7 +45,11 @@ export default function LoginScreen() {
         value={password}
         onChangeText={setPassword}
       />
-      {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
+      {error ? (
+        <Text testID="login-error" style={{ color: "red" }}>
+          {error}
+        </Text>
+      ) : null}
       <Pressable testID="login-submit" onPress={handleSubmit}>
         <Text>Entrar</Text>
       </Pressable>
