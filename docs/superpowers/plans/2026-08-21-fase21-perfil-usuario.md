@@ -50,10 +50,10 @@
 - Consumes: `isUserVerified`, `userRatingSummary`, `reportUser`, `blockUser`; `useLocalSearchParams<{ userId: string }>`.
 - Produces: tela com `user-verified` (selo, só quando verificado), `user-rating` (mesma formatação da Task 1), botão `report-user` → `reportUser(userId, "denúncia feita a partir do perfil", "perfil <userId>")` → `Alert.alert("Denúncia enviada", "Nossa equipe vai analisar.")`, botão `block-user` → `blockUser(userId)` → `Alert.alert("Usuário bloqueado")` + `router.back()`; erros → `Alert.alert("Erro", message)`.
 
-- [ ] **Step 1: Write the failing RNTL tests** (`user-profile.test.tsx` — casos: mostra selo quando verificado e omite quando não; mostra reputação e "Sem avaliações"; denunciar chama `reportUser` com motivo/contexto do perfil e mostra confirmação; bloquear chama `blockUser`, confirma e volta; erro de denúncia vira `Alert.alert("Erro", ...)`.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest user-profile` → FAIL.
-- [ ] **Step 3: Implement** — tela no padrão de `app/chat/[conversationId].tsx` (handlers `.then/.catch` + `Alert`) → GREEN.
-- [ ] **Step 4: Commit** — `feat: add public user profile with report and block`
+- [x] **Step 1: Write the failing RNTL tests** (`user-profile.test.tsx` — casos: mostra selo quando verificado e omite quando não; mostra reputação e "Sem avaliações"; denunciar chama `reportUser` com motivo/contexto do perfil e mostra confirmação; bloquear chama `blockUser`, confirma e volta; erro de denúncia vira `Alert.alert("Erro", ...)`.)
+- [x] **Step 2: Run to verify it fails** — `npx jest user-profile` → FAIL (suite não resolve `./[userId]`).
+- [x] **Step 3: Implement** — tela no padrão de `app/chat/[conversationId].tsx` (handlers `.then/.catch` + `Alert`) → GREEN (7/7).
+- [x] **Step 4: Commit** — `feat: add public user profile with report and block`
 
 ---
 
