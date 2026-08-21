@@ -7,15 +7,16 @@ jest.mock("../../src/features/social/chatRepository", () => ({
 jest.mock("../../src/features/premium/entitlementsRepository", () => ({
   isUserVerified: jest.fn()
 }));
+const mockPush = jest.fn();
 jest.mock("expo-router", () => ({
   useFocusEffect: (callback: () => void) => {
     const React = require("react");
     React.useEffect(callback, []);
   },
-  router: { push: jest.fn() }
+  router: { push: (...args: unknown[]) => mockPush(...args) }
 }));
 
-import { render, waitFor } from "@testing-library/react-native";
+import { fireEvent, render, waitFor } from "@testing-library/react-native";
 import { isUserVerified } from "../../src/features/premium/entitlementsRepository";
 import { listMatches } from "../../src/features/social/matchesRepository";
 import MatchesScreen from "./matches";
@@ -65,5 +66,25 @@ describe("MatchesScreen verified badge", () => {
     const items = getAllByTestId(/^match-item-/);
     expect(items[0].props.testID).toBe("match-item-m2");
     expect(items[1].props.testID).toBe("match-item-m1");
+  });
+});
+
+describe("MatchesScreen wishlist link", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (listMatches as jest.Mock).mockResolvedValue([]);
+    (isUserVerified as jest.Mock).mockResolvedValue(false);
+  });
+
+  it("navigates to the wishlist screen from the fixed link", async () => {
+    const { getByTestId } = render(<MatchesScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("open-wishlist")).toBeTruthy();
+    });
+
+    fireEvent.press(getByTestId("open-wishlist"));
+
+    expect(mockPush).toHaveBeenCalledWith("/wishlist");
   });
 });

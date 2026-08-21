@@ -64,10 +64,10 @@
 **Interfaces:**
 - Consumes: Task 2 (rota `/wishlist`). A aba Trocas ganha link fixo `open-wishlist` ("Minha lista de desejos") acima da lista de matches; tocar navega para `/wishlist` via `router.push`.
 
-- [ ] **Step 1: Write the failing RNTL test** (estender `matches.test.tsx` — caso: o link aparece e tocar navega para `/wishlist`.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest matches` → FAIL.
-- [ ] **Step 3: Implement** — `Pressable` acima da FlatList → GREEN.
-- [ ] **Step 4: Commit** — `feat: link to wishlist from matches tab`
+- [x] **Step 1: Write the failing RNTL test** (estender `matches.test.tsx` — caso: o link aparece e tocar navega para `/wishlist`.)
+- [x] **Step 2: Run to verify it fails** — `npx jest matches` → FAIL (1 falha).
+- [x] **Step 3: Implement** — `Pressable` acima da FlatList → GREEN (5/5).
+- [x] **Step 4: Commit** — `feat: link to wishlist from matches tab`
 
 ---
 

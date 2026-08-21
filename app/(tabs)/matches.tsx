@@ -49,6 +49,9 @@ export default function MatchesScreen() {
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
+      <Pressable testID="open-wishlist" onPress={() => router.push("/wishlist")}>
+        <Text style={{ color: "#0a66c2", marginBottom: 12 }}>Minha lista de desejos</Text>
+      </Pressable>
       <FlatList
         testID="matches-list"
         data={sortedMatches}
