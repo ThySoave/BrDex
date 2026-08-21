@@ -55,6 +55,22 @@
 
 ---
 
+### Task 3: Feedback de preço inválido na venda do álbum
+
+**Files:** Modify `app/(tabs)/album.tsx`; extend `app/(tabs)/album.test.tsx`.
+
+**Interfaces:**
+- Nova varredura (pós Tasks 1–2) encontrou o último parse numérico sem feedback: `handleConfirmSale` faz `return` silencioso com preço inválido/vazio — o usuário toca em "confirmar" e nada acontece. Passa a mostrar `Alert.alert("Informe um valor válido em reais")` (mesma mensagem do alerta de preço no catálogo) mantendo o painel aberto e sem chamar `markCardAsSold`.
+- Teste existente "não chama o repositório com preço vazio" permanece válido (só afirma a não-chamada).
+
+- [x] **Step 1: Write the failing RNTL test** (estender `album.test.tsx` — caso: confirmar venda com preço `"abc"` mostra o `Alert` de valor válido e não chama `markCardAsSold`.)
+- [x] **Step 2: Run to verify it fails** — `npx jest album.test` → FAIL (1 falha: Alert não era chamado; 25 casos existentes verdes).
+- [x] **Step 3: Implement** — trocar o `return` silencioso pelo `Alert` → GREEN (26/26).
+- [x] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes (231/231 em 51 suites, tsc limpo).
+- [x] **Step 5: Commit** — `fix: alert on invalid sale price in album`
+
+---
+
 ## Self-Review Notes
 
 - **Escopo:** nenhum recurso fora do spec — só robustez de entrada em fluxos já existentes; a varredura desta sessão confirmou o spec coberto (bloqueio, aviso de chat, outliers, RLS, premium gating).

@@ -72,7 +72,10 @@ export default function AlbumScreen() {
   const handleConfirmSale = () => {
     if (!sellingCard) return;
     const price = Number.parseFloat(salePrice.replace(",", "."));
-    if (!Number.isFinite(price) || price <= 0) return;
+    if (!Number.isFinite(price) || price <= 0) {
+      Alert.alert("Informe um valor válido em reais");
+      return;
+    }
 
     const cardId = sellingCard.id;
     markCardAsSold(cardId, price)

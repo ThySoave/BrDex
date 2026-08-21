@@ -202,6 +202,19 @@ describe("AlbumScreen card sale", () => {
     expect(markCardAsSold).not.toHaveBeenCalled();
   });
 
+  it("mostra alerta de valor válido quando o preço da venda é inválido", async () => {
+    const alertSpy = jest.spyOn(Alert, "alert").mockImplementation(() => {});
+    const { getByTestId } = await openSalePanel();
+
+    fireEvent.changeText(getByTestId("sale-price-input"), "abc");
+    fireEvent.press(getByTestId("confirm-sale"));
+
+    await waitFor(() => {
+      expect(alertSpy).toHaveBeenCalledWith("Informe um valor válido em reais");
+    });
+    expect(markCardAsSold).not.toHaveBeenCalled();
+  });
+
   it("mostra alerta quando a venda falha", async () => {
     (markCardAsSold as jest.Mock).mockRejectedValue(new Error("venda falhou"));
     const alertSpy = jest.spyOn(Alert, "alert").mockImplementation(() => {});
