@@ -63,10 +63,15 @@ export default function UserProfileScreen() {
       <Text testID="user-rating" style={{ marginBottom: 24 }}>
         {ratingLabel}
       </Text>
-      <Pressable testID="report-user" onPress={handleReport} style={{ marginBottom: 16 }}>
+      <Pressable
+        testID="report-user"
+        accessibilityRole="button"
+        onPress={handleReport}
+        style={{ marginBottom: 16 }}
+      >
         <Text style={{ color: "#c22" }}>Denunciar usuário</Text>
       </Pressable>
-      <Pressable testID="block-user" onPress={handleBlock}>
+      <Pressable testID="block-user" accessibilityRole="button" onPress={handleBlock}>
         <Text style={{ color: "#c22" }}>Bloquear usuário</Text>
       </Pressable>
     </View>

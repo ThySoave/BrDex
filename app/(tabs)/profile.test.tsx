@@ -33,6 +33,12 @@ describe("ProfileScreen", () => {
     (signOut as jest.Mock).mockResolvedValue(undefined);
   });
 
+  it("expõe sair da conta como botão", async () => {
+    const { findByRole } = render(<ProfileScreen />);
+
+    await findByRole("button", { name: "Sair da conta" });
+  });
+
   it("shows the session email", async () => {
     const { getByTestId } = render(<ProfileScreen />);
 

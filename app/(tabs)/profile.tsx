@@ -65,7 +65,7 @@ export default function ProfileScreen() {
       <Text testID="profile-rating" style={{ marginBottom: 24 }}>
         {ratingLabel}
       </Text>
-      <Pressable testID="sign-out" onPress={handleSignOut}>
+      <Pressable testID="sign-out" accessibilityRole="button" onPress={handleSignOut}>
         <Text style={{ color: "#c22" }}>Sair da conta</Text>
       </Pressable>
     </View>

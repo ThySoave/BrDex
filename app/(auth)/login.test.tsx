@@ -50,6 +50,13 @@ describe("LoginScreen", () => {
     expect(signIn).not.toHaveBeenCalled();
   });
 
+  it("expõe entrar e entrar com Google como botões", () => {
+    const { getByRole } = render(<LoginScreen />);
+
+    expect(getByRole("button", { name: "Entrar" })).toBeTruthy();
+    expect(getByRole("button", { name: "Entrar com Google" })).toBeTruthy();
+  });
+
   it("shows the repository error when sign in fails", async () => {
     (signIn as jest.Mock).mockRejectedValue(new Error("Credenciais inválidas"));
     const { getByTestId, findByText } = render(<LoginScreen />);

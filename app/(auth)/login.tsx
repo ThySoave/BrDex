@@ -48,12 +48,13 @@ export default function LoginScreen() {
           {error}
         </Text>
       ) : null}
-      <Pressable testID="login-submit" onPress={handleSubmit}>
+      <Pressable testID="login-submit" accessibilityRole="button" onPress={handleSubmit}>
         <Text>Entrar</Text>
       </Pressable>
       <Link href="/(auth)/signup">Criar conta</Link>
       <Pressable
         testID="login-google"
+        accessibilityRole="button"
         onPress={async () => {
           const WebBrowser = await import("expo-web-browser");
           const { buildGoogleOAuthUrl } = await import("../../src/features/auth/googleAuth");

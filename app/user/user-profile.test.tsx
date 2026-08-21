@@ -68,6 +68,13 @@ describe("UserProfileScreen", () => {
     });
   });
 
+  it("expõe denunciar e bloquear como botões", async () => {
+    const { findByRole, getByRole } = render(<UserProfileScreen />);
+
+    await findByRole("button", { name: "Denunciar usuário" });
+    expect(getByRole("button", { name: "Bloquear usuário" })).toBeTruthy();
+  });
+
   it("reports the user from the profile", async () => {
     const alertSpy = jest.spyOn(Alert, "alert").mockImplementation(() => undefined);
     const { getByTestId } = render(<UserProfileScreen />);

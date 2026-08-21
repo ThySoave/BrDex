@@ -52,6 +52,12 @@ describe("SignupScreen", () => {
     });
   });
 
+  it("expõe criar conta como botão", () => {
+    const { getByRole } = render(<SignupScreen />);
+
+    expect(getByRole("button", { name: "Criar conta" })).toBeTruthy();
+  });
+
   it("shows the repository error when sign up fails", async () => {
     (signUp as jest.Mock).mockRejectedValue(new Error("Email já cadastrado"));
     const { getByTestId, findByText } = render(<SignupScreen />);

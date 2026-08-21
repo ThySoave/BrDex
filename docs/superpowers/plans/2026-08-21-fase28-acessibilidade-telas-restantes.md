@@ -25,10 +25,10 @@
 
 ### Task 1: Conta e perfis (login, signup, profile, user)
 
-- [ ] **Step 1: Write the failing RNTL tests** (um caso por tela via `getByRole`/`findByRole` — entrar/entrar com Google; criar conta; sair da conta; denunciar/bloquear no perfil público.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest login.test signup profile user-profile` → FAIL.
-- [ ] **Step 3: Implement** as props → GREEN sem editar testes existentes.
-- [ ] **Step 4: Commit** — `feat: add accessibility roles to account screens`
+- [x] **Step 1: Write the failing RNTL tests** (um caso por tela via `getByRole`/`findByRole` — entrar/entrar com Google; criar conta; sair da conta; denunciar/bloquear no perfil público.)
+- [x] **Step 2: Run to verify it fails** — `npx jest login.test signup profile.test user-profile` → FAIL (4 falhas, uma por suite).
+- [x] **Step 3: Implement** as props (6 Pressables) → GREEN (28/28) sem editar testes existentes.
+- [x] **Step 4: Commit** — `feat: add accessibility roles to account screens`
 
 ---
 

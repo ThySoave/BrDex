@@ -48,7 +48,7 @@ export default function SignupScreen() {
           {error}
         </Text>
       ) : null}
-      <Pressable testID="signup-submit" onPress={handleSubmit}>
+      <Pressable testID="signup-submit" accessibilityRole="button" onPress={handleSubmit}>
         <Text>Criar conta</Text>
       </Pressable>
     </View>
