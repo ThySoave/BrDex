@@ -53,6 +53,14 @@ describe("ChatScreen trades", () => {
     (userRatingSummary as jest.Mock).mockResolvedValue({ avgStars: null, ratingsCount: 0 });
   });
 
+  it("expõe enviar, denunciar e bloquear como botões", async () => {
+    const { findByRole, getByRole } = render(<ChatScreen />);
+
+    await findByRole("button", { name: "Enviar" });
+    expect(getByRole("button", { name: "Denunciar" })).toBeTruthy();
+    expect(getByRole("button", { name: "Bloquear" })).toBeTruthy();
+  });
+
   it("shows the other user's completed trades count", async () => {
     const { getByTestId, getByText } = render(<ChatScreen />);
 

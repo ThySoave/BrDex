@@ -49,7 +49,7 @@ export default function MatchesScreen() {
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
-      <Pressable testID="open-wishlist" onPress={() => router.push("/wishlist")}>
+      <Pressable testID="open-wishlist" accessibilityRole="button" onPress={() => router.push("/wishlist")}>
         <Text style={{ color: "#0a66c2", marginBottom: 12 }}>Minha lista de desejos</Text>
       </Pressable>
       <FlatList
@@ -77,6 +77,8 @@ export default function MatchesScreen() {
             </Text>
             <Pressable
               testID={`match-chat-${item.id}`}
+              accessibilityRole="button"
+              accessibilityLabel={`Conversar sobre ${item.cardName}`}
               onPress={() => openConversation(item)}
             >
               <Text>Conversar</Text>

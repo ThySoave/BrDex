@@ -46,7 +46,12 @@ export default function WishlistScreen() {
             <Text style={{ color: "#666" }}>
               {languageLabel(item.language)}
             </Text>
-            <Pressable testID={`wishlist-remove-${item.id}`} onPress={() => handleRemove(item)}>
+            <Pressable
+              testID={`wishlist-remove-${item.id}`}
+              accessibilityRole="button"
+              accessibilityLabel={`Remover ${item.cardName}`}
+              onPress={() => handleRemove(item)}
+            >
               <Text style={{ color: "#c22" }}>Remover</Text>
             </Pressable>
           </View>

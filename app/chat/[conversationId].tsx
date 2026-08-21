@@ -184,7 +184,12 @@ export default function ChatScreen() {
         </Pressable>
       ) : null}
       {!pendingOwn ? (
-        <Pressable testID="chat-propose-trade" onPress={handleProposeTrade} style={{ marginVertical: 4 }}>
+        <Pressable
+          testID="chat-propose-trade"
+          accessibilityRole="button"
+          onPress={handleProposeTrade}
+          style={{ marginVertical: 4 }}
+        >
           <Text style={{ color: "#0a66c2" }}>Troca concluída</Text>
         </Pressable>
       ) : (
@@ -196,14 +201,18 @@ export default function ChatScreen() {
       </Text>
       <View style={{ flexDirection: "row", gap: 16, marginVertical: 8 }}>
         {other ? (
-          <Pressable testID="chat-view-profile" onPress={() => router.push(`/user/${other}`)}>
+          <Pressable
+            testID="chat-view-profile"
+            accessibilityRole="button"
+            onPress={() => router.push(`/user/${other}`)}
+          >
             <Text style={{ color: "#0a66c2" }}>Ver perfil</Text>
           </Pressable>
         ) : null}
-        <Pressable testID="chat-report" onPress={handleReport}>
+        <Pressable testID="chat-report" accessibilityRole="button" onPress={handleReport}>
           <Text>Denunciar</Text>
         </Pressable>
-        <Pressable testID="chat-block" onPress={handleBlock}>
+        <Pressable testID="chat-block" accessibilityRole="button" onPress={handleBlock}>
           <Text>Bloquear</Text>
         </Pressable>
       </View>
@@ -225,7 +234,7 @@ export default function ChatScreen() {
           onChangeText={setDraft}
           style={{ flex: 1 }}
         />
-        <Pressable testID="chat-send" onPress={handleSend}>
+        <Pressable testID="chat-send" accessibilityRole="button" onPress={handleSend}>
           <Text>Enviar</Text>
         </Pressable>
       </View>

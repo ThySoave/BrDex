@@ -47,6 +47,13 @@ describe("MatchesScreen verified badge", () => {
     );
   });
 
+  it("expõe conversar como botão rotulado com o nome da carta", async () => {
+    const { findAllByRole } = render(<MatchesScreen />);
+
+    const buttons = await findAllByRole("button", { name: /Conversar sobre/ });
+    expect(buttons.length).toBeGreaterThan(0);
+  });
+
   it("shows the badge only for verified users", async () => {
     const { getByTestId, queryByTestId } = render(<MatchesScreen />);
 
@@ -74,6 +81,12 @@ describe("MatchesScreen wishlist link", () => {
     jest.clearAllMocks();
     (listMatches as jest.Mock).mockResolvedValue([]);
     (isUserVerified as jest.Mock).mockResolvedValue(false);
+  });
+
+  it("expõe o link da wishlist como botão", async () => {
+    const { findByRole } = render(<MatchesScreen />);
+
+    await findByRole("button", { name: "Minha lista de desejos" });
   });
 
   it("navigates to the wishlist screen from the fixed link", async () => {

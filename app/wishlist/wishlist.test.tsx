@@ -88,6 +88,12 @@ describe("WishlistScreen", () => {
     expect(getByTestId("wishlist-item-wish-1")).toBeTruthy();
   });
 
+  it("expõe remover como botão rotulado com o nome da carta", async () => {
+    const { findByRole } = render(<WishlistScreen />);
+
+    await findByRole("button", { name: "Remover Pikachu" });
+  });
+
   it("shows the empty state when the wishlist is empty", async () => {
     (listWishlist as jest.Mock).mockResolvedValue([]);
 

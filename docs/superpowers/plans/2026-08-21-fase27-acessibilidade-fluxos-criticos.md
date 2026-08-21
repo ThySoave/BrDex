@@ -45,11 +45,11 @@
 **Interfaces:**
 - Chat: enviar ("Enviar mensagem"), denunciar e bloquear como botões; matches: link da wishlist e itens de match como botões; wishlist: remover por item como botão com rótulo `Remover ${item.cardName}`.
 
-- [ ] **Step 1: Write the failing RNTL tests** (estender `chat.test.tsx`, `matches.test.tsx`, `wishlist.test.tsx` — um caso por tela via `getByRole`/`getAllByRole`.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest chat.test matches wishlist` → FAIL.
-- [ ] **Step 3: Implement** as props → GREEN sem editar testes existentes.
-- [ ] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: add accessibility roles to social flows`
+- [x] **Step 1: Write the failing RNTL tests** (estender `chat.test.tsx`, `matches.test.tsx`, `wishlist.test.tsx` — casos via `getByRole`/`findAllByRole`; o caso de "Conversar" mora no describe com fixtures de match, não no do link com lista vazia.)
+- [x] **Step 2: Run to verify it fails** — `npx jest chat.test matches.test wishlist.test` → FAIL (3 casos novos).
+- [x] **Step 3: Implement** as props (roles em enviar/denunciar/bloquear/propor troca/ver perfil no chat; link e itens em matches com label `Conversar sobre <carta>`; remover na wishlist com label `Remover <carta>`) → GREEN (19/19) sem editar testes existentes.
+- [x] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes (252/252 em 54 suites, tsc limpo).
+- [x] **Step 5: Commit** — `feat: add accessibility roles to social flows`
 
 ---
 
