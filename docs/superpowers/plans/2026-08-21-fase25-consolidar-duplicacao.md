@@ -33,11 +33,11 @@
 - Produces: `parseBrlPrice(input: string): number | null` — `"12,50"` → `12.5`; `"30.5"` → `30.5`; `""`/`"abc"` → `null`; `"0"` → `0` (política de `<= 0` fica no chamador); `" 12,50 "` → `12.5` (trim).
 - Consumers: venda no álbum (`null` ou `<= 0` → alerta), edição no álbum (`null` → grava `null`), cadastro de carta (`null` → grava `null`), limiar de alerta no catálogo (`null` ou `<= 0` → alerta).
 
-- [ ] **Step 1: Write the failing unit tests** (novo `parsePrice.test.ts` — casos: vírgula decimal, ponto decimal, vazio, não numérico, zero, espaços.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest parsePrice` → FAIL (module not found).
-- [ ] **Step 3: Implement** o helper → GREEN.
-- [ ] **Step 4: Refactor** as 4 telas para `parseBrlPrice` e rodar as suites delas (`npx jest add.test album.test catalog`) — verdes sem editar nenhum teste.
-- [ ] **Step 5: Commit** — `refactor: extract shared BRL price parser`
+- [x] **Step 1: Write the unit tests** (novo `parsePrice.test.ts` — casos: vírgula decimal, ponto decimal, vazio, não numérico, zero, espaços.)
+- [x] **Step 2: Run** — `npx jest parsePrice` → GREEN direto: o helper e parte dos refactors já constavam na árvore de trabalho (aplicados fora desta sessão); os testes serviram como caracterização do contrato planejado.
+- [x] **Step 3: Implement** — já presente em `src/lib/parsePrice.ts`, idêntico ao contrato do plano.
+- [x] **Step 4: Refactor** — `add.tsx`/`album.tsx` já usavam o helper; `catalog.tsx` completado nesta sessão; `npx jest parsePrice add.test album.test catalog` → 55/55 sem editar nenhum teste.
+- [x] **Step 5: Commit** — `refactor: extract shared BRL price parser`
 
 ---
 
