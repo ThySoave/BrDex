@@ -10,14 +10,8 @@ import { createPriceAlert } from "../../src/features/premium/priceAlertsReposito
 import { CardGridItem } from "../../src/components/CardGridItem";
 import type { CatalogCard } from "../../src/features/catalog/types";
 import type { CardLanguage } from "../../src/features/collection/types";
+import { LANGUAGE_OPTIONS } from "../../src/features/collection/labels";
 import { parseBrlPrice } from "../../src/lib/parsePrice";
-
-const WISHLIST_LANGUAGES: { value: CardLanguage; label: string }[] = [
-  { value: "en", label: "Inglês" },
-  { value: "pt", label: "Português" },
-  { value: "jp", label: "Japonês" },
-  { value: "other", label: "Outro" }
-];
 
 export default function CatalogScreen() {
   const router = useRouter();
@@ -98,7 +92,7 @@ export default function CatalogScreen() {
           <Pressable testID="wishlist-language-any" onPress={() => handleChooseLanguage(null)}>
             <Text style={{ color: "#0a66c2" }}>Qualquer idioma</Text>
           </Pressable>
-          {WISHLIST_LANGUAGES.map((lang) => (
+          {LANGUAGE_OPTIONS.map((lang) => (
             <Pressable
               key={lang.value}
               testID={`wishlist-language-${lang.value}`}

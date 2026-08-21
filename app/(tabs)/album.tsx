@@ -15,6 +15,7 @@ import { fetchSetProgress, type SetProgress } from "../../src/features/collectio
 import { ShareCollectionCard, ShareSingleCard } from "../../src/features/collection/shareCards";
 import { captureAndShareView } from "../../src/features/collection/shareImage";
 import { isPremium } from "../../src/features/premium/entitlementsRepository";
+import { LANGUAGE_OPTIONS } from "../../src/features/collection/labels";
 import type { CardLanguage, CardStatus, UserCard } from "../../src/features/collection/types";
 import { parseBrlPrice } from "../../src/lib/parsePrice";
 
@@ -22,13 +23,6 @@ const STATUS_OPTIONS: { value: CardStatus; label: string }[] = [
   { value: "guardada", label: "Guardada" },
   { value: "a_venda", label: "À venda" },
   { value: "disponivel_troca", label: "Disponível para troca" }
-];
-
-const LANGUAGES: { value: CardLanguage; label: string }[] = [
-  { value: "en", label: "Inglês" },
-  { value: "pt", label: "Português" },
-  { value: "jp", label: "Japonês" },
-  { value: "other", label: "Outro" }
 ];
 
 export default function AlbumScreen() {
@@ -255,7 +249,7 @@ export default function AlbumScreen() {
         <View style={{ padding: 12, borderWidth: 1, borderColor: "#ccc", borderRadius: 8 }}>
           <Text>{`Editar ${editingCard.cardName}`}</Text>
           <Text>Idioma</Text>
-          {LANGUAGES.map((lang) => (
+          {LANGUAGE_OPTIONS.map((lang) => (
             <Pressable
               key={lang.value}
               testID={`edit-language-${lang.value}`}

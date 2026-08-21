@@ -6,14 +6,7 @@ import {
   removeFromWishlist,
   type WishlistItem
 } from "../../src/features/social/wishlistRepository";
-import type { CardLanguage } from "../../src/features/collection/types";
-
-const LANGUAGE_LABELS: Record<CardLanguage, string> = {
-  en: "Inglês",
-  pt: "Português",
-  jp: "Japonês",
-  other: "Outro"
-};
+import { languageLabel } from "../../src/features/collection/labels";
 
 export default function WishlistScreen() {
   const [items, setItems] = useState<WishlistItem[]>([]);
@@ -51,7 +44,7 @@ export default function WishlistScreen() {
           <View testID={`wishlist-item-${item.id}`} style={{ marginBottom: 16 }}>
             <Text>{item.cardName}</Text>
             <Text style={{ color: "#666" }}>
-              {item.language ? LANGUAGE_LABELS[item.language] : "Qualquer idioma"}
+              {languageLabel(item.language)}
             </Text>
             <Pressable testID={`wishlist-remove-${item.id}`} onPress={() => handleRemove(item)}>
               <Text style={{ color: "#c22" }}>Remover</Text>

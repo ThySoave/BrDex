@@ -7,16 +7,10 @@ import { uploadCardPhoto } from "../../src/features/collection/photoRepository";
 import { CardPrices } from "../../src/components/CardPrices";
 import { parseBrlPrice } from "../../src/lib/parsePrice";
 import { CARD_CONDITIONS, type CardCondition } from "../../src/features/collection/conditionScale";
+import { LANGUAGE_OPTIONS } from "../../src/features/collection/labels";
 import type { CardLanguage, CardStatus } from "../../src/features/collection/types";
 import { isPremium } from "../../src/features/premium/entitlementsRepository";
 import { canAddCard, FREE_CARD_LIMIT } from "../../src/features/premium/cardLimit";
-
-const LANGUAGES: { value: CardLanguage; label: string }[] = [
-  { value: "en", label: "Inglês" },
-  { value: "pt", label: "Português" },
-  { value: "jp", label: "Japonês" },
-  { value: "other", label: "Outro" }
-];
 
 const STATUSES: { value: CardStatus; label: string }[] = [
   { value: "guardada", label: "Guardada" },
@@ -107,7 +101,7 @@ export default function AddCardScreen() {
     <ScrollView style={{ flex: 1, padding: 16 }}>
       {catalogCardId ? <CardPrices catalogCardId={catalogCardId} language={language} /> : null}
       <Text>Idioma</Text>
-      {LANGUAGES.map((lang) => (
+      {LANGUAGE_OPTIONS.map((lang) => (
         <Pressable key={lang.value} testID={`language-${lang.value}`} onPress={() => setLanguage(lang.value)}>
           <Text style={{ fontWeight: language === lang.value ? "bold" : "normal" }}>{lang.label}</Text>
         </Pressable>

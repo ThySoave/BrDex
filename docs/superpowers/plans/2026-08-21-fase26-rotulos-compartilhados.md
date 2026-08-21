@@ -31,11 +31,11 @@
 - Produces: `LANGUAGE_OPTIONS: { value: CardLanguage; label: string }[]` (en/pt/jp/other, rótulos atuais); `languageLabel(language: CardLanguage | null): string` (null → "Qualquer idioma").
 - Consumers: `add.tsx` e `album.tsx` (substituem `LANGUAGES` local), `catalog.tsx` (substitui `WISHLIST_LANGUAGES`), `wishlist/index.tsx` (substitui `LANGUAGE_LABELS` + ternário por `languageLabel(item.language)`).
 
-- [ ] **Step 1: Write the failing unit tests** (novo `labels.test.ts` — casos: `LANGUAGE_OPTIONS` tem os 4 idiomas com os rótulos atuais; `languageLabel("pt")` → "Português"; `languageLabel(null)` → "Qualquer idioma".)
-- [ ] **Step 2: Run to verify it fails** — `npx jest labels` → FAIL (module not found).
-- [ ] **Step 3: Implement** o módulo (parte de idiomas) → GREEN.
-- [ ] **Step 4: Refactor** as 4 telas e rodar `npx jest add.test album.test catalog wishlist` — verdes sem editar nenhum teste.
-- [ ] **Step 5: Commit** — `refactor: extract shared language labels`
+- [x] **Step 1: Write the failing unit tests** (novo `labels.test.ts` — casos: `LANGUAGE_OPTIONS` tem os 4 idiomas com os rótulos atuais; `languageLabel("pt")` → "Português"; `languageLabel(null)` → "Qualquer idioma".)
+- [x] **Step 2: Run to verify it fails** — `npx jest labels` → FAIL (module not found).
+- [x] **Step 3: Implement** o módulo (parte de idiomas) → GREEN (3/3).
+- [x] **Step 4: Refactor** as 4 telas — `npx jest labels add.test album.test catalog wishlist` → 63/63 em 8 suites + tsc limpo, sem editar nenhum teste.
+- [x] **Step 5: Commit** — `refactor: extract shared language labels`
 
 ---
 
