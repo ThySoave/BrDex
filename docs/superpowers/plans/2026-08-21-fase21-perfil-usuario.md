@@ -35,10 +35,10 @@
 - Consumes: `getSession`/`signOut` (authRepository), `isPremium` (entitlementsRepository), `isUserVerified` (entitlementsRepository), `userRatingSummary` (ratingsRepository).
 - Produces: tela com `profile-email` (email da sessão), `profile-plan` ("Plano: Premium" / "Plano: Grátis"), `profile-verified` ("✓ Verificado", só quando verificado), `profile-rating` (média + contagem ou "Sem avaliações") e botão `sign-out` → `signOut()` → `router.replace("/(auth)/login")`; erro → `Alert.alert("Erro", message)`.
 
-- [ ] **Step 1: Write the failing RNTL tests** (`profile.test.tsx` — casos: mostra email da sessão; mostra "Plano: Premium" quando `isPremium` true e "Plano: Grátis" quando false; mostra selo só quando `isUserVerified` true; mostra reputação formatada e "Sem avaliações" quando `ratingsCount` = 0; `sign-out` chama `signOut` e navega para o login; erro do `signOut` vira `Alert.alert`.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest profile` → FAIL.
-- [ ] **Step 3: Implement** — tela no padrão das demais tabs + `<Tabs.Screen name="profile" options={{ title: "Perfil" }} />` no layout → GREEN.
-- [ ] **Step 4: Commit** — `feat: add profile tab with account info and sign out`
+- [x] **Step 1: Write the failing RNTL tests** (`profile.test.tsx` — casos: mostra email da sessão; mostra "Plano: Premium" quando `isPremium` true e "Plano: Grátis" quando false; mostra selo só quando `isUserVerified` true; mostra reputação formatada e "Sem avaliações" quando `ratingsCount` = 0; `sign-out` chama `signOut` e navega para o login; erro do `signOut` vira `Alert.alert`.)
+- [x] **Step 2: Run to verify it fails** — `npx jest profile` → FAIL (module not found, 9 testes bloqueados).
+- [x] **Step 3: Implement** — tela no padrão das demais tabs + `<Tabs.Screen name="profile" options={{ title: "Perfil" }} />` no layout → GREEN (9/9).
+- [x] **Step 4: Commit** — `feat: add profile tab with account info and sign out`
 
 ---
 
