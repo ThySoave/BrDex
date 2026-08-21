@@ -47,11 +47,11 @@
 - Produces: `STATUS_OPTIONS: { value: CardStatus; label: string }[]` (guardada/a_venda/disponivel_troca, rótulos atuais).
 - Consumers: `add.tsx` (substitui `STATUSES`), `album.tsx` (substitui `STATUS_OPTIONS` local).
 
-- [ ] **Step 1: Write the failing unit test** (estender `labels.test.ts` — caso: `STATUS_OPTIONS` tem os 3 status com os rótulos atuais.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest labels` → FAIL (export inexistente).
-- [ ] **Step 3: Implement + refactor** as 2 telas; `npx jest labels add.test album.test` verdes sem editar testes.
-- [ ] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `refactor: extract shared status labels`
+- [x] **Step 1: Write the failing unit test** (estender `labels.test.ts` — caso: `STATUS_OPTIONS` tem os 3 status com os rótulos atuais.)
+- [x] **Step 2: Run to verify it fails** — `npx jest labels` → FAIL (1 falha: export inexistente).
+- [x] **Step 3: Implement + refactor** as 2 telas; `npx jest labels add.test album.test` → 39/39 sem editar testes.
+- [x] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes (246/246 em 54 suites, tsc limpo).
+- [x] **Step 5: Commit** — `refactor: extract shared status labels`
 
 ---
 

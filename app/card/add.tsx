@@ -7,16 +7,10 @@ import { uploadCardPhoto } from "../../src/features/collection/photoRepository";
 import { CardPrices } from "../../src/components/CardPrices";
 import { parseBrlPrice } from "../../src/lib/parsePrice";
 import { CARD_CONDITIONS, type CardCondition } from "../../src/features/collection/conditionScale";
-import { LANGUAGE_OPTIONS } from "../../src/features/collection/labels";
+import { LANGUAGE_OPTIONS, STATUS_OPTIONS } from "../../src/features/collection/labels";
 import type { CardLanguage, CardStatus } from "../../src/features/collection/types";
 import { isPremium } from "../../src/features/premium/entitlementsRepository";
 import { canAddCard, FREE_CARD_LIMIT } from "../../src/features/premium/cardLimit";
-
-const STATUSES: { value: CardStatus; label: string }[] = [
-  { value: "guardada", label: "Guardada" },
-  { value: "a_venda", label: "À venda" },
-  { value: "disponivel_troca", label: "Disponível para troca" }
-];
 
 export default function AddCardScreen() {
   const { catalogCardId } = useLocalSearchParams<{ catalogCardId: string }>();
@@ -115,7 +109,7 @@ export default function AddCardScreen() {
       ))}
 
       <Text>Status</Text>
-      {STATUSES.map((s) => (
+      {STATUS_OPTIONS.map((s) => (
         <Pressable key={s.value} testID={`status-${s.value}`} onPress={() => setStatus(s.value)}>
           <Text style={{ fontWeight: status === s.value ? "bold" : "normal" }}>{s.label}</Text>
         </Pressable>

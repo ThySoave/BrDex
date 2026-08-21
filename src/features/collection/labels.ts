@@ -1,4 +1,4 @@
-import type { CardLanguage } from "./types";
+import type { CardLanguage, CardStatus } from "./types";
 
 // Rótulos únicos de idioma (mesmo padrão de CARD_CONDITIONS para condição).
 export const LANGUAGE_OPTIONS: { value: CardLanguage; label: string }[] = [
@@ -6,6 +6,12 @@ export const LANGUAGE_OPTIONS: { value: CardLanguage; label: string }[] = [
   { value: "pt", label: "Português" },
   { value: "jp", label: "Japonês" },
   { value: "other", label: "Outro" }
+];
+
+export const STATUS_OPTIONS: { value: CardStatus; label: string }[] = [
+  { value: "guardada", label: "Guardada" },
+  { value: "a_venda", label: "À venda" },
+  { value: "disponivel_troca", label: "Disponível para troca" }
 ];
 
 export function languageLabel(language: CardLanguage | null): string {

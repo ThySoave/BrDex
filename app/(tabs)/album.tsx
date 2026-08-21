@@ -15,15 +15,9 @@ import { fetchSetProgress, type SetProgress } from "../../src/features/collectio
 import { ShareCollectionCard, ShareSingleCard } from "../../src/features/collection/shareCards";
 import { captureAndShareView } from "../../src/features/collection/shareImage";
 import { isPremium } from "../../src/features/premium/entitlementsRepository";
-import { LANGUAGE_OPTIONS } from "../../src/features/collection/labels";
+import { LANGUAGE_OPTIONS, STATUS_OPTIONS } from "../../src/features/collection/labels";
 import type { CardLanguage, CardStatus, UserCard } from "../../src/features/collection/types";
 import { parseBrlPrice } from "../../src/lib/parsePrice";
-
-const STATUS_OPTIONS: { value: CardStatus; label: string }[] = [
-  { value: "guardada", label: "Guardada" },
-  { value: "a_venda", label: "À venda" },
-  { value: "disponivel_troca", label: "Disponível para troca" }
-];
 
 export default function AlbumScreen() {
   const [cards, setCards] = useState<UserCard[]>([]);
