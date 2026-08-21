@@ -64,10 +64,10 @@
 **Interfaces:**
 - Cobre `registerForPushNotifications` (comportamento existente, sem mudança): permissão negada (get e request) → `registerPushToken` não é chamado; permissão já concedida → registra token com o `Platform.OS`; permissão concedida após request → registra; erro de qualquer etapa é engolido (não propaga).
 
-- [ ] **Step 1: Write the characterization tests** (novo `registerForPush.test.ts`, mock de `expo-notifications` e de `pushTokensRepository` — 4 casos acima; caracterização: nascem GREEN, ver Global Constraints.)
-- [ ] **Step 2: Run to verify they pass against current code** — `npx jest registerForPush` → GREEN (4/4).
-- [ ] **Step 3: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
-- [ ] **Step 4: Commit** — `test: cover push registration flows`
+- [x] **Step 1: Write the characterization tests** (novo `registerForPush.test.ts`, mock de `expo-notifications` e de `pushTokensRepository` — 4 casos acima; caracterização: nascem GREEN, ver Global Constraints.)
+- [x] **Step 2: Run to verify they pass against current code** — `npx jest registerForPush` → GREEN (4/4).
+- [x] **Step 3: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes (225/225 em 51 suites, tsc limpo).
+- [x] **Step 4: Commit** — `test: cover push registration flows`
 
 ---
 
