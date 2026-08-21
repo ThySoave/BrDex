@@ -1,5 +1,5 @@
 import { getSupabaseClient } from "../../lib/supabaseClient";
-import type { AddUserCardInput, CardStatus, UserCard } from "./types";
+import type { AddUserCardInput, CardStatus, UpdateUserCardInput, UserCard } from "./types";
 
 export async function addUserCard(input: AddUserCardInput): Promise<void> {
   const client = getSupabaseClient();
@@ -83,6 +83,52 @@ export async function updateCardStatus(cardId: string, status: CardStatus): Prom
   const { error } = await client
     .from("user_cards")
     .update({ status })
+    .eq("id", cardId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function updateUserCard(cardId: string, updates: UpdateUserCardInput): Promise<void> {
+  const client = getSupabaseClient();
+  const {
+    data: { user }
+  } = await client.auth.getUser();
+
+  if (!user) {
+    throw new Error("Usuário não autenticado");
+  }
+
+  const { error } = await client
+    .from("user_cards")
+    .update({
+      language: updates.language,
+      condition: updates.condition,
+      price_paid: updates.pricePaid
+    })
+    .eq("id", cardId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function deleteUserCard(cardId: string): Promise<void> {
+  const client = getSupabaseClient();
+  const {
+    data: { user }
+  } = await client.auth.getUser();
+
+  if (!user) {
+    throw new Error("Usuário não autenticado");
+  }
+
+  const { error } = await client
+    .from("user_cards")
+    .delete()
     .eq("id", cardId)
     .eq("user_id", user.id);
 

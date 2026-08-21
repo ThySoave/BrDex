@@ -12,6 +12,12 @@ export interface AddUserCardInput {
   photoUrl: string | null;
 }
 
+export interface UpdateUserCardInput {
+  language: CardLanguage;
+  condition: CardCondition;
+  pricePaid: number | null;
+}
+
 export interface UserCard {
   id: string;
   catalogCardId: string;

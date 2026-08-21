@@ -6,9 +6,11 @@ import { getSupabaseClient } from "../../lib/supabaseClient";
 import {
   addUserCard,
   countUserCards,
+  deleteUserCard,
   listUserCards,
   markCardAsSold,
-  updateCardStatus
+  updateCardStatus,
+  updateUserCard
 } from "./collectionRepository";
 
 describe("addUserCard", () => {
@@ -200,5 +202,79 @@ describe("updateCardStatus", () => {
     mockClient({ error: { message: "boom" } });
 
     await expect(updateCardStatus("uc-1", "guardada")).rejects.toThrow("boom");
+  });
+});
+
+describe("updateUserCard", () => {
+  function mockClient(response: { error: { message: string } | null }) {
+    const eqUserMock = jest.fn().mockResolvedValue(response);
+    const eqIdMock = jest.fn().mockReturnValue({ eq: eqUserMock });
+    const updateMock = jest.fn().mockReturnValue({ eq: eqIdMock });
+    const fromMock = jest.fn().mockReturnValue({ update: updateMock });
+    const getUserMock = jest.fn().mockResolvedValue({ data: { user: { id: "user-1" } } });
+
+    (getSupabaseClient as jest.Mock).mockReturnValue({
+      from: fromMock,
+      auth: { getUser: getUserMock }
+    });
+
+    return { fromMock, updateMock, eqIdMock, eqUserMock };
+  }
+
+  it("updates language, condition and price paid scoped to the user", async () => {
+    const { fromMock, updateMock, eqIdMock, eqUserMock } = mockClient({ error: null });
+
+    await updateUserCard("uc-1", { language: "pt", condition: "excellent", pricePaid: 12.5 });
+
+    expect(fromMock).toHaveBeenCalledWith("user_cards");
+    expect(updateMock).toHaveBeenCalledWith({
+      language: "pt",
+      condition: "excellent",
+      price_paid: 12.5
+    });
+    expect(eqIdMock).toHaveBeenCalledWith("id", "uc-1");
+    expect(eqUserMock).toHaveBeenCalledWith("user_id", "user-1");
+  });
+
+  it("throws when the update fails", async () => {
+    mockClient({ error: { message: "boom" } });
+
+    await expect(
+      updateUserCard("uc-1", { language: "en", condition: "good", pricePaid: null })
+    ).rejects.toThrow("boom");
+  });
+});
+
+describe("deleteUserCard", () => {
+  function mockClient(response: { error: { message: string } | null }) {
+    const eqUserMock = jest.fn().mockResolvedValue(response);
+    const eqIdMock = jest.fn().mockReturnValue({ eq: eqUserMock });
+    const deleteMock = jest.fn().mockReturnValue({ eq: eqIdMock });
+    const fromMock = jest.fn().mockReturnValue({ delete: deleteMock });
+    const getUserMock = jest.fn().mockResolvedValue({ data: { user: { id: "user-1" } } });
+
+    (getSupabaseClient as jest.Mock).mockReturnValue({
+      from: fromMock,
+      auth: { getUser: getUserMock }
+    });
+
+    return { fromMock, deleteMock, eqIdMock, eqUserMock };
+  }
+
+  it("deletes the card scoped to the user", async () => {
+    const { fromMock, deleteMock, eqIdMock, eqUserMock } = mockClient({ error: null });
+
+    await deleteUserCard("uc-1");
+
+    expect(fromMock).toHaveBeenCalledWith("user_cards");
+    expect(deleteMock).toHaveBeenCalled();
+    expect(eqIdMock).toHaveBeenCalledWith("id", "uc-1");
+    expect(eqUserMock).toHaveBeenCalledWith("user_id", "user-1");
+  });
+
+  it("throws when the delete fails", async () => {
+    mockClient({ error: { message: "boom" } });
+
+    await expect(deleteUserCard("uc-1")).rejects.toThrow("boom");
   });
 });

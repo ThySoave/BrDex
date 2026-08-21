@@ -35,10 +35,10 @@
 - Produces: `updateUserCard(cardId: string, updates: UpdateUserCardInput): Promise<void>` — exige usuário autenticado; `client.from("user_cards").update({ language, condition, price_paid }).eq("id", cardId).eq("user_id", user.id)`; `error` → `throw new Error(error.message)`.
 - Produces: `deleteUserCard(cardId: string): Promise<void>` — exige usuário autenticado; `client.from("user_cards").delete().eq("id", cardId).eq("user_id", user.id)`; `error` → `throw new Error(error.message)`.
 
-- [ ] **Step 1: Write the failing Jest tests** (estender `collectionRepository.test.ts` — casos: `updateUserCard` faz update de `language`/`condition`/`price_paid` filtrando por `id` e `user_id`; erro do update vira throw; `deleteUserCard` deleta filtrando por `id` e `user_id`; erro do delete vira throw.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest collectionRepository` → FAIL (falhas esperadas nas funções novas).
-- [ ] **Step 3: Implement** — tipo + duas funções no shape de `updateCardStatus` → GREEN.
-- [ ] **Step 4: Commit** — `feat: add update and delete card to collection repository`
+- [x] **Step 1: Write the failing Jest tests** (estender `collectionRepository.test.ts` — casos: `updateUserCard` faz update de `language`/`condition`/`price_paid` filtrando por `id` e `user_id`; erro do update vira throw; `deleteUserCard` deleta filtrando por `id` e `user_id`; erro do delete vira throw.)
+- [x] **Step 2: Run to verify it fails** — `npx jest collectionRepository` → FAIL (4 falhas esperadas).
+- [x] **Step 3: Implement** — tipo + duas funções no shape de `updateCardStatus` → GREEN (13/13).
+- [x] **Step 4: Commit** — `feat: add update and delete card to collection repository`
 
 ---
 
