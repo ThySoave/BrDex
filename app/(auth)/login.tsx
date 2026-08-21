@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View, TextInput, Text, Pressable } from "react-native";
 import { useRouter, Link } from "expo-router";
 import { signIn } from "../../src/features/auth/authRepository";
+import { validateCredentials } from "../../src/features/auth/validateCredentials";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -11,12 +12,9 @@ export default function LoginScreen() {
 
   async function handleSubmit() {
     setError(null);
-    if (!email.trim() || !email.includes("@")) {
-      setError("Informe um email válido.");
-      return;
-    }
-    if (password.length < 6) {
-      setError("A senha precisa de pelo menos 6 caracteres.");
+    const validationError = validateCredentials(email, password);
+    if (validationError) {
+      setError(validationError);
       return;
     }
     try {

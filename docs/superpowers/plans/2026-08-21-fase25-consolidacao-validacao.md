@@ -48,11 +48,11 @@
 - Produces: `validateCredentials(email: string, password: string): string | null` — email vazio/sem `@` → "Informe um email válido."; senha < 6 → "A senha precisa de pelo menos 6 caracteres."; ok → `null`.
 - Consumers: `handleSubmit` de login e signup — `const validationError = validateCredentials(email, password); if (validationError) { setError(validationError); return; }`.
 
-- [ ] **Step 1: Write the failing unit tests** (novo `validateCredentials.test.ts` — casos: email vazio, sem `@`, senha curta, credenciais válidas, precedência email antes de senha.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest validateCredentials` → FAIL (module not found).
-- [ ] **Step 3: Implement + refactor** — criar o helper e trocar a validação inline das duas telas; `npx jest validateCredentials login.test signup` → GREEN sem tocar nos testes de tela.
-- [ ] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `refactor: extract shared credential validation`
+- [x] **Step 1: Write the failing unit tests** (novo `validateCredentials.test.ts` — casos: email vazio, sem `@`, senha curta, credenciais válidas, precedência email antes de senha.)
+- [x] **Step 2: Run to verify it fails** — `npx jest validateCredentials` → FAIL (module not found).
+- [x] **Step 3: Implement + refactor** — helper criado e validação inline das duas telas trocada; `npx jest validateCredentials login.test signup` → GREEN (13/13) sem tocar nos testes de tela.
+- [x] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes (242/242 em 53 suites, tsc limpo).
+- [x] **Step 5: Commit** — `refactor: extract shared credential validation`
 
 ---
 
