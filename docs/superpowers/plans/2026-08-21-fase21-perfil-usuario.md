@@ -64,11 +64,11 @@
 **Interfaces:**
 - Consumes: Task 2 (rota `/user/<id>`). Mercado: cada item ganha botão `market-seller-<userCardId>` → `router.push("/user/<sellerId>")`. Chat: botão `chat-view-profile` no cabeçalho → `router.push("/user/<other>")` (omitido quando `other` ausente).
 
-- [ ] **Step 1: Write the failing RNTL tests** (estender `market.test.tsx`: botão do vendedor navega para o perfil do `sellerId`; estender `chat.test.tsx`: botão do cabeçalho navega para o perfil do `other`.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest market chat` → FAIL.
-- [ ] **Step 3: Implement** — dois botões com `router.push` → GREEN.
-- [ ] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: link to user profile from market and chat`
+- [x] **Step 1: Write the failing RNTL tests** (estender `market.test.tsx`: botão do vendedor navega para o perfil do `sellerId`; estender `chat.test.tsx`: botão do cabeçalho navega para o perfil do `other`.)
+- [x] **Step 2: Run to verify it fails** — `npx jest market chat` → FAIL (2 falhas esperadas).
+- [x] **Step 3: Implement** — dois botões com `router.push` → GREEN.
+- [x] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes (199/199, 47 suites, tsc limpo).
+- [x] **Step 5: Commit** — `feat: link to user profile from market and chat`
 
 ---
 

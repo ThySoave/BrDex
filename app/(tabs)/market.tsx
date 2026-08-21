@@ -82,6 +82,12 @@ export default function MarketScreen() {
               <Pressable testID={`market-chat-${item.userCardId}`} onPress={() => openConversation(item)}>
                 <Text style={{ color: "#0a66c2" }}>Conversar</Text>
               </Pressable>
+              <Pressable
+                testID={`market-seller-${item.userCardId}`}
+                onPress={() => router.push(`/user/${item.sellerId}`)}
+              >
+                <Text style={{ color: "#0a66c2" }}>Ver perfil do vendedor</Text>
+              </Pressable>
             </View>
           </View>
         )}

@@ -91,4 +91,16 @@ describe("MarketScreen", () => {
       expect(mockPush).toHaveBeenCalledWith("/chat/conv-1?other=user-2");
     });
   });
+
+  it("navigates to the seller profile", async () => {
+    const { getByTestId } = render(<MarketScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("market-seller-uc-1")).toBeTruthy();
+    });
+
+    fireEvent.press(getByTestId("market-seller-uc-1"));
+
+    expect(mockPush).toHaveBeenCalledWith("/user/user-2");
+  });
 });

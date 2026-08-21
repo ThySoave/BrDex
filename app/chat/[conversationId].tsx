@@ -195,6 +195,11 @@ export default function ChatScreen() {
         participa da transação.
       </Text>
       <View style={{ flexDirection: "row", gap: 16, marginVertical: 8 }}>
+        {other ? (
+          <Pressable testID="chat-view-profile" onPress={() => router.push(`/user/${other}`)}>
+            <Text style={{ color: "#0a66c2" }}>Ver perfil</Text>
+          </Pressable>
+        ) : null}
         <Pressable testID="chat-report" onPress={handleReport}>
           <Text>Denunciar</Text>
         </Pressable>

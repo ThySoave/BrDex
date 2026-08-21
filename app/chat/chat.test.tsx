@@ -18,9 +18,10 @@ jest.mock("../../src/features/social/ratingsRepository", () => ({
   myRatedTradeIds: jest.fn(),
   userRatingSummary: jest.fn()
 }));
+const mockChatPush = jest.fn();
 jest.mock("expo-router", () => ({
   useLocalSearchParams: () => ({ conversationId: "conv-1", other: "user-2" }),
-  router: { back: jest.fn() }
+  router: { back: jest.fn(), push: (...args: unknown[]) => mockChatPush(...args) }
 }));
 
 import { fireEvent, render, waitFor } from "@testing-library/react-native";
@@ -160,5 +161,17 @@ describe("ChatScreen ratings", () => {
       expect(getByTestId("chat-reputation")).toBeTruthy();
     });
     expect(queryByTestId("chat-rate-5")).toBeNull();
+  });
+
+  it("navigates to the other user's profile from the header", async () => {
+    const { getByTestId } = render(<ChatScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("chat-view-profile")).toBeTruthy();
+    });
+
+    fireEvent.press(getByTestId("chat-view-profile"));
+
+    expect(mockChatPush).toHaveBeenCalledWith("/user/user-2");
   });
 });
