@@ -10,6 +10,7 @@ import { createPriceAlert } from "../../src/features/premium/priceAlertsReposito
 import { CardGridItem } from "../../src/components/CardGridItem";
 import type { CatalogCard } from "../../src/features/catalog/types";
 import type { CardLanguage } from "../../src/features/collection/types";
+import { parseBrlPrice } from "../../src/lib/parsePrice";
 
 const WISHLIST_LANGUAGES: { value: CardLanguage; label: string }[] = [
   { value: "en", label: "Inglês" },
@@ -47,8 +48,8 @@ export default function CatalogScreen() {
   };
 
   const handleConfirmAlert = () => {
-    const value = Number(threshold.replace(",", "."));
-    if (!alertCardId || Number.isNaN(value) || value <= 0) {
+    const value = parseBrlPrice(threshold);
+    if (!alertCardId || value === null || value <= 0) {
       Alert.alert("Informe um valor válido em reais");
       return;
     }

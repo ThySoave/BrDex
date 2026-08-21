@@ -16,6 +16,7 @@ import { ShareCollectionCard, ShareSingleCard } from "../../src/features/collect
 import { captureAndShareView } from "../../src/features/collection/shareImage";
 import { isPremium } from "../../src/features/premium/entitlementsRepository";
 import type { CardLanguage, CardStatus, UserCard } from "../../src/features/collection/types";
+import { parseBrlPrice } from "../../src/lib/parsePrice";
 
 const STATUS_OPTIONS: { value: CardStatus; label: string }[] = [
   { value: "guardada", label: "Guardada" },
@@ -71,8 +72,8 @@ export default function AlbumScreen() {
 
   const handleConfirmSale = () => {
     if (!sellingCard) return;
-    const price = Number.parseFloat(salePrice.replace(",", "."));
-    if (!Number.isFinite(price) || price <= 0) {
+    const price = parseBrlPrice(salePrice);
+    if (price === null || price <= 0) {
       Alert.alert("Informe um valor válido em reais");
       return;
     }
@@ -95,8 +96,7 @@ export default function AlbumScreen() {
 
   const handleSaveEdit = () => {
     if (!editingCard) return;
-    const parsed = Number.parseFloat(editPrice.replace(",", "."));
-    const pricePaid = Number.isFinite(parsed) ? parsed : null;
+    const pricePaid = parseBrlPrice(editPrice);
 
     const cardId = editingCard.id;
     const updates = { language: editLanguage, condition: editCondition, pricePaid };

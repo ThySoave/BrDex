@@ -5,6 +5,7 @@ import * as ImagePicker from "expo-image-picker";
 import { addUserCard, countUserCards } from "../../src/features/collection/collectionRepository";
 import { uploadCardPhoto } from "../../src/features/collection/photoRepository";
 import { CardPrices } from "../../src/components/CardPrices";
+import { parseBrlPrice } from "../../src/lib/parsePrice";
 import { CARD_CONDITIONS, type CardCondition } from "../../src/features/collection/conditionScale";
 import type { CardLanguage, CardStatus } from "../../src/features/collection/types";
 import { isPremium } from "../../src/features/premium/entitlementsRepository";
@@ -68,14 +69,12 @@ export default function AddCardScreen() {
 
   async function handleSubmit() {
     setError(null);
-    // Mesmo parse da edição no álbum: aceita vírgula decimal; inválido vira null.
-    const parsedPrice = Number.parseFloat(pricePaid.replace(",", "."));
     try {
       await addUserCard({
         catalogCardId,
         language,
         condition,
-        pricePaid: Number.isFinite(parsedPrice) ? parsedPrice : null,
+        pricePaid: parseBrlPrice(pricePaid),
         status,
         photoUrl
       });

@@ -33,10 +33,10 @@
 - Produces: `parseBrlPrice(input: string): number | null` — `"12,50"` → `12.5`; `"30.5"` → `30.5`; `""`/`"abc"` → `null`; `"12abc"` → `12` (semântica `parseFloat`); preserva sinal (quem exige positivo checa na tela).
 - Consumers: cadastro (`pricePaid: parseBrlPrice(pricePaid)`); venda (`price === null || price <= 0` → alerta existente); edição (`pricePaid` direto, `null` permitido); alerta do catálogo (`value === null || value <= 0` → alerta existente).
 
-- [ ] **Step 1: Write the failing unit tests** (novo `parsePrice.test.ts` — casos: vírgula, ponto, vazio, não numérico, prefixo numérico, negativo.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest parsePrice` → FAIL (module not found).
-- [ ] **Step 3: Implement + refactor** — criar o helper e trocar os 4 pontos de parse; `npx jest parsePrice add.test album.test catalog` → GREEN sem tocar nos testes de tela.
-- [ ] **Step 4: Commit** — `refactor: extract shared BRL price parser`
+- [x] **Step 1: Write the failing unit tests** (novo `parsePrice.test.ts` — casos finais: vírgula, ponto, vazio, não numérico, zero (política de valor é da tela), espaços ao redor.)
+- [x] **Step 2: Run to verify it fails** — `npx jest parsePrice` → FAIL (module not found).
+- [x] **Step 3: Implement + refactor** — helper criado e 4 pontos de parse trocados; `npx jest parsePrice add.test album.test catalog` → GREEN (55/55 em 6 suites) sem tocar nos testes de tela.
+- [x] **Step 4: Commit** — `refactor: extract shared BRL price parser`
 
 ---
 
