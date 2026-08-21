@@ -68,12 +68,14 @@ export default function AddCardScreen() {
 
   async function handleSubmit() {
     setError(null);
+    // Mesmo parse da edição no álbum: aceita vírgula decimal; inválido vira null.
+    const parsedPrice = Number.parseFloat(pricePaid.replace(",", "."));
     try {
       await addUserCard({
         catalogCardId,
         language,
         condition,
-        pricePaid: pricePaid ? Number(pricePaid) : null,
+        pricePaid: Number.isFinite(parsedPrice) ? parsedPrice : null,
         status,
         photoUrl
       });

@@ -74,6 +74,42 @@ describe("AddCardScreen", () => {
     expect(mockReplace).toHaveBeenCalledWith("/(tabs)/album");
   });
 
+  it("parses a decimal comma price before saving", async () => {
+    (isPremium as jest.Mock).mockResolvedValue(false);
+    (countUserCards as jest.Mock).mockResolvedValue(FREE_CARD_LIMIT - 1);
+
+    const { getByTestId } = render(<AddCardScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("add-card-submit")).toBeTruthy();
+    });
+
+    fireEvent.changeText(getByTestId("add-card-price"), "12,50");
+    fireEvent.press(getByTestId("add-card-submit"));
+
+    await waitFor(() => {
+      expect(addUserCard).toHaveBeenCalledWith(expect.objectContaining({ pricePaid: 12.5 }));
+    });
+  });
+
+  it("saves a null price when the input is not numeric", async () => {
+    (isPremium as jest.Mock).mockResolvedValue(false);
+    (countUserCards as jest.Mock).mockResolvedValue(FREE_CARD_LIMIT - 1);
+
+    const { getByTestId } = render(<AddCardScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("add-card-submit")).toBeTruthy();
+    });
+
+    fireEvent.changeText(getByTestId("add-card-price"), "abc");
+    fireEvent.press(getByTestId("add-card-submit"));
+
+    await waitFor(() => {
+      expect(addUserCard).toHaveBeenCalledWith(expect.objectContaining({ pricePaid: null }));
+    });
+  });
+
   it("shows the form for premium users even at the limit", async () => {
     (isPremium as jest.Mock).mockResolvedValue(true);
     (countUserCards as jest.Mock).mockResolvedValue(FREE_CARD_LIMIT + 20);

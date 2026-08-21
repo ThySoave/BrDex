@@ -47,11 +47,11 @@
 **Interfaces:**
 - `handleSubmit` passa a converter o preço com o parse do álbum: `const parsed = Number.parseFloat(pricePaid.replace(",", ".")); pricePaid: Number.isFinite(parsed) ? parsed : null` — `"12,50"` → `12.5`; `"abc"`/vazio → `null` (hoje `"12,50"` vira `NaN` e o preço se perde).
 
-- [ ] **Step 1: Write the failing RNTL tests** (estender `add.test.tsx` — casos: preço `"12,50"` chama `addUserCard` com `pricePaid: 12.5`; preço não numérico chama com `pricePaid: null`.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest add.test` → FAIL (caso da vírgula).
-- [ ] **Step 3: Implement** — parse idêntico ao de `album.tsx` → GREEN.
-- [ ] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `fix: parse decimal comma in card price input`
+- [x] **Step 1: Write the failing RNTL tests** (estender `add.test.tsx` — casos: preço `"12,50"` chama `addUserCard` com `pricePaid: 12.5`; preço não numérico chama com `pricePaid: null`.)
+- [x] **Step 2: Run to verify it fails** — `npx jest add.test` → FAIL (2 falhas: `"12,50"` e `"abc"` viravam `NaN`).
+- [x] **Step 3: Implement** — parse idêntico ao de `album.tsx` → GREEN (9/9).
+- [x] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes (230/230 em 51 suites, tsc limpo).
+- [x] **Step 5: Commit** — `fix: parse decimal comma in card price input`
 
 ---
 
