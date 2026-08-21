@@ -31,6 +31,12 @@ export default function MeetupsScreen() {
       return;
     }
 
+    // Mesmo corte da listagem (gte(now)): encontro no passado nunca apareceria.
+    if (startsAt.getTime() < Date.now()) {
+      Alert.alert("A data do encontro precisa ser futura");
+      return;
+    }
+
     createMeetup({ title: title.trim(), city: city.trim(), startsAt: startsAt.toISOString(), description: null })
       .then(() => {
         setTitle("");

@@ -50,10 +50,10 @@
 - `handleCreate` passa a rejeitar data no passado: `startsAt.getTime() < Date.now()` → `Alert.alert("A data do encontro precisa ser futura")` e `createMeetup` NÃO é chamado (mesmo corte de visibilidade de `listUpcomingMeetups`).
 - Comportamento existente coberto por caracterização: lista renderiza itens de `listUpcomingMeetups`; criação válida chama `createMeetup`, limpa os campos e recarrega a lista; campos vazios/data inválida mantêm o `Alert` atual.
 
-- [ ] **Step 1: Write the failing RNTL tests** (novo `meetups.test.tsx` — casos: data no passado dispara o `Alert` de data futura e não chama `createMeetup`; lista renderiza os encontros; criação válida chama `createMeetup` e recarrega; campos vazios disparam o `Alert` existente.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest meetups` → FAIL (caso de data no passado).
-- [ ] **Step 3: Implement** — checagem de data passada no `handleCreate` → GREEN.
-- [ ] **Step 4: Commit** — `feat: reject past dates when creating meetups`
+- [x] **Step 1: Write the failing RNTL tests** (novo `meetups.test.tsx` — casos: data no passado dispara o `Alert` de data futura e não chama `createMeetup`; lista renderiza os encontros; criação válida chama `createMeetup` e recarrega; campos vazios disparam o `Alert` existente.)
+- [x] **Step 2: Run to verify it fails** — `npx jest meetups.test` → FAIL (1 falha: data no passado; 3 casos de caracterização verdes).
+- [x] **Step 3: Implement** — checagem de data passada no `handleCreate` → GREEN (4/4).
+- [x] **Step 4: Commit** — `feat: reject past dates when creating meetups`
 
 ---
 
