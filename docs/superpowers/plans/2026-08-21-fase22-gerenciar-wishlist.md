@@ -50,10 +50,10 @@
 **Interfaces:**
 - Consumes: Task 1 (`listWishlist`, `removeFromWishlist`). Tela carrega a lista no foco (`useFocusEffect`, padrão da aba Trocas); cada item (`wishlist-item-<id>`) mostra nome da carta e rótulo de idioma; botão `wishlist-remove-<id>` chama `removeFromWishlist(id)` e remove o item da lista local; erro (do load ou da remoção) → `Alert.alert("Erro", message)` e, no caso da remoção, o item permanece na lista; lista vazia mostra `wishlist-empty` apontando para o botão "Quero" do catálogo.
 
-- [ ] **Step 1: Write the failing RNTL tests** (novo `wishlist.test.tsx` — casos: itens renderizam com nome e rótulo de idioma ("Qualquer idioma" para `null`); remover chama `removeFromWishlist` e tira o item da lista; erro na remoção vira `Alert.alert` e o item continua; lista vazia mostra o empty state.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest app/wishlist` → FAIL.
-- [ ] **Step 3: Implement** — tela no padrão das listas existentes (FlatList + estado local) → GREEN.
-- [ ] **Step 4: Commit** — `feat: add wishlist screen with item removal`
+- [x] **Step 1: Write the failing RNTL tests** (novo `wishlist.test.tsx` — casos: itens renderizam com nome e rótulo de idioma ("Qualquer idioma" para `null`); remover chama `removeFromWishlist` e tira o item da lista; erro na remoção vira `Alert.alert` e o item continua; lista vazia mostra o empty state.)
+- [x] **Step 2: Run to verify it fails** — `npx jest app/wishlist` → FAIL (module not found).
+- [x] **Step 3: Implement** — tela no padrão das listas existentes (FlatList + estado local) → GREEN.
+- [x] **Step 4: Commit** — `feat: add wishlist screen with item removal` (GREEN 5/5)
 
 ---
 
