@@ -31,10 +31,10 @@
 - Todo `Pressable` interativo do álbum ganha `accessibilityRole="button"`; os botões por carta (vender/editar/excluir/status/compartilhar) ganham `accessibilityLabel` com o nome da carta (ex.: `Vender ${item.cardName}`); a imagem da carta ganha `accessibilityLabel={item.cardName}`.
 - Painéis (venda/edição/exclusão) mantêm seus controles com role de botão ("Confirmar", "Cancelar").
 
-- [ ] **Step 1: Write the failing RNTL tests** (estender `album.test.tsx` — casos: os controles por carta são expostos como botões com rótulo contendo o nome da carta (`getAllByRole("button", ...)`); confirmar/cancelar do painel de venda são botões.)
-- [ ] **Step 2: Run to verify it fails** — `npx jest album.test` → FAIL (nenhum role hoje).
-- [ ] **Step 3: Implement** as props de acessibilidade → GREEN, sem editar testes existentes.
-- [ ] **Step 4: Commit** — `feat: add accessibility roles and labels to album`
+- [x] **Step 1: Write the failing RNTL tests** (estender `album.test.tsx` — casos: os controles por carta são expostos como botões com rótulo contendo o nome da carta; confirmar/cancelar do painel de venda são botões.)
+- [x] **Step 2: Run to verify it fails** — `npx jest album.test` → FAIL (2 falhas novas; 26 existentes verdes).
+- [x] **Step 3: Implement** as props de acessibilidade (roles em todos os Pressable, labels por carta, label na imagem; container de long-press sem role para não engolir os botões internos) → GREEN (28/28), sem editar testes existentes.
+- [x] **Step 4: Commit** — `feat: add accessibility roles and labels to album`
 
 ---
 

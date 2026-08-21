@@ -240,6 +240,38 @@ describe("AlbumScreen card sale", () => {
   });
 });
 
+describe("AlbumScreen accessibility", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (listUserCards as jest.Mock).mockResolvedValue(CARDS);
+    (fetchSetProgress as jest.Mock).mockResolvedValue([]);
+    (isPremium as jest.Mock).mockResolvedValue(false);
+    (markCardAsSold as jest.Mock).mockResolvedValue(undefined);
+  });
+
+  it("expõe os controles por carta como botões rotulados com o nome da carta", async () => {
+    const { findByRole, getByRole } = render(<AlbumScreen />);
+
+    await findByRole("button", { name: "Vender Pikachu" });
+    expect(getByRole("button", { name: "Editar Pikachu" })).toBeTruthy();
+    expect(getByRole("button", { name: "Excluir Pikachu" })).toBeTruthy();
+    expect(getByRole("button", { name: "Status Pikachu" })).toBeTruthy();
+  });
+
+  it("expõe confirmar e cancelar do painel de venda como botões", async () => {
+    const { findByRole, getByRole, getByTestId } = render(<AlbumScreen />);
+
+    const sellButton = await findByRole("button", { name: "Vender Pikachu" });
+    fireEvent.press(sellButton);
+
+    await waitFor(() => {
+      expect(getByTestId("sale-price-input")).toBeTruthy();
+    });
+    expect(getByRole("button", { name: "Confirmar venda" })).toBeTruthy();
+    expect(getByRole("button", { name: "Cancelar" })).toBeTruthy();
+  });
+});
+
 describe("AlbumScreen card status", () => {
   beforeEach(() => {
     jest.clearAllMocks();

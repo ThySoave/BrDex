@@ -153,10 +153,20 @@ export default function AlbumScreen() {
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
-      <Pressable testID="share-collection" onPress={handleShareCollection} style={{ marginBottom: 8 }}>
+      <Pressable
+        testID="share-collection"
+        accessibilityRole="button"
+        onPress={handleShareCollection}
+        style={{ marginBottom: 8 }}
+      >
         <Text>Compartilhar</Text>
       </Pressable>
-      <Pressable testID="export-pdf" onPress={handleExportPdf} style={{ marginBottom: 8 }}>
+      <Pressable
+        testID="export-pdf"
+        accessibilityRole="button"
+        onPress={handleExportPdf}
+        style={{ marginBottom: 8 }}
+      >
         <Text>Exportar PDF</Text>
       </Pressable>
       {showPdfUpsell ? (
@@ -189,20 +199,41 @@ export default function AlbumScreen() {
           >
             <Image
               testID={`album-image-${item.id}`}
+              accessibilityLabel={item.cardName}
               source={{ uri: item.photoUrl ?? item.cardImageUrl }}
               style={{ width: 84, height: 117, borderRadius: 4 }}
             />
             <Text numberOfLines={1}>{item.cardName}</Text>
-            <Pressable testID={`sell-card-${item.id}`} onPress={() => handleOpenSale(item)}>
+            <Pressable
+              testID={`sell-card-${item.id}`}
+              accessibilityRole="button"
+              accessibilityLabel={`Vender ${item.cardName}`}
+              onPress={() => handleOpenSale(item)}
+            >
               <Text style={{ color: "#c00" }}>Vender</Text>
             </Pressable>
-            <Pressable testID={`card-status-${item.id}`} onPress={() => setStatusCard(item)}>
+            <Pressable
+              testID={`card-status-${item.id}`}
+              accessibilityRole="button"
+              accessibilityLabel={`Status ${item.cardName}`}
+              onPress={() => setStatusCard(item)}
+            >
               <Text style={{ color: "#06c" }}>Status</Text>
             </Pressable>
-            <Pressable testID={`edit-card-${item.id}`} onPress={() => handleOpenEdit(item)}>
+            <Pressable
+              testID={`edit-card-${item.id}`}
+              accessibilityRole="button"
+              accessibilityLabel={`Editar ${item.cardName}`}
+              onPress={() => handleOpenEdit(item)}
+            >
               <Text style={{ color: "#090" }}>Editar</Text>
             </Pressable>
-            <Pressable testID={`delete-card-${item.id}`} onPress={() => setDeletingCard(item)}>
+            <Pressable
+              testID={`delete-card-${item.id}`}
+              accessibilityRole="button"
+              accessibilityLabel={`Excluir ${item.cardName}`}
+              onPress={() => setDeletingCard(item)}
+            >
               <Text style={{ color: "#900" }}>Excluir</Text>
             </Pressable>
           </Pressable>
@@ -215,6 +246,7 @@ export default function AlbumScreen() {
             <Pressable
               key={option.value}
               testID={`status-option-${option.value}`}
+              accessibilityRole="button"
               onPress={() => handleChangeStatus(option.value)}
               style={{ marginVertical: 4 }}
             >
@@ -223,7 +255,7 @@ export default function AlbumScreen() {
               </Text>
             </Pressable>
           ))}
-          <Pressable testID="cancel-status" onPress={() => setStatusCard(null)}>
+          <Pressable testID="cancel-status" accessibilityRole="button" onPress={() => setStatusCard(null)}>
             <Text>Cancelar</Text>
           </Pressable>
         </View>
@@ -231,10 +263,15 @@ export default function AlbumScreen() {
       {deletingCard ? (
         <View style={{ padding: 12, borderWidth: 1, borderColor: "#ccc", borderRadius: 8 }}>
           <Text>{`Excluir ${deletingCard.cardName} da coleção? Essa ação não pode ser desfeita.`}</Text>
-          <Pressable testID="confirm-delete" onPress={handleConfirmDelete} style={{ marginVertical: 8 }}>
+          <Pressable
+            testID="confirm-delete"
+            accessibilityRole="button"
+            onPress={handleConfirmDelete}
+            style={{ marginVertical: 8 }}
+          >
             <Text style={{ color: "#900" }}>Excluir carta</Text>
           </Pressable>
-          <Pressable testID="cancel-delete" onPress={() => setDeletingCard(null)}>
+          <Pressable testID="cancel-delete" accessibilityRole="button" onPress={() => setDeletingCard(null)}>
             <Text>Cancelar</Text>
           </Pressable>
         </View>
@@ -247,6 +284,7 @@ export default function AlbumScreen() {
             <Pressable
               key={lang.value}
               testID={`edit-language-${lang.value}`}
+              accessibilityRole="button"
               onPress={() => setEditLanguage(lang.value)}
             >
               <Text style={{ fontWeight: editLanguage === lang.value ? "bold" : "normal" }}>
@@ -259,6 +297,7 @@ export default function AlbumScreen() {
             <Pressable
               key={cond.value}
               testID={`edit-condition-${cond.value}`}
+              accessibilityRole="button"
               onPress={() => setEditCondition(cond.value)}
             >
               <Text style={{ fontWeight: editCondition === cond.value ? "bold" : "normal" }}>
@@ -274,10 +313,10 @@ export default function AlbumScreen() {
             onChangeText={setEditPrice}
             style={{ borderWidth: 1, borderColor: "#ccc", marginVertical: 8, padding: 8 }}
           />
-          <Pressable testID="save-edit" onPress={handleSaveEdit} style={{ marginBottom: 8 }}>
+          <Pressable testID="save-edit" accessibilityRole="button" onPress={handleSaveEdit} style={{ marginBottom: 8 }}>
             <Text>Salvar</Text>
           </Pressable>
-          <Pressable testID="cancel-edit" onPress={() => setEditingCard(null)}>
+          <Pressable testID="cancel-edit" accessibilityRole="button" onPress={() => setEditingCard(null)}>
             <Text>Cancelar</Text>
           </Pressable>
         </View>
@@ -293,10 +332,15 @@ export default function AlbumScreen() {
             onChangeText={setSalePrice}
             style={{ borderWidth: 1, borderColor: "#ccc", marginVertical: 8, padding: 8 }}
           />
-          <Pressable testID="confirm-sale" onPress={handleConfirmSale} style={{ marginBottom: 8 }}>
+          <Pressable
+            testID="confirm-sale"
+            accessibilityRole="button"
+            onPress={handleConfirmSale}
+            style={{ marginBottom: 8 }}
+          >
             <Text>Confirmar venda</Text>
           </Pressable>
-          <Pressable testID="cancel-sale" onPress={() => setSellingCard(null)}>
+          <Pressable testID="cancel-sale" accessibilityRole="button" onPress={() => setSellingCard(null)}>
             <Text>Cancelar</Text>
           </Pressable>
         </View>
