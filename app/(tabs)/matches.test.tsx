@@ -16,7 +16,7 @@ jest.mock("expo-router", () => ({
   router: { push: (...args: unknown[]) => mockPush(...args) }
 }));
 
-import { fireEvent, render, waitFor } from "@testing-library/react-native";
+import { act, fireEvent, render, waitFor } from "@testing-library/react-native";
 import { isUserVerified } from "../../src/features/premium/entitlementsRepository";
 import { listMatches } from "../../src/features/social/matchesRepository";
 import MatchesScreen from "./matches";
@@ -114,5 +114,28 @@ describe("MatchesScreen loading state", () => {
 
     expect(getByTestId("matches-loading")).toBeTruthy();
     expect(queryByTestId("matches-empty")).toBeNull();
+  });
+});
+
+describe("MatchesScreen retry", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (isUserVerified as jest.Mock).mockResolvedValue(false);
+  });
+
+  it("recarrega as trocas ao tocar em tentar novamente", async () => {
+    (listMatches as jest.Mock)
+      .mockRejectedValueOnce(new Error("sem conexão"))
+      .mockResolvedValueOnce(MATCHES);
+    const { findByTestId, queryByTestId } = render(<MatchesScreen />);
+
+    const retry = await findByTestId("matches-retry");
+    await act(async () => {
+      fireEvent.press(retry);
+    });
+
+    await findByTestId("match-item-m1");
+    expect(queryByTestId("matches-error")).toBeNull();
+    expect(listMatches).toHaveBeenCalledTimes(2);
   });
 });

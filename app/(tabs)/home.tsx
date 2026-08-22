@@ -23,16 +23,20 @@ export default function HomeScreen() {
     registerForPushNotifications();
   }, []);
 
+  const loadNews = useCallback(() => {
+    listNews()
+      .then(setNews)
+      .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar notícias"))
+      .finally(() => setLoading(false));
+  }, []);
+
   useFocusEffect(
     useCallback(() => {
-      listNews()
-        .then(setNews)
-        .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar notícias"))
-        .finally(() => setLoading(false));
+      loadNews();
       listUndismissedSetReleases()
         .then(setReleases)
         .catch(() => setReleases([]));
-    }, [])
+    }, [loadNews])
   );
 
   const handleDismiss = (setReleaseId: string) => {
@@ -48,7 +52,18 @@ export default function HomeScreen() {
   if (error) {
     return (
       <View style={{ flex: 1, padding: 16 }}>
-        <Text>{error}</Text>
+        <Text testID="home-error">{error}</Text>
+        <Pressable
+          testID="home-retry"
+          accessibilityRole="button"
+          onPress={() => {
+            setError(null);
+            setLoading(true);
+            loadNews();
+          }}
+        >
+          <Text style={{ color: "#0a66c2", marginTop: 8 }}>Tentar novamente</Text>
+        </Pressable>
       </View>
     );
   }

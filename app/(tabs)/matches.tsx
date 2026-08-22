@@ -11,22 +11,22 @@ export default function MatchesScreen() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useFocusEffect(
-    useCallback(() => {
-      listMatches()
-        .then((items) => {
-          setMatches(items);
-          setError(null);
+  const loadMatches = useCallback(() => {
+    listMatches()
+      .then((items) => {
+        setMatches(items);
+        setError(null);
 
-          const userIds = [...new Set(items.map((item) => item.otherUserId))];
-          return Promise.all(
-            userIds.map((userId) => isUserVerified(userId).then((verified) => [userId, verified] as const))
-          ).then((entries) => setVerifiedByUser(Object.fromEntries(entries)));
-        })
-        .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar trocas"))
-        .finally(() => setLoading(false));
-    }, [])
-  );
+        const userIds = [...new Set(items.map((item) => item.otherUserId))];
+        return Promise.all(
+          userIds.map((userId) => isUserVerified(userId).then((verified) => [userId, verified] as const))
+        ).then((entries) => setVerifiedByUser(Object.fromEntries(entries)));
+      })
+      .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar trocas"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useFocusEffect(loadMatches);
 
   // Verificados primeiro, ordem original preservada entre iguais
   const sortedMatches = [...matches].sort(
@@ -44,7 +44,18 @@ export default function MatchesScreen() {
   if (error) {
     return (
       <View style={{ flex: 1, padding: 16 }}>
-        <Text>{error}</Text>
+        <Text testID="matches-error">{error}</Text>
+        <Pressable
+          testID="matches-retry"
+          accessibilityRole="button"
+          onPress={() => {
+            setError(null);
+            setLoading(true);
+            loadMatches();
+          }}
+        >
+          <Text style={{ color: "#0a66c2", marginTop: 8 }}>Tentar novamente</Text>
+        </Pressable>
       </View>
     );
   }

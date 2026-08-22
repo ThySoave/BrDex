@@ -35,11 +35,11 @@
 
 ### Task 2: Tentar novamente nas listas restantes (home, matches)
 
-- [ ] **Step 1: Write the failing RNTL tests** — mesmo padrão: `listNews` / `listMatches` rejeitam e depois resolvem → `home-retry` / `matches-retry` recarregam a tela.
-- [ ] **Step 2: Run to verify it fails** — `npx jest home.test matches.test` → 2 falhas novas, existentes verdes.
-- [ ] **Step 3: Implement** — extrair `loadNews` / `loadMatches` em `useCallback` e botão de retry no bloco de erro (no home, retry recarrega só as notícias; banners de set seguem independentes) → GREEN.
-- [ ] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: add retry to remaining error states`
+- [x] **Step 1: Write the failing RNTL tests** — mesmo padrão: `listNews` / `listMatches` rejeitam e depois resolvem → `home-retry` / `matches-retry` recarregam a tela.
+- [x] **Step 2: Run to verify it fails** — `npx jest home.test matches.test` → 2 falhas novas, existentes verdes.
+- [x] **Step 3: Implement** — extrair `loadNews` / `loadMatches` em `useCallback` e botão de retry no bloco de erro (no home, retry recarrega só as notícias; banners de set seguem independentes) → GREEN.
+- [x] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
+- [x] **Step 5: Commit** — `feat: add retry to remaining error states`
 
 ---
 

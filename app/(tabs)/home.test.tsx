@@ -22,7 +22,7 @@ jest.mock("../../src/features/notifications/pushTokensRepository", () => ({
   registerPushToken: jest.fn()
 }));
 
-import { fireEvent, render, waitFor } from "@testing-library/react-native";
+import { act, fireEvent, render, waitFor } from "@testing-library/react-native";
 import * as Notifications from "expo-notifications";
 import { Linking } from "react-native";
 import { registerPushToken } from "../../src/features/notifications/pushTokensRepository";
@@ -151,5 +151,30 @@ describe("HomeScreen loading state", () => {
 
     expect(getByTestId("home-loading")).toBeTruthy();
     expect(queryByText("Nenhuma notícia por enquanto. Volte mais tarde!")).toBeNull();
+  });
+});
+
+describe("HomeScreen retry", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (listUndismissedSetReleases as jest.Mock).mockResolvedValue([]);
+    (Notifications.getPermissionsAsync as jest.Mock).mockResolvedValue({ status: "denied" });
+    (Notifications.requestPermissionsAsync as jest.Mock).mockResolvedValue({ status: "denied" });
+  });
+
+  it("recarrega as notícias ao tocar em tentar novamente", async () => {
+    (listNews as jest.Mock)
+      .mockRejectedValueOnce(new Error("sem conexão"))
+      .mockResolvedValueOnce(NEWS);
+    const { findByTestId, queryByTestId } = render(<HomeScreen />);
+
+    const retry = await findByTestId("home-retry");
+    await act(async () => {
+      fireEvent.press(retry);
+    });
+
+    await findByTestId("home-news-item-news-1");
+    expect(queryByTestId("home-error")).toBeNull();
+    expect(listNews).toHaveBeenCalledTimes(2);
   });
 });
