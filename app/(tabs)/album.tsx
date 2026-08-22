@@ -191,6 +191,11 @@ export default function AlbumScreen() {
         data={cards}
         keyExtractor={(item) => item.id}
         numColumns={3}
+        ListEmptyComponent={
+          <Text testID="album-empty" style={{ color: "#666", marginTop: 16 }}>
+            Seu álbum está vazio. Busque uma carta no catálogo para cadastrar a primeira.
+          </Text>
+        }
         renderItem={({ item }) => (
           <Pressable
             testID={`album-item-${item.id}`}

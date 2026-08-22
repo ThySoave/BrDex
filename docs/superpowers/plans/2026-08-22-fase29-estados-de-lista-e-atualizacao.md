@@ -25,10 +25,10 @@
 
 ### Task 1: Estados vazios nas listas restantes (catalog, album, meetups, chat)
 
-- [ ] **Step 1: Write the failing RNTL tests** — um caso por tela: com repositório resolvendo `[]`, a tela mostra `catalog-empty` / `album-empty` / `meetups-empty` / `chat-empty` com mensagem orientando a próxima ação.
-- [ ] **Step 2: Run to verify it fails** — `npx jest catalog.test album.test meetups.test chat.test` → 4 falhas novas.
-- [ ] **Step 3: Implement** — `ListEmptyComponent` nas 4 FlatLists → GREEN sem editar testes existentes.
-- [ ] **Step 4: Commit** — `feat: add empty states to remaining lists`
+- [x] **Step 1: Write the failing RNTL tests** — um caso por tela: com repositório resolvendo `[]`, a tela mostra `catalog-empty` / `album-empty` / `meetups-empty` / `chat-empty` com mensagem orientando a próxima ação.
+- [x] **Step 2: Run to verify it fails** — `npx jest catalog.test album.test meetups.test chat.test` → 4 falhas novas (exatamente os 4 casos novos; 50 existentes verdes).
+- [x] **Step 3: Implement** — `ListEmptyComponent` nas 4 FlatLists → GREEN (54/54) sem editar testes existentes.
+- [x] **Step 4: Commit** — `feat: add empty states to remaining lists`
 
 ---
 

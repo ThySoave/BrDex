@@ -533,3 +533,19 @@ describe("AlbumScreen card images", () => {
     });
   });
 });
+
+describe("AlbumScreen empty state", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (fetchSetProgress as jest.Mock).mockResolvedValue([]);
+    (isPremium as jest.Mock).mockResolvedValue(false);
+  });
+
+  it("mostra o estado vazio quando o álbum não tem cartas", async () => {
+    (listUserCards as jest.Mock).mockResolvedValue([]);
+    const { findByTestId } = render(<AlbumScreen />);
+
+    const empty = await findByTestId("album-empty");
+    expect(empty).toBeTruthy();
+  });
+});

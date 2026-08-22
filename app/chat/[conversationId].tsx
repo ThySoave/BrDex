@@ -223,6 +223,11 @@ export default function ChatScreen() {
         testID="chat-messages"
         data={messages}
         keyExtractor={(item) => item.id}
+        ListEmptyComponent={
+          <Text testID="chat-empty" style={{ color: "#666", marginTop: 16 }}>
+            Nenhuma mensagem ainda. Envie a primeira para combinar a negociação.
+          </Text>
+        }
         renderItem={({ item }) => (
           <View testID={`chat-message-${item.id}`} style={{ marginBottom: 8 }}>
             <Text>{item.body}</Text>

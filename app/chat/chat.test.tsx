@@ -190,4 +190,11 @@ describe("ChatScreen ratings", () => {
 
     expect(mockChatPush).toHaveBeenCalledWith("/user/user-2");
   });
+
+  it("mostra o estado vazio quando a conversa ainda não tem mensagens", async () => {
+    const { findByTestId } = render(<ChatScreen />);
+
+    const empty = await findByTestId("chat-empty");
+    expect(empty).toBeTruthy();
+  });
 });

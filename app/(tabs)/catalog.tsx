@@ -134,6 +134,11 @@ export default function CatalogScreen() {
         data={visibleCards}
         keyExtractor={(item) => item.id}
         numColumns={3}
+        ListEmptyComponent={
+          <Text testID="catalog-empty" style={{ color: "#666", marginTop: 16 }}>
+            Nenhuma carta encontrada. Tente outra busca ou volte mais tarde.
+          </Text>
+        }
         renderItem={({ item }) => (
           <View>
             <CardGridItem card={item} />

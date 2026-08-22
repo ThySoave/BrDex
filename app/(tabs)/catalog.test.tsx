@@ -163,3 +163,18 @@ describe("CatalogScreen wishlist language", () => {
     expect(addToWishlist).not.toHaveBeenCalled();
   });
 });
+
+describe("CatalogScreen empty state", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (isPremium as jest.Mock).mockResolvedValue(false);
+  });
+
+  it("mostra o estado vazio quando o catálogo não tem cartas", async () => {
+    (fetchCatalogPage as jest.Mock).mockResolvedValue([]);
+    const { findByTestId } = render(<CatalogScreen />);
+
+    const empty = await findByTestId("catalog-empty");
+    expect(empty).toBeTruthy();
+  });
+});

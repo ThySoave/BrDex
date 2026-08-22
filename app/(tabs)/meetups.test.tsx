@@ -80,4 +80,12 @@ describe("MeetupsScreen", () => {
     });
     expect(createMeetup).not.toHaveBeenCalled();
   });
+
+  it("mostra o estado vazio quando não há encontros publicados", async () => {
+    (listUpcomingMeetups as jest.Mock).mockResolvedValue([]);
+    const { findByTestId } = render(<MeetupsScreen />);
+
+    const empty = await findByTestId("meetups-empty");
+    expect(empty).toBeTruthy();
+  });
 });

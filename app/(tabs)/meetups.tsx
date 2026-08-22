@@ -67,6 +67,11 @@ export default function MeetupsScreen() {
         testID="meetups-list"
         data={meetups}
         keyExtractor={(item) => item.id}
+        ListEmptyComponent={
+          <Text testID="meetups-empty" style={{ color: "#666", marginTop: 16 }}>
+            Nenhum encontro publicado por enquanto. Publique o primeiro usando o formulário acima.
+          </Text>
+        }
         renderItem={({ item }) => (
           <View testID={`meetup-${item.id}`} style={{ paddingVertical: 8 }}>
             <Text style={{ fontWeight: "bold" }}>{item.title}</Text>
