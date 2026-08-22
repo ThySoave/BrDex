@@ -3,7 +3,7 @@ jest.mock("../../src/features/meetups/meetupsRepository", () => ({
   createMeetup: jest.fn()
 }));
 
-import { fireEvent, render, waitFor } from "@testing-library/react-native";
+import { act, fireEvent, render, waitFor } from "@testing-library/react-native";
 import { Alert } from "react-native";
 import { createMeetup, listUpcomingMeetups } from "../../src/features/meetups/meetupsRepository";
 import MeetupsScreen from "./meetups";
@@ -79,6 +79,22 @@ describe("MeetupsScreen", () => {
       expect(Alert.alert).toHaveBeenCalledWith("Preencha título, cidade e uma data válida (AAAA-MM-DD)");
     });
     expect(createMeetup).not.toHaveBeenCalled();
+  });
+
+  it("puxar para atualizar refaz a busca e mostra o encontro novo", async () => {
+    (listUpcomingMeetups as jest.Mock)
+      .mockResolvedValueOnce([meetup])
+      .mockResolvedValueOnce([meetup, { ...meetup, id: "m2", title: "Feira nova" }]);
+    const { findByTestId, getByTestId, getByText } = render(<MeetupsScreen />);
+
+    await findByTestId("meetup-m1");
+
+    await act(async () => {
+      fireEvent(getByTestId("meetups-list"), "refresh");
+    });
+
+    expect(listUpcomingMeetups).toHaveBeenCalledTimes(2);
+    expect(getByText("Feira nova")).toBeTruthy();
   });
 
   it("mostra o estado vazio quando não há encontros publicados", async () => {

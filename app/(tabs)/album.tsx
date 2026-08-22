@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Alert, FlatList, Image, Pressable, Text, TextInput, View } from "react-native";
+import { useFocusEffect } from "expo-router";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import {
@@ -34,6 +35,7 @@ export default function AlbumScreen() {
   const [editPrice, setEditPrice] = useState("");
   const [deletingCard, setDeletingCard] = useState<UserCard | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
   const collectionShareRef = useRef<View>(null);
   const cardShareRef = useRef<View>(null);
 
@@ -129,19 +131,35 @@ export default function AlbumScreen() {
       .finally(() => setShareCard(null));
   }, [shareCard]);
 
-  useEffect(() => {
-    listUserCards()
-      .then(setCards)
-      .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar álbum"));
-    isPremium()
-      .then((active) => {
-        setPremium(active);
-        if (active) {
-          fetchSetProgress().then(setProgress).catch(() => setProgress([]));
-        }
-      })
-      .catch(() => setPremium(false));
-  }, []);
+  const loadCards = useCallback(
+    () =>
+      listUserCards()
+        .then((items) => {
+          setCards(items);
+          setError(null);
+        })
+        .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar álbum")),
+    []
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      loadCards();
+      isPremium()
+        .then((active) => {
+          setPremium(active);
+          if (active) {
+            fetchSetProgress().then(setProgress).catch(() => setProgress([]));
+          }
+        })
+        .catch(() => setPremium(false));
+    }, [loadCards])
+  );
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    loadCards().finally(() => setRefreshing(false));
+  };
 
   if (error) {
     return (
@@ -191,6 +209,8 @@ export default function AlbumScreen() {
         data={cards}
         keyExtractor={(item) => item.id}
         numColumns={3}
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
         ListEmptyComponent={
           <Text testID="album-empty" style={{ color: "#666", marginTop: 16 }}>
             Seu álbum está vazio. Busque uma carta no catálogo para cadastrar a primeira.

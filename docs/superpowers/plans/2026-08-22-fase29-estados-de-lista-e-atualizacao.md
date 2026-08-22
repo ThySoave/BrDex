@@ -43,11 +43,11 @@
 
 ### Task 3: Álbum atualiza ao focar + pull-to-refresh (album, meetups)
 
-- [ ] **Step 1: Write the failing RNTL tests** — (a) álbum: `fireEvent(albumList, "refresh")` refaz `listUserCards` e mostra a carta nova; (b) meetups: idem com `listUpcomingMeetups`; (c) álbum recarrega ao ganhar foco (`useFocusEffect`), seguindo o mock de expo-router já usado em matches.test.
-- [ ] **Step 2: Run to verify it fails** — `npx jest album.test meetups.test` → falhas novas.
-- [ ] **Step 3: Implement** — extrair `loadCards` com `useCallback`, trocar `useEffect` por `useFocusEffect` no álbum; `onRefresh`/`refreshing` nas duas FlatLists → GREEN.
-- [ ] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: add focus reload and pull-to-refresh to album and meetups`
+- [x] **Step 1: Write the failing RNTL tests** — (a) álbum: `fireEvent(albumList, "refresh")` refaz `listUserCards` e mostra a carta nova; (b) meetups: idem com `listUpcomingMeetups`; (c) álbum recarrega ao ganhar foco (`useFocusEffect`), seguindo o mock de expo-router já usado em matches.test.
+- [x] **Step 2: Run to verify it fails** — `npx jest album.test meetups.test` → 3 falhas novas (35 existentes verdes).
+- [x] **Step 3: Implement** — extraído `loadCards` com `useCallback`, `useEffect` → `useFocusEffect` no álbum; `onRefresh`/`refreshing` nas duas FlatLists → GREEN (38/38).
+- [x] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes (272/272 em 54 suites, tsc limpo).
+- [x] **Step 5: Commit** — `feat: add focus reload and pull-to-refresh to album and meetups`
 
 ---
 

@@ -20,6 +20,13 @@ jest.mock("expo-sharing", () => ({
 jest.mock("../../src/features/collection/shareImage", () => ({
   captureAndShareView: jest.fn()
 }));
+const mockUseFocusEffect = jest.fn((callback: () => void) => {
+  const React = require("react");
+  React.useEffect(callback, []);
+});
+jest.mock("expo-router", () => ({
+  useFocusEffect: (callback: () => void) => mockUseFocusEffect(callback)
+}));
 
 import { act, fireEvent, render, waitFor } from "@testing-library/react-native";
 import { Alert } from "react-native";
@@ -531,6 +538,38 @@ describe("AlbumScreen card images", () => {
         uri: "https://example.com/25.png"
       });
     });
+  });
+});
+
+describe("AlbumScreen refresh", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (fetchSetProgress as jest.Mock).mockResolvedValue([]);
+    (isPremium as jest.Mock).mockResolvedValue(false);
+  });
+
+  it("recarrega o álbum ao ganhar foco (useFocusEffect)", async () => {
+    (listUserCards as jest.Mock).mockResolvedValue(CARDS);
+    const { findByTestId } = render(<AlbumScreen />);
+
+    await findByTestId("album-item-uc-1");
+    expect(mockUseFocusEffect).toHaveBeenCalled();
+  });
+
+  it("puxar para atualizar refaz a busca e mostra a carta nova", async () => {
+    (listUserCards as jest.Mock)
+      .mockResolvedValueOnce(CARDS)
+      .mockResolvedValueOnce([...CARDS, { ...CARDS[0], id: "uc-2", cardName: "Charmander" }]);
+    const { findByTestId, getByTestId } = render(<AlbumScreen />);
+
+    await findByTestId("album-item-uc-1");
+
+    await act(async () => {
+      fireEvent(getByTestId("album-list"), "refresh");
+    });
+
+    expect(listUserCards).toHaveBeenCalledTimes(2);
+    expect(getByTestId("album-item-uc-2")).toBeTruthy();
   });
 });
 

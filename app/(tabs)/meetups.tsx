@@ -13,12 +13,20 @@ export default function MeetupsScreen() {
   const [title, setTitle] = useState("");
   const [city, setCity] = useState("");
   const [date, setDate] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
 
-  const loadMeetups = useCallback(() => {
-    listUpcomingMeetups()
-      .then(setMeetups)
-      .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar encontros"));
-  }, []);
+  const loadMeetups = useCallback(
+    () =>
+      listUpcomingMeetups()
+        .then(setMeetups)
+        .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar encontros")),
+    []
+  );
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    loadMeetups().finally(() => setRefreshing(false));
+  };
 
   useEffect(() => {
     loadMeetups();
@@ -67,6 +75,8 @@ export default function MeetupsScreen() {
         testID="meetups-list"
         data={meetups}
         keyExtractor={(item) => item.id}
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
         ListEmptyComponent={
           <Text testID="meetups-empty" style={{ color: "#666", marginTop: 16 }}>
             Nenhum encontro publicado por enquanto. Publique o primeiro usando o formulário acima.
