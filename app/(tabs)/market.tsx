@@ -54,7 +54,12 @@ export default function MarketScreen() {
         value={query}
         onChangeText={setQuery}
       />
-      <Pressable testID="market-search-submit" onPress={() => runSearch(query)} style={{ marginVertical: 8 }}>
+      <Pressable
+        testID="market-search-submit"
+        accessibilityRole="button"
+        onPress={() => runSearch(query)}
+        style={{ marginVertical: 8 }}
+      >
         <Text style={{ color: "#0a66c2" }}>Buscar</Text>
       </Pressable>
       <FlatList
@@ -79,11 +84,18 @@ export default function MarketScreen() {
               <Text style={{ color: "#666" }}>
                 {STATUS_LABELS[item.status] ?? item.status}
               </Text>
-              <Pressable testID={`market-chat-${item.userCardId}`} onPress={() => openConversation(item)}>
+              <Pressable
+                testID={`market-chat-${item.userCardId}`}
+                accessibilityRole="button"
+                accessibilityLabel={`Conversar sobre ${item.cardName}`}
+                onPress={() => openConversation(item)}
+              >
                 <Text style={{ color: "#0a66c2" }}>Conversar</Text>
               </Pressable>
               <Pressable
                 testID={`market-seller-${item.userCardId}`}
+                accessibilityRole="button"
+                accessibilityLabel={`Ver perfil do vendedor de ${item.cardName}`}
                 onPress={() => router.push(`/user/${item.sellerId}`)}
               >
                 <Text style={{ color: "#0a66c2" }}>Ver perfil do vendedor</Text>

@@ -60,7 +60,7 @@ export default function MeetupsScreen() {
       <TextInput testID="meetup-title" placeholder="Título do encontro" value={title} onChangeText={setTitle} />
       <TextInput testID="meetup-city" placeholder="Cidade" value={city} onChangeText={setCity} />
       <TextInput testID="meetup-date" placeholder="Data (AAAA-MM-DD)" value={date} onChangeText={setDate} />
-      <Pressable testID="meetup-create" onPress={handleCreate} style={{ marginVertical: 8 }}>
+      <Pressable testID="meetup-create" accessibilityRole="button" onPress={handleCreate} style={{ marginVertical: 8 }}>
         <Text>Publicar encontro</Text>
       </Pressable>
       <FlatList

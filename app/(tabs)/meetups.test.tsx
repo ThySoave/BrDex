@@ -23,6 +23,12 @@ describe("MeetupsScreen", () => {
     (listUpcomingMeetups as jest.Mock).mockResolvedValue([meetup]);
   });
 
+  it("expõe publicar encontro como botão", async () => {
+    const { findByRole } = render(<MeetupsScreen />);
+
+    await findByRole("button", { name: "Publicar encontro" });
+  });
+
   it("renders the upcoming meetups", async () => {
     const { findByText } = render(<MeetupsScreen />);
 

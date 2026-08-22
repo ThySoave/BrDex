@@ -62,6 +62,7 @@ export default function HomeScreen() {
           <Text style={{ fontWeight: "bold" }}>{`Novo set: ${release.setName}!`}</Text>
           <Pressable
             testID={`home-set-release-dismiss-${release.id}`}
+            accessibilityRole="button"
             onPress={() => handleDismiss(release.id)}
             style={{ marginTop: 4 }}
           >
@@ -77,6 +78,8 @@ export default function HomeScreen() {
         renderItem={({ item }) => (
           <Pressable
             testID={`home-news-item-${item.id}`}
+            accessibilityRole="link"
+            accessibilityLabel={item.title}
             onPress={() => handleOpenNews(item.url)}
             style={{ paddingVertical: 8 }}
           >

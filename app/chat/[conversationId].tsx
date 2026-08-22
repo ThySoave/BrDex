@@ -166,6 +166,8 @@ export default function ChatScreen() {
               <Pressable
                 key={stars}
                 testID={`chat-rate-${stars}`}
+                accessibilityRole="button"
+                accessibilityLabel={`Avaliar com ${stars} ${stars === 1 ? "estrela" : "estrelas"}`}
                 onPress={() => handleRateTrade(unratedConfirmed.id, stars)}
               >
                 <Text style={{ color: "#0a66c2" }}>{`${stars}★`}</Text>
@@ -177,6 +179,7 @@ export default function ChatScreen() {
       {pendingFromOther ? (
         <Pressable
           testID="chat-confirm-trade"
+          accessibilityRole="button"
           onPress={() => handleConfirmTrade(pendingFromOther.id)}
           style={{ marginVertical: 4 }}
         >

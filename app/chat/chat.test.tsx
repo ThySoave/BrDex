@@ -142,6 +142,14 @@ describe("ChatScreen ratings", () => {
     expect(userRatingSummary).toHaveBeenCalledWith("user-2");
   });
 
+  it("expõe as estrelas de avaliação como botões rotulados", async () => {
+    (listTrades as jest.Mock).mockResolvedValue([confirmedTrade]);
+
+    const { findByRole } = render(<ChatScreen />);
+
+    await findByRole("button", { name: "Avaliar com 5 estrelas" });
+  });
+
   it("rates a confirmed trade not yet rated by me", async () => {
     (listTrades as jest.Mock).mockResolvedValue([confirmedTrade]);
 

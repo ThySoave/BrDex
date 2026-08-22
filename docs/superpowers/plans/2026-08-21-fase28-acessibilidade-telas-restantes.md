@@ -43,11 +43,11 @@
 
 ### Task 3: Demais abas e sobras do chat (home, market, meetups, value, chat)
 
-- [ ] **Step 1: Write the failing RNTL tests** (um caso por tela; chat: estrelas como botões "Avaliar com N estrelas" e "Confirmar troca".)
-- [ ] **Step 2: Run to verify it fails** — `npx jest home market meetups.test value chat.test` → FAIL.
-- [ ] **Step 3: Implement** as props → GREEN sem editar testes existentes.
-- [ ] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: add accessibility roles to remaining screens`
+- [x] **Step 1: Write the failing RNTL tests** (um caso por tela: dispensar banner na home, buscar no market, publicar encontro, remover alerta, estrelas "Avaliar com 5 estrelas" no chat.)
+- [x] **Step 2: Run to verify it fails** — `npx jest home.test market.test meetups.test value.test chat.test` → FAIL (5 falhas, uma por tela).
+- [x] **Step 3: Implement** as props (home: banner button + notícia como `link` rotulado com o título; market: buscar + labels por carta em conversar/vendedor; meetups: publicar; value: remover com label da carta; chat: estrelas rotuladas + confirmar troca) → GREEN (28/28) sem editar testes existentes.
+- [x] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes (264/264 em 54 suites, tsc limpo).
+- [x] **Step 5: Commit** — `feat: add accessibility roles to remaining screens`
 
 ---
 

@@ -55,6 +55,8 @@ export default function ValueScreen() {
             </Text>
             <Pressable
               testID={`triggered-alert-remove-${alert.alertId}`}
+              accessibilityRole="button"
+              accessibilityLabel={`Remover alerta de ${alert.cardName}`}
               onPress={() => handleRemoveAlert(alert.alertId)}
               style={{ marginTop: 4 }}
             >

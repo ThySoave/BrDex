@@ -88,6 +88,12 @@ describe("HomeScreen", () => {
     expect(registerPushToken).not.toHaveBeenCalled();
   });
 
+  it("expõe dispensar o banner de set como botão", async () => {
+    const { findByRole } = render(<HomeScreen />);
+
+    await findByRole("button", { name: "Ok, entendi" });
+  });
+
   it("renders the news list", async () => {
     const { getByText } = render(<HomeScreen />);
 

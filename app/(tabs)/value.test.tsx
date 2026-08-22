@@ -45,6 +45,12 @@ describe("ValueScreen triggered price alerts", () => {
     });
   });
 
+  it("expõe remover alerta como botão", async () => {
+    const { findByRole } = render(<ValueScreen />);
+
+    await findByRole("button", { name: "Remover alerta" });
+  });
+
   it("removes an alert and hides it from the list", async () => {
     const { getByTestId, queryByTestId } = render(<ValueScreen />);
 

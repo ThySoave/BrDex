@@ -77,6 +77,12 @@ describe("MarketScreen", () => {
     expect(queryByTestId("market-verified-uc-2")).toBeNull();
   });
 
+  it("expõe buscar como botão", async () => {
+    const { findByRole } = render(<MarketScreen />);
+
+    await findByRole("button", { name: "Buscar" });
+  });
+
   it("opens a conversation with the seller", async () => {
     const { getByTestId } = render(<MarketScreen />);
 
