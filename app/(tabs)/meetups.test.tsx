@@ -120,3 +120,26 @@ describe("MeetupsScreen loading state", () => {
     expect(queryByTestId("meetups-empty")).toBeNull();
   });
 });
+
+describe("MeetupsScreen retry", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(Alert, "alert").mockImplementation(() => undefined);
+  });
+
+  it("recarrega os encontros ao tocar em tentar novamente", async () => {
+    (listUpcomingMeetups as jest.Mock)
+      .mockRejectedValueOnce(new Error("sem conexão"))
+      .mockResolvedValueOnce([meetup]);
+    const { findByTestId, findByText, queryByTestId } = render(<MeetupsScreen />);
+
+    const retry = await findByTestId("meetups-retry");
+    await act(async () => {
+      fireEvent.press(retry);
+    });
+
+    await findByText("Troca na praça");
+    expect(queryByTestId("meetups-error")).toBeNull();
+    expect(listUpcomingMeetups).toHaveBeenCalledTimes(2);
+  });
+});

@@ -13,7 +13,7 @@ jest.mock("expo-router", () => ({
   router: { push: (...args: unknown[]) => mockPush(...args) }
 }));
 
-import { fireEvent, render, waitFor } from "@testing-library/react-native";
+import { act, fireEvent, render, waitFor } from "@testing-library/react-native";
 import { getOrCreateConversation } from "../../src/features/social/chatRepository";
 import { searchMarketListings } from "../../src/features/social/marketRepository";
 import MarketScreen from "./market";
@@ -122,5 +122,27 @@ describe("MarketScreen loading state", () => {
 
     expect(getByTestId("market-loading")).toBeTruthy();
     expect(queryByTestId("market-empty")).toBeNull();
+  });
+});
+
+describe("MarketScreen retry", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("refaz a busca ao tocar em tentar novamente", async () => {
+    (searchMarketListings as jest.Mock)
+      .mockRejectedValueOnce(new Error("sem conexão"))
+      .mockResolvedValueOnce(LISTINGS);
+    const { findByTestId, queryByTestId } = render(<MarketScreen />);
+
+    const retry = await findByTestId("market-retry");
+    await act(async () => {
+      fireEvent.press(retry);
+    });
+
+    await findByTestId("market-list");
+    expect(queryByTestId("market-error")).toBeNull();
+    expect(searchMarketListings).toHaveBeenCalledTimes(2);
   });
 });

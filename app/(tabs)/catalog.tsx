@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert, FlatList, Linking, Pressable, Text, TextInput, View } from "react-native";
 import { useRouter } from "expo-router";
 import { fetchCatalogPage } from "../../src/features/catalog/catalogRepository";
@@ -25,7 +25,7 @@ export default function CatalogScreen() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const loadCatalog = useCallback(() => {
     fetchCatalogPage(0)
       .then((items) => {
         setCards(items);
@@ -33,10 +33,20 @@ export default function CatalogScreen() {
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar catálogo"))
       .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    loadCatalog();
     isPremium()
       .then(setPremium)
       .catch(() => setPremium(false));
-  }, []);
+  }, [loadCatalog]);
+
+  const handleRetry = () => {
+    setError(null);
+    setLoading(true);
+    loadCatalog();
+  };
 
   const visibleCards = filterCatalogCards(cards, query);
 
@@ -44,6 +54,9 @@ export default function CatalogScreen() {
     return (
       <View style={{ flex: 1, padding: 16 }}>
         <Text testID="catalog-error">{error}</Text>
+        <Pressable testID="catalog-retry" accessibilityRole="button" onPress={handleRetry}>
+          <Text style={{ color: "#0a66c2", marginTop: 8 }}>Tentar novamente</Text>
+        </Pressable>
       </View>
     );
   }

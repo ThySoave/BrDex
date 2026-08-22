@@ -26,10 +26,10 @@
 
 ### Task 1: Tentar novamente nas abas principais (catalog, album, market, meetups)
 
-- [ ] **Step 1: Write the failing RNTL tests** — um caso por tela: fetch primário (`fetchCatalogPage` / `listUserCards` / `searchMarketListings` / `listUpcomingMeetups`) rejeita na 1ª chamada e resolve com dados na 2ª → erro visível com `<tela>-retry`; press no retry → dado renderizado e erro ausente.
-- [ ] **Step 2: Run to verify it fails** — `npx jest catalog.test album.test market.test meetups.test` → 4 falhas novas, existentes verdes.
-- [ ] **Step 3: Implement** — botão `Tentar novamente` no bloco de erro das 4 telas (+ `testID` de erro onde faltar; extrair `loadCatalog` no catalog) → GREEN sem editar testes existentes.
-- [ ] **Step 4: Commit** — `feat: add retry to main tab error states`
+- [x] **Step 1: Write the failing RNTL tests** — um caso por tela: fetch primário (`fetchCatalogPage` / `listUserCards` / `searchMarketListings` / `listUpcomingMeetups`) rejeita na 1ª chamada e resolve com dados na 2ª → erro visível com `<tela>-retry`; press no retry → dado renderizado e erro ausente.
+- [x] **Step 2: Run to verify it fails** — `npx jest catalog.test album.test market.test meetups.test` → 4 falhas novas, existentes verdes.
+- [x] **Step 3: Implement** — botão `Tentar novamente` no bloco de erro das 4 telas (+ `testID` de erro onde faltar; extrair `loadCatalog` no catalog) → GREEN sem editar testes existentes.
+- [x] **Step 4: Commit** — `feat: add retry to main tab error states`
 
 ---
 

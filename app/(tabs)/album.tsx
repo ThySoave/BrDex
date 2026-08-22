@@ -166,7 +166,18 @@ export default function AlbumScreen() {
   if (error) {
     return (
       <View style={{ flex: 1, padding: 16 }}>
-        <Text>{error}</Text>
+        <Text testID="album-error">{error}</Text>
+        <Pressable
+          testID="album-retry"
+          accessibilityRole="button"
+          onPress={() => {
+            setError(null);
+            setLoading(true);
+            loadCards();
+          }}
+        >
+          <Text style={{ color: "#0a66c2", marginTop: 8 }}>Tentar novamente</Text>
+        </Pressable>
       </View>
     );
   }

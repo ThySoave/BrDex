@@ -604,3 +604,27 @@ describe("AlbumScreen loading state", () => {
     expect(queryByTestId("album-empty")).toBeNull();
   });
 });
+
+describe("AlbumScreen retry", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (fetchSetProgress as jest.Mock).mockResolvedValue([]);
+    (isPremium as jest.Mock).mockResolvedValue(false);
+  });
+
+  it("recarrega o álbum ao tocar em tentar novamente", async () => {
+    (listUserCards as jest.Mock)
+      .mockRejectedValueOnce(new Error("sem conexão"))
+      .mockResolvedValueOnce(CARDS);
+    const { findByTestId, queryByTestId } = render(<AlbumScreen />);
+
+    const retry = await findByTestId("album-retry");
+    await act(async () => {
+      fireEvent.press(retry);
+    });
+
+    await findByTestId("album-item-uc-1");
+    expect(queryByTestId("album-error")).toBeNull();
+    expect(listUserCards).toHaveBeenCalledTimes(2);
+  });
+});

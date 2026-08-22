@@ -16,7 +16,7 @@ jest.mock("../../src/features/premium/priceAlertsRepository", () => ({
   createPriceAlert: jest.fn()
 }));
 
-import { fireEvent, render, waitFor } from "@testing-library/react-native";
+import { act, fireEvent, render, waitFor } from "@testing-library/react-native";
 import { fetchCatalogPage } from "../../src/features/catalog/catalogRepository";
 import { isPremium } from "../../src/features/premium/entitlementsRepository";
 import { createPriceAlert } from "../../src/features/premium/priceAlertsRepository";
@@ -200,5 +200,28 @@ describe("CatalogScreen loading state", () => {
 
     expect(getByTestId("catalog-loading")).toBeTruthy();
     expect(queryByTestId("catalog-empty")).toBeNull();
+  });
+});
+
+describe("CatalogScreen retry", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (isPremium as jest.Mock).mockResolvedValue(false);
+  });
+
+  it("recarrega o catálogo ao tocar em tentar novamente", async () => {
+    (fetchCatalogPage as jest.Mock)
+      .mockRejectedValueOnce(new Error("sem conexão"))
+      .mockResolvedValueOnce(CARDS);
+    const { findByTestId, queryByTestId } = render(<CatalogScreen />);
+
+    const retry = await findByTestId("catalog-retry");
+    await act(async () => {
+      fireEvent.press(retry);
+    });
+
+    await findByTestId("catalog-list");
+    expect(queryByTestId("catalog-error")).toBeNull();
+    expect(fetchCatalogPage).toHaveBeenCalledTimes(2);
   });
 });
