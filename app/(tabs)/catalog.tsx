@@ -22,15 +22,29 @@ export default function CatalogScreen() {
   const [threshold, setThreshold] = useState("");
   const [showAlertUpsell, setShowAlertUpsell] = useState(false);
   const [wishlistCardId, setWishlistCardId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchCatalogPage(0).then(setCards).catch(() => setCards([]));
+    fetchCatalogPage(0)
+      .then((items) => {
+        setCards(items);
+        setError(null);
+      })
+      .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar catálogo"));
     isPremium()
       .then(setPremium)
       .catch(() => setPremium(false));
   }, []);
 
   const visibleCards = filterCatalogCards(cards, query);
+
+  if (error) {
+    return (
+      <View style={{ flex: 1, padding: 16 }}>
+        <Text testID="catalog-error">{error}</Text>
+      </View>
+    );
+  }
 
   const handleOpenAlert = (cardId: string) => {
     if (!premium) {

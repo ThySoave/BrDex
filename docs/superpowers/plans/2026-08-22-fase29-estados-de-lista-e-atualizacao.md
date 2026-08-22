@@ -34,10 +34,10 @@
 
 ### Task 2: Erro visível no carregamento do catálogo
 
-- [ ] **Step 1: Write the failing RNTL test** — `fetchCatalogPage` rejeitando → tela mostra `catalog-error` com a mensagem, em vez de lista vazia silenciosa.
-- [ ] **Step 2: Run to verify it fails** — `npx jest catalog.test` → 1 falha nova.
-- [ ] **Step 3: Implement** — estado `error` no catálogo, mesmo padrão de album/meetups → GREEN.
-- [ ] **Step 4: Commit** — `feat: surface catalog load errors`
+- [x] **Step 1: Write the failing RNTL test** — `fetchCatalogPage` rejeitando → tela mostra `catalog-error` com a mensagem, em vez de lista vazia silenciosa.
+- [x] **Step 2: Run to verify it fails** — `npx jest catalog.test` → 1 falha nova (9 existentes verdes).
+- [x] **Step 3: Implement** — estado `error` no catálogo, mesmo padrão de album/meetups (early return) → GREEN (10/10).
+- [x] **Step 4: Commit** — `feat: surface catalog load errors`
 
 ---
 

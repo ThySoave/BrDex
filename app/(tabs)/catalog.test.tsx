@@ -177,4 +177,13 @@ describe("CatalogScreen empty state", () => {
     const empty = await findByTestId("catalog-empty");
     expect(empty).toBeTruthy();
   });
+
+  it("mostra o erro quando o catálogo falha ao carregar", async () => {
+    (fetchCatalogPage as jest.Mock).mockRejectedValue(new Error("sem conexão"));
+    const { findByTestId, queryByTestId } = render(<CatalogScreen />);
+
+    const error = await findByTestId("catalog-error");
+    expect(error).toBeTruthy();
+    expect(queryByTestId("catalog-empty")).toBeNull();
+  });
 });
