@@ -17,6 +17,7 @@ export default function HomeScreen() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [releases, setReleases] = useState<SetRelease[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     registerForPushNotifications();
@@ -26,7 +27,8 @@ export default function HomeScreen() {
     useCallback(() => {
       listNews()
         .then(setNews)
-        .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar notícias"));
+        .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar notícias"))
+        .finally(() => setLoading(false));
       listUndismissedSetReleases()
         .then(setReleases)
         .catch(() => setReleases([]));
@@ -70,6 +72,11 @@ export default function HomeScreen() {
           </Pressable>
         </View>
       ))}
+      {loading ? (
+        <Text testID="home-loading" style={{ color: "#666", marginTop: 16 }}>
+          Carregando...
+        </Text>
+      ) : (
       <FlatList
         testID="home-news-list"
         data={news}
@@ -89,6 +96,7 @@ export default function HomeScreen() {
           </Pressable>
         )}
       />
+      )}
     </View>
   );
 }

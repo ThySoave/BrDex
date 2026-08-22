@@ -115,3 +115,17 @@ describe("WishlistScreen", () => {
     });
   });
 });
+
+describe("WishlistScreen loading state", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("mostra o carregamento enquanto a lista de desejos ainda não respondeu", () => {
+    (listWishlist as jest.Mock).mockReturnValue(new Promise(() => {}));
+    const { getByTestId, queryByTestId } = render(<WishlistScreen />);
+
+    expect(getByTestId("wishlist-loading")).toBeTruthy();
+    expect(queryByTestId("wishlist-empty")).toBeNull();
+  });
+});

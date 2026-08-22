@@ -26,18 +26,18 @@
 
 - [x] **Step 1: Write the failing RNTL tests** — um caso por tela: com o fetch primário (`fetchCatalogPage` / `listUserCards` / `searchMarketListings` / `listUpcomingMeetups`) retornando promessa pendente (`new Promise(() => {})`), a tela mostra `catalog-loading` / `album-loading` / `market-loading` / `meetups-loading` e **não** mostra o estado vazio correspondente.
 - [x] **Step 2: Run to verify it fails** — `npx jest catalog.test album.test market.test meetups.test` → 4 falhas novas (53 existentes verdes).
-- [x] **Step 3: Implement** — estado `loading` + `.finally(() => setLoading(false))` no fetch primário + early return com `Carregando...` nas 4 telas → GREEN (57/57, tsc limpo) sem editar testes existentes.
+- [x] **Step 3: Implement** — estado `loading` + `.finally(() => setLoading(false))` no fetch primário + indicador `Carregando...` no lugar da FlatList nas 4 telas → GREEN (57/57, tsc limpo) sem editar testes existentes.
 - [x] **Step 4: Commit** — `feat: add loading states to main tab lists`
 
 ---
 
 ### Task 2: Estado de carregamento nas listas restantes (home, matches, wishlist)
 
-- [ ] **Step 1: Write the failing RNTL tests** — mesmo padrão: `listNews` / `listMatches` / `listWishlist` pendentes → `home-loading` / `matches-loading` / `wishlist-loading` visíveis, estado vazio ausente.
-- [ ] **Step 2: Run to verify it fails** — `npx jest home.test matches.test wishlist.test` → 3 falhas novas (existentes verdes).
-- [ ] **Step 3: Implement** — mesmo padrão da Task 1 nas 3 telas (no home, gate só em `listNews`; banners de set continuam independentes) → GREEN.
-- [ ] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: add loading states to remaining lists`
+- [x] **Step 1: Write the failing RNTL tests** — mesmo padrão: `listNews` / `listMatches` / `listWishlist` pendentes → `home-loading` / `matches-loading` / `wishlist-loading` visíveis, estado vazio ausente.
+- [x] **Step 2: Run to verify it fails** — `npx jest home.test matches.test wishlist.test` → 3 falhas novas (17 existentes verdes).
+- [x] **Step 3: Implement** — mesmo padrão da Task 1 nas 3 telas (no home, gate só em `listNews`; banners de set continuam independentes) → GREEN (20/20).
+- [x] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes (279/279 em 54 suítes, tsc limpo).
+- [x] **Step 5: Commit** — `feat: add loading states to remaining lists`
 
 ---
 

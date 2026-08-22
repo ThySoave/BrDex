@@ -101,3 +101,18 @@ describe("MatchesScreen wishlist link", () => {
     expect(mockPush).toHaveBeenCalledWith("/wishlist");
   });
 });
+
+describe("MatchesScreen loading state", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (isUserVerified as jest.Mock).mockResolvedValue(false);
+  });
+
+  it("mostra o carregamento enquanto as trocas ainda não responderam", () => {
+    (listMatches as jest.Mock).mockReturnValue(new Promise(() => {}));
+    const { getByTestId, queryByTestId } = render(<MatchesScreen />);
+
+    expect(getByTestId("matches-loading")).toBeTruthy();
+    expect(queryByTestId("matches-empty")).toBeNull();
+  });
+});

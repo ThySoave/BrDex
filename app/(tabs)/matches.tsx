@@ -9,6 +9,7 @@ export default function MatchesScreen() {
   const [matches, setMatches] = useState<MatchItem[]>([]);
   const [verifiedByUser, setVerifiedByUser] = useState<Record<string, boolean>>({});
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useFocusEffect(
     useCallback(() => {
@@ -22,7 +23,8 @@ export default function MatchesScreen() {
             userIds.map((userId) => isUserVerified(userId).then((verified) => [userId, verified] as const))
           ).then((entries) => setVerifiedByUser(Object.fromEntries(entries)));
         })
-        .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar trocas"));
+        .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar trocas"))
+        .finally(() => setLoading(false));
     }, [])
   );
 
@@ -52,6 +54,11 @@ export default function MatchesScreen() {
       <Pressable testID="open-wishlist" accessibilityRole="button" onPress={() => router.push("/wishlist")}>
         <Text style={{ color: "#0a66c2", marginBottom: 12 }}>Minha lista de desejos</Text>
       </Pressable>
+      {loading ? (
+        <Text testID="matches-loading" style={{ color: "#666", marginTop: 16 }}>
+          Carregando...
+        </Text>
+      ) : (
       <FlatList
         testID="matches-list"
         data={sortedMatches}
@@ -86,6 +93,7 @@ export default function MatchesScreen() {
           </View>
         )}
       />
+      )}
     </View>
   );
 }

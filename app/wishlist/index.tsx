@@ -10,12 +10,14 @@ import { languageLabel } from "../../src/features/collection/labels";
 
 export default function WishlistScreen() {
   const [items, setItems] = useState<WishlistItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useFocusEffect(
     useCallback(() => {
       listWishlist()
         .then(setItems)
-        .catch((err: Error) => Alert.alert("Erro", err.message));
+        .catch((err: Error) => Alert.alert("Erro", err.message))
+        .finally(() => setLoading(false));
     }, [])
   );
 
@@ -30,6 +32,11 @@ export default function WishlistScreen() {
       <Text style={{ fontSize: 18, fontWeight: "bold", marginBottom: 12 }}>
         Minha lista de desejos
       </Text>
+      {loading ? (
+        <Text testID="wishlist-loading" style={{ color: "#666", marginTop: 16 }}>
+          Carregando...
+        </Text>
+      ) : (
       <FlatList
         testID="wishlist-list"
         data={items}
@@ -57,6 +64,7 @@ export default function WishlistScreen() {
           </View>
         )}
       />
+      )}
     </View>
   );
 }

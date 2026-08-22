@@ -136,3 +136,20 @@ describe("HomeScreen", () => {
     expect(openUrlSpy).toHaveBeenCalledWith("https://example.com/noticia-1");
   });
 });
+
+describe("HomeScreen loading state", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (listUndismissedSetReleases as jest.Mock).mockResolvedValue([]);
+    (Notifications.getPermissionsAsync as jest.Mock).mockResolvedValue({ status: "denied" });
+    (Notifications.requestPermissionsAsync as jest.Mock).mockResolvedValue({ status: "denied" });
+  });
+
+  it("mostra o carregamento enquanto as notícias ainda não responderam", () => {
+    (listNews as jest.Mock).mockReturnValue(new Promise(() => {}));
+    const { getByTestId, queryByText } = render(<HomeScreen />);
+
+    expect(getByTestId("home-loading")).toBeTruthy();
+    expect(queryByText("Nenhuma notícia por enquanto. Volte mais tarde!")).toBeNull();
+  });
+});
