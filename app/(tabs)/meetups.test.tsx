@@ -105,3 +105,18 @@ describe("MeetupsScreen", () => {
     expect(empty).toBeTruthy();
   });
 });
+
+describe("MeetupsScreen loading state", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(Alert, "alert").mockImplementation(() => undefined);
+  });
+
+  it("mostra o carregamento enquanto os encontros ainda não responderam", () => {
+    (listUpcomingMeetups as jest.Mock).mockReturnValue(new Promise(() => {}));
+    const { getByTestId, queryByTestId } = render(<MeetupsScreen />);
+
+    expect(getByTestId("meetups-loading")).toBeTruthy();
+    expect(queryByTestId("meetups-empty")).toBeNull();
+  });
+});

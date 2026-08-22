@@ -110,3 +110,17 @@ describe("MarketScreen", () => {
     expect(mockPush).toHaveBeenCalledWith("/user/user-2");
   });
 });
+
+describe("MarketScreen loading state", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("mostra o carregamento enquanto a busca inicial não respondeu", () => {
+    (searchMarketListings as jest.Mock).mockReturnValue(new Promise(() => {}));
+    const { getByTestId, queryByTestId } = render(<MarketScreen />);
+
+    expect(getByTestId("market-loading")).toBeTruthy();
+    expect(queryByTestId("market-empty")).toBeNull();
+  });
+});

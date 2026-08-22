@@ -16,6 +16,7 @@ export default function MarketScreen() {
   const [query, setQuery] = useState("");
   const [listings, setListings] = useState<MarketListing[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const runSearch = useCallback((text: string) => {
     searchMarketListings(text)
@@ -23,7 +24,8 @@ export default function MarketScreen() {
         setListings(results);
         setError(null);
       })
-      .catch((err) => setError(err instanceof Error ? err.message : "Erro ao buscar no mercado"));
+      .catch((err) => setError(err instanceof Error ? err.message : "Erro ao buscar no mercado"))
+      .finally(() => setLoading(false));
   }, []);
 
   useFocusEffect(
@@ -62,6 +64,11 @@ export default function MarketScreen() {
       >
         <Text style={{ color: "#0a66c2" }}>Buscar</Text>
       </Pressable>
+      {loading ? (
+        <Text testID="market-loading" style={{ color: "#666", marginTop: 16 }}>
+          Carregando...
+        </Text>
+      ) : (
       <FlatList
         testID="market-list"
         data={listings}
@@ -104,6 +111,7 @@ export default function MarketScreen() {
           </View>
         )}
       />
+      )}
     </View>
   );
 }

@@ -14,12 +14,14 @@ export default function MeetupsScreen() {
   const [city, setCity] = useState("");
   const [date, setDate] = useState("");
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const loadMeetups = useCallback(
     () =>
       listUpcomingMeetups()
         .then(setMeetups)
-        .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar encontros")),
+        .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar encontros"))
+        .finally(() => setLoading(false)),
     []
   );
 
@@ -71,6 +73,11 @@ export default function MeetupsScreen() {
       <Pressable testID="meetup-create" accessibilityRole="button" onPress={handleCreate} style={{ marginVertical: 8 }}>
         <Text>Publicar encontro</Text>
       </Pressable>
+      {loading ? (
+        <Text testID="meetups-loading" style={{ color: "#666", marginTop: 16 }}>
+          Carregando...
+        </Text>
+      ) : (
       <FlatList
         testID="meetups-list"
         data={meetups}
@@ -90,6 +97,7 @@ export default function MeetupsScreen() {
           </View>
         )}
       />
+      )}
     </View>
   );
 }

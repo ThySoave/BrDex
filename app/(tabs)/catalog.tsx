@@ -23,6 +23,7 @@ export default function CatalogScreen() {
   const [showAlertUpsell, setShowAlertUpsell] = useState(false);
   const [wishlistCardId, setWishlistCardId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchCatalogPage(0)
@@ -30,7 +31,8 @@ export default function CatalogScreen() {
         setCards(items);
         setError(null);
       })
-      .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar catálogo"));
+      .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar catálogo"))
+      .finally(() => setLoading(false));
     isPremium()
       .then(setPremium)
       .catch(() => setPremium(false));
@@ -143,6 +145,11 @@ export default function CatalogScreen() {
           </Pressable>
         </View>
       ) : null}
+      {loading ? (
+        <Text testID="catalog-loading" style={{ color: "#666", marginTop: 16 }}>
+          Carregando...
+        </Text>
+      ) : (
       <FlatList
         testID="catalog-list"
         data={visibleCards}
@@ -183,6 +190,7 @@ export default function CatalogScreen() {
           </View>
         )}
       />
+      )}
     </View>
   );
 }

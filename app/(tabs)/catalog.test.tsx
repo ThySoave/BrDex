@@ -187,3 +187,18 @@ describe("CatalogScreen empty state", () => {
     expect(queryByTestId("catalog-empty")).toBeNull();
   });
 });
+
+describe("CatalogScreen loading state", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (isPremium as jest.Mock).mockResolvedValue(false);
+  });
+
+  it("mostra o carregamento enquanto o catálogo ainda não respondeu", () => {
+    (fetchCatalogPage as jest.Mock).mockReturnValue(new Promise(() => {}));
+    const { getByTestId, queryByTestId } = render(<CatalogScreen />);
+
+    expect(getByTestId("catalog-loading")).toBeTruthy();
+    expect(queryByTestId("catalog-empty")).toBeNull();
+  });
+});

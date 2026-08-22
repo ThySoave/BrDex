@@ -588,3 +588,19 @@ describe("AlbumScreen empty state", () => {
     expect(empty).toBeTruthy();
   });
 });
+
+describe("AlbumScreen loading state", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (fetchSetProgress as jest.Mock).mockResolvedValue([]);
+    (isPremium as jest.Mock).mockResolvedValue(false);
+  });
+
+  it("mostra o carregamento enquanto o álbum ainda não respondeu", () => {
+    (listUserCards as jest.Mock).mockReturnValue(new Promise(() => {}));
+    const { getByTestId, queryByTestId } = render(<AlbumScreen />);
+
+    expect(getByTestId("album-loading")).toBeTruthy();
+    expect(queryByTestId("album-empty")).toBeNull();
+  });
+});

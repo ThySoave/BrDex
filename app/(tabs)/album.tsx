@@ -35,6 +35,7 @@ export default function AlbumScreen() {
   const [editPrice, setEditPrice] = useState("");
   const [deletingCard, setDeletingCard] = useState<UserCard | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const collectionShareRef = useRef<View>(null);
   const cardShareRef = useRef<View>(null);
@@ -138,7 +139,8 @@ export default function AlbumScreen() {
           setCards(items);
           setError(null);
         })
-        .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar álbum")),
+        .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar álbum"))
+        .finally(() => setLoading(false)),
     []
   );
 
@@ -204,6 +206,11 @@ export default function AlbumScreen() {
           Assine o premium para ver o progresso por edição.
         </Text>
       )}
+      {loading ? (
+        <Text testID="album-loading" style={{ color: "#666", marginTop: 16 }}>
+          Carregando...
+        </Text>
+      ) : (
       <FlatList
         testID="album-list"
         data={cards}
@@ -264,6 +271,7 @@ export default function AlbumScreen() {
           </Pressable>
         )}
       />
+      )}
       {statusCard ? (
         <View style={{ padding: 12, borderWidth: 1, borderColor: "#ccc", borderRadius: 8 }}>
           <Text>{`Status de ${statusCard.cardName}`}</Text>
