@@ -4,6 +4,7 @@ jest.mock("expo-router", () => ({
   useRouter: () => ({ push: mockPush })
 }));
 jest.mock("../../src/features/catalog/catalogRepository", () => ({
+  CATALOG_PAGE_SIZE: 50,
   fetchCatalogPage: jest.fn(),
   searchCatalogByName: jest.fn()
 }));
@@ -285,6 +286,117 @@ describe("CatalogScreen busca server-side", () => {
     expect(searchCatalogByName).toHaveBeenLastCalledWith("Mewtwo");
     expect(queryByTestId("catalog-error")).toBeNull();
     expect(getByTestId("wishlist-add-card-2")).toBeTruthy();
+  });
+});
+
+describe("CatalogScreen paginação", () => {
+  const { searchCatalogByName } = require("../../src/features/catalog/catalogRepository");
+
+  const PAGE_ZERO = Array.from({ length: 50 }, (_, i) => ({
+    id: `p0-${i}`,
+    name: `Abra ${String(i).padStart(2, "0")}`,
+    number: String(i + 1),
+    setName: "Base Set",
+    rarity: "Common",
+    imageUrl: `https://example.com/p0-${i}.png`
+  }));
+
+  const PAGE_ONE_CARD = {
+    id: "p1-0",
+    name: "Zubat",
+    number: "51",
+    setName: "Base Set",
+    rarity: "Common",
+    imageUrl: "https://example.com/p1-0.png"
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (isPremium as jest.Mock).mockResolvedValue(false);
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it("carrega e anexa a próxima página ao chegar no fim da lista", async () => {
+    (fetchCatalogPage as jest.Mock).mockImplementation((page: number) =>
+      Promise.resolve(page === 0 ? PAGE_ZERO : [PAGE_ONE_CARD])
+    );
+    const { getByTestId } = render(<CatalogScreen />);
+    await act(async () => {});
+
+    fireEvent(getByTestId("catalog-list"), "onEndReached");
+    await act(async () => {});
+
+    expect(fetchCatalogPage).toHaveBeenCalledWith(1);
+    const data = getByTestId("catalog-list").props.data;
+    expect(data).toHaveLength(51);
+    expect(data[0].id).toBe("p0-0");
+    expect(data[50].id).toBe("p1-0");
+  });
+
+  it("não busca mais páginas depois de uma página incompleta", async () => {
+    (fetchCatalogPage as jest.Mock).mockImplementation((page: number) =>
+      Promise.resolve(page === 0 ? PAGE_ZERO : [PAGE_ONE_CARD])
+    );
+    const { getByTestId } = render(<CatalogScreen />);
+    await act(async () => {});
+
+    fireEvent(getByTestId("catalog-list"), "onEndReached");
+    await act(async () => {});
+    expect(fetchCatalogPage).toHaveBeenCalledTimes(2);
+
+    fireEvent(getByTestId("catalog-list"), "onEndReached");
+    await act(async () => {});
+    expect(fetchCatalogPage).toHaveBeenCalledTimes(2);
+  });
+
+  it("não pagina enquanto uma busca está ativa", async () => {
+    jest.useFakeTimers();
+    (fetchCatalogPage as jest.Mock).mockResolvedValue(PAGE_ZERO);
+    (searchCatalogByName as jest.Mock).mockResolvedValue([PAGE_ONE_CARD]);
+    const { getByTestId } = render(<CatalogScreen />);
+    await act(async () => {});
+
+    fireEvent.changeText(getByTestId("catalog-search-input"), "Zubat");
+    await act(async () => {
+      jest.advanceTimersByTime(300);
+    });
+
+    fireEvent(getByTestId("catalog-list"), "onEndReached");
+    await act(async () => {});
+
+    expect(fetchCatalogPage).toHaveBeenCalledTimes(1);
+    expect(fetchCatalogPage).toHaveBeenCalledWith(0);
+  });
+
+  it("mantém a lista visível quando o load-more falha e tenta de novo no próximo fim de lista", async () => {
+    let pageOneCalls = 0;
+    (fetchCatalogPage as jest.Mock).mockImplementation((page: number) => {
+      if (page === 0) {
+        return Promise.resolve(PAGE_ZERO);
+      }
+      pageOneCalls += 1;
+      return pageOneCalls === 1
+        ? Promise.reject(new Error("sem conexão"))
+        : Promise.resolve([PAGE_ONE_CARD]);
+    });
+    const { getByTestId, queryByTestId } = render(<CatalogScreen />);
+    await act(async () => {});
+
+    fireEvent(getByTestId("catalog-list"), "onEndReached");
+    await act(async () => {});
+
+    expect(queryByTestId("catalog-error")).toBeNull();
+    expect(getByTestId("catalog-list").props.data).toHaveLength(50);
+
+    fireEvent(getByTestId("catalog-list"), "onEndReached");
+    await act(async () => {});
+
+    const data = getByTestId("catalog-list").props.data;
+    expect(data).toHaveLength(51);
+    expect(data[50].id).toBe("p1-0");
   });
 });
 

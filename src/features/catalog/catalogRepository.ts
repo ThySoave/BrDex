@@ -1,7 +1,7 @@
 import { getSupabaseClient } from "../../lib/supabaseClient";
 import type { CatalogCard } from "./types";
 
-const PAGE_SIZE = 50;
+export const CATALOG_PAGE_SIZE = 50;
 const SEARCH_LIMIT = 25;
 
 interface CatalogRow {
@@ -25,8 +25,8 @@ function toCatalogCard(row: CatalogRow): CatalogCard {
 }
 
 export async function fetchCatalogPage(page: number): Promise<CatalogCard[]> {
-  const from = page * PAGE_SIZE;
-  const to = from + PAGE_SIZE - 1;
+  const from = page * CATALOG_PAGE_SIZE;
+  const to = from + CATALOG_PAGE_SIZE - 1;
 
   const { data, error } = await getSupabaseClient()
     .from("cards_catalog")

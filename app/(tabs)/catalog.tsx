@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { Alert, FlatList, Linking, Pressable, Text, TextInput, View } from "react-native";
 import { useRouter } from "expo-router";
-import { fetchCatalogPage, searchCatalogByName } from "../../src/features/catalog/catalogRepository";
+import {
+  CATALOG_PAGE_SIZE,
+  fetchCatalogPage,
+  searchCatalogByName
+} from "../../src/features/catalog/catalogRepository";
 import { filterCatalogCards } from "../../src/features/catalog/catalogSearch";
 import { addToWishlist } from "../../src/features/social/wishlistRepository";
 import { buildTcgplayerSearchUrl } from "../../src/features/premium/affiliateLinks";
@@ -27,6 +31,9 @@ export default function CatalogScreen() {
   const [wishlistCardId, setWishlistCardId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const debouncedQuery = useDebouncedValue(query, SEARCH_DEBOUNCE_MS);
 
@@ -36,11 +43,32 @@ export default function CatalogScreen() {
     request
       .then((items) => {
         setCards(items);
+        setPage(0);
+        setHasMore(trimmed === "" && items.length === CATALOG_PAGE_SIZE);
         setError(null);
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar catálogo"))
       .finally(() => setLoading(false));
   }, []);
+
+  const handleEndReached = () => {
+    if (!hasMore || loadingMore || query.trim() !== "") {
+      return;
+    }
+
+    setLoadingMore(true);
+    const nextPage = page + 1;
+    fetchCatalogPage(nextPage)
+      .then((items) => {
+        setCards((previous) => [...previous, ...items]);
+        setPage(nextPage);
+        setHasMore(items.length === CATALOG_PAGE_SIZE);
+      })
+      .catch(() => {
+        // A lista já tem conteúdo; o próximo onEndReached tenta de novo.
+      })
+      .finally(() => setLoadingMore(false));
+  };
 
   useEffect(() => {
     loadCards(debouncedQuery);
@@ -178,6 +206,14 @@ export default function CatalogScreen() {
         data={visibleCards}
         keyExtractor={(item) => item.id}
         numColumns={3}
+        onEndReached={handleEndReached}
+        ListFooterComponent={
+          loadingMore ? (
+            <Text testID="catalog-loading-more" style={{ color: "#666", marginTop: 16 }}>
+              Carregando mais...
+            </Text>
+          ) : null
+        }
         ListEmptyComponent={
           <Text testID="catalog-empty" style={{ color: "#666", marginTop: 16 }}>
             Nenhuma carta encontrada. Tente outra busca ou volte mais tarde.
