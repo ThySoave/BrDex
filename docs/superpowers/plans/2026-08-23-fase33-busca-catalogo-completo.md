@@ -25,10 +25,10 @@
 
 ### Task 1: Hook useDebouncedValue
 
-- [ ] **Step 1: Write the failing test** — `src/lib/useDebouncedValue.test.ts` com `renderHook` + fake timers: (a) valor inicial é retornado imediatamente; (b) após mudança, valor antigo persiste antes de 300 ms e o novo aparece depois de `advanceTimersByTime(300)`; (c) mudanças em sequência dentro da janela só aplicam a última (timer reiniciado).
-- [ ] **Step 2: Run to verify it fails** — `npx jest useDebouncedValue` → falha por módulo inexistente.
-- [ ] **Step 3: Implement** — `src/lib/useDebouncedValue.ts`: `useState(value)` + `useEffect` com `setTimeout(delayMs)` e cleanup `clearTimeout` → GREEN.
-- [ ] **Step 4: Commit** — `feat: add useDebouncedValue hook`
+- [x] **Step 1: Write the failing test** — `src/lib/useDebouncedValue.test.ts` com `renderHook` + fake timers: (a) valor inicial é retornado imediatamente; (b) após mudança, valor antigo persiste antes de 300 ms e o novo aparece depois de `advanceTimersByTime(300)`; (c) mudanças em sequência dentro da janela só aplicam a última (timer reiniciado).
+- [x] **Step 2: Run to verify it fails** — `npx jest useDebouncedValue` → falha por módulo inexistente.
+- [x] **Step 3: Implement** — `src/lib/useDebouncedValue.ts`: `useState(value)` + `useEffect` com `setTimeout(delayMs)` e cleanup `clearTimeout` → GREEN.
+- [x] **Step 4: Commit** — `feat: add useDebouncedValue hook`
 
 ---
 
