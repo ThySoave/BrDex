@@ -75,9 +75,30 @@ describe("UserProfileScreen", () => {
     expect(getByRole("button", { name: "Bloquear usuário" })).toBeTruthy();
   });
 
+  it("mostra o seletor de motivos sem enviar a denúncia direto", async () => {
+    const { getByTestId, getByText, queryByTestId } = render(<UserProfileScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("report-user")).toBeTruthy();
+    });
+    expect(queryByTestId("report-reason-golpe")).toBeNull();
+
+    await act(async () => {
+      fireEvent.press(getByTestId("report-user"));
+    });
+
+    expect(reportUser).not.toHaveBeenCalled();
+    expect(getByText("Qual o motivo da denúncia?")).toBeTruthy();
+    expect(getByTestId("report-reason-golpe")).toBeTruthy();
+    expect(getByTestId("report-reason-ofensa")).toBeTruthy();
+    expect(getByTestId("report-reason-spam")).toBeTruthy();
+    expect(getByTestId("report-reason-perfil_falso")).toBeTruthy();
+    expect(getByTestId("report-reason-outro")).toBeTruthy();
+  });
+
   it("reports the user from the profile", async () => {
     const alertSpy = jest.spyOn(Alert, "alert").mockImplementation(() => undefined);
-    const { getByTestId } = render(<UserProfileScreen />);
+    const { getByTestId, queryByTestId } = render(<UserProfileScreen />);
 
     await waitFor(() => {
       expect(getByTestId("report-user")).toBeTruthy();
@@ -87,14 +108,15 @@ describe("UserProfileScreen", () => {
       fireEvent.press(getByTestId("report-user"));
     });
 
+    await act(async () => {
+      fireEvent.press(getByTestId("report-reason-golpe"));
+    });
+
     await waitFor(() => {
-      expect(reportUser).toHaveBeenCalledWith(
-        "user-2",
-        "denúncia feita a partir do perfil",
-        "perfil user-2"
-      );
+      expect(reportUser).toHaveBeenCalledWith("user-2", "Golpe ou fraude", "perfil user-2");
       expect(alertSpy).toHaveBeenCalledWith("Denúncia enviada", "Nossa equipe vai analisar.");
     });
+    expect(queryByTestId("report-reason-golpe")).toBeNull();
   });
 
   it("blocks the user and navigates back", async () => {
@@ -128,6 +150,10 @@ describe("UserProfileScreen", () => {
 
     await act(async () => {
       fireEvent.press(getByTestId("report-user"));
+    });
+
+    await act(async () => {
+      fireEvent.press(getByTestId("report-reason-outro"));
     });
 
     await waitFor(() => {

@@ -4,12 +4,14 @@ import { router, useLocalSearchParams } from "expo-router";
 import { isUserVerified } from "../../src/features/premium/entitlementsRepository";
 import { userRatingSummary } from "../../src/features/social/ratingsRepository";
 import type { RatingSummary } from "../../src/features/social/ratingsRepository";
+import { REPORT_REASONS } from "../../src/features/social/reportReasons";
 import { blockUser, reportUser } from "../../src/features/social/safetyRepository";
 
 export default function UserProfileScreen() {
   const { userId } = useLocalSearchParams<{ userId: string }>();
   const [verified, setVerified] = useState(false);
   const [rating, setRating] = useState<RatingSummary | null>(null);
+  const [choosingReason, setChoosingReason] = useState(false);
 
   useEffect(() => {
     if (!userId) {
@@ -23,11 +25,16 @@ export default function UserProfileScreen() {
   }, [userId]);
 
   const handleReport = () => {
+    setChoosingReason((current) => !current);
+  };
+
+  const handleReportReason = (reasonLabel: string) => {
     if (!userId) {
       return;
     }
 
-    reportUser(userId, "denúncia feita a partir do perfil", `perfil ${userId}`)
+    setChoosingReason(false);
+    reportUser(userId, reasonLabel, `perfil ${userId}`)
       .then(() => Alert.alert("Denúncia enviada", "Nossa equipe vai analisar."))
       .catch((err: Error) => Alert.alert("Erro", err.message));
   };
@@ -71,6 +78,22 @@ export default function UserProfileScreen() {
       >
         <Text style={{ color: "#c22" }}>Denunciar usuário</Text>
       </Pressable>
+      {choosingReason ? (
+        <View style={{ marginBottom: 16 }}>
+          <Text style={{ marginBottom: 8 }}>Qual o motivo da denúncia?</Text>
+          {REPORT_REASONS.map((reason) => (
+            <Pressable
+              key={reason.value}
+              testID={`report-reason-${reason.value}`}
+              accessibilityRole="button"
+              onPress={() => handleReportReason(reason.label)}
+              style={{ marginBottom: 8 }}
+            >
+              <Text>{reason.label}</Text>
+            </Pressable>
+          ))}
+        </View>
+      ) : null}
       <Pressable testID="block-user" accessibilityRole="button" onPress={handleBlock}>
         <Text style={{ color: "#c22" }}>Bloquear usuário</Text>
       </Pressable>
