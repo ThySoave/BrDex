@@ -24,11 +24,11 @@
 
 ### Task 1: Scroll infinito na aba Catálogo
 
-- [ ] **Step 1: Write the failing RNTL tests** — describe novo `CatalogScreen paginação` em `catalog.test.tsx`, com página 0 mockada com 50 cartas (`hasMore` verdadeiro): (a) `fireEvent(catalog-list, "onEndReached")` → `fetchCatalogPage(1)` chamado e carta da página 1 renderizada junto com as da página 0; (b) quando a página retornada tem menos de 50 cartas, novo `onEndReached` não dispara fetch adicional; (c) com query ativa (após debounce), `onEndReached` não chama `fetchCatalogPage`; (d) falha em `fetchCatalogPage(1)` → lista da página 0 continua visível (sem `catalog-error`) e o próximo `onEndReached` tenta de novo.
-- [ ] **Step 2: Run to verify it fails** — `npx jest catalog.test` → casos novos falham, existentes verdes.
-- [ ] **Step 3: Implement** — exportar `CATALOG_PAGE_SIZE` no repositório; em `catalog.tsx` adicionar `page`/`hasMore`/`loadingMore`, `handleEndReached` e footer `catalog-loading-more`; `loadCards` reseta a paginação → GREEN sem editar casos existentes.
-- [ ] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: infinite scroll pagination in catalog tab`
+- [x] **Step 1: Write the failing RNTL tests** — describe novo `CatalogScreen paginação` em `catalog.test.tsx`, com página 0 mockada com 50 cartas (`hasMore` verdadeiro): (a) `fireEvent(catalog-list, "onEndReached")` → `fetchCatalogPage(1)` chamado e carta da página 1 renderizada junto com as da página 0; (b) quando a página retornada tem menos de 50 cartas, novo `onEndReached` não dispara fetch adicional; (c) com query ativa (após debounce), `onEndReached` não chama `fetchCatalogPage`; (d) falha em `fetchCatalogPage(1)` → lista da página 0 continua visível (sem `catalog-error`) e o próximo `onEndReached` tenta de novo.
+- [x] **Step 2: Run to verify it fails** — `npx jest catalog.test` → casos novos falham, existentes verdes.
+- [x] **Step 3: Implement** — exportar `CATALOG_PAGE_SIZE` no repositório; em `catalog.tsx` adicionar `page`/`hasMore`/`loadingMore`, `handleEndReached` e footer `catalog-loading-more`; `loadCards` reseta a paginação → GREEN sem editar casos existentes.
+- [x] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
+- [x] **Step 5: Commit** — `feat: infinite scroll pagination in catalog tab`
 
 ---
 
