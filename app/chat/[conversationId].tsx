@@ -13,6 +13,7 @@ import {
   userRatingSummary,
   type RatingSummary
 } from "../../src/features/social/ratingsRepository";
+import { REPORT_REASONS } from "../../src/features/social/reportReasons";
 import { blockUser, reportUser } from "../../src/features/social/safetyRepository";
 import {
   completedTradesCount,
@@ -33,6 +34,7 @@ export default function ChatScreen() {
   const [reputation, setReputation] = useState<number | null>(null);
   const [ratingSummary, setRatingSummary] = useState<RatingSummary | null>(null);
   const [ratedTradeIds, setRatedTradeIds] = useState<string[]>([]);
+  const [choosingReportReason, setChoosingReportReason] = useState(false);
 
   const loadTrades = () => {
     if (!conversationId) {
@@ -90,11 +92,16 @@ export default function ChatScreen() {
   };
 
   const handleReport = () => {
+    setChoosingReportReason((current) => !current);
+  };
+
+  const handleReportReason = (reasonLabel: string) => {
     if (!other) {
       return;
     }
 
-    reportUser(other, "denúncia feita a partir do chat", `conversa ${conversationId}`)
+    setChoosingReportReason(false);
+    reportUser(other, reasonLabel, `conversa ${conversationId}`)
       .then(() => Alert.alert("Denúncia enviada", "Nossa equipe vai analisar."))
       .catch((err: Error) => Alert.alert("Erro", err.message));
   };
@@ -219,6 +226,22 @@ export default function ChatScreen() {
           <Text>Bloquear</Text>
         </Pressable>
       </View>
+      {choosingReportReason ? (
+        <View style={{ marginBottom: 8 }}>
+          <Text style={{ marginBottom: 8 }}>Qual o motivo da denúncia?</Text>
+          {REPORT_REASONS.map((reason) => (
+            <Pressable
+              key={reason.value}
+              testID={`report-reason-${reason.value}`}
+              accessibilityRole="button"
+              onPress={() => handleReportReason(reason.label)}
+              style={{ marginBottom: 8 }}
+            >
+              <Text>{reason.label}</Text>
+            </Pressable>
+          ))}
+        </View>
+      ) : null}
       <FlatList
         testID="chat-messages"
         data={messages}

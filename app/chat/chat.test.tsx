@@ -24,8 +24,10 @@ jest.mock("expo-router", () => ({
   router: { back: jest.fn(), push: (...args: unknown[]) => mockChatPush(...args) }
 }));
 
-import { fireEvent, render, waitFor } from "@testing-library/react-native";
+import { Alert } from "react-native";
+import { act, fireEvent, render, waitFor } from "@testing-library/react-native";
 import { listMessages, subscribeToMessages } from "../../src/features/social/chatRepository";
+import { reportUser } from "../../src/features/social/safetyRepository";
 import {
   myRatedTradeIds,
   rateTrade,
@@ -59,6 +61,51 @@ describe("ChatScreen trades", () => {
     await findByRole("button", { name: "Enviar" });
     expect(getByRole("button", { name: "Denunciar" })).toBeTruthy();
     expect(getByRole("button", { name: "Bloquear" })).toBeTruthy();
+  });
+
+  it("mostra o seletor de motivos sem enviar a denúncia direto", async () => {
+    const { getByTestId, getByText, queryByTestId } = render(<ChatScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("chat-report")).toBeTruthy();
+    });
+    expect(queryByTestId("report-reason-spam")).toBeNull();
+
+    await act(async () => {
+      fireEvent.press(getByTestId("chat-report"));
+    });
+
+    expect(reportUser).not.toHaveBeenCalled();
+    expect(getByText("Qual o motivo da denúncia?")).toBeTruthy();
+    expect(getByTestId("report-reason-golpe")).toBeTruthy();
+    expect(getByTestId("report-reason-ofensa")).toBeTruthy();
+    expect(getByTestId("report-reason-spam")).toBeTruthy();
+    expect(getByTestId("report-reason-perfil_falso")).toBeTruthy();
+    expect(getByTestId("report-reason-outro")).toBeTruthy();
+  });
+
+  it("reports the other user with the chosen reason", async () => {
+    (reportUser as jest.Mock).mockResolvedValue(undefined);
+    const alertSpy = jest.spyOn(Alert, "alert").mockImplementation(() => undefined);
+    const { getByTestId, queryByTestId } = render(<ChatScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId("chat-report")).toBeTruthy();
+    });
+
+    await act(async () => {
+      fireEvent.press(getByTestId("chat-report"));
+    });
+
+    await act(async () => {
+      fireEvent.press(getByTestId("report-reason-spam"));
+    });
+
+    await waitFor(() => {
+      expect(reportUser).toHaveBeenCalledWith("user-2", "Spam ou propaganda", "conversa conv-1");
+      expect(alertSpy).toHaveBeenCalledWith("Denúncia enviada", "Nossa equipe vai analisar.");
+    });
+    expect(queryByTestId("report-reason-spam")).toBeNull();
   });
 
   it("shows the other user's completed trades count", async () => {
