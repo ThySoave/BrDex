@@ -27,29 +27,29 @@
 
 ### Task 1: Módulo compartilhado de motivos de denúncia
 
-- [ ] **Step 1: Write the failing test** — `reportReasons.test.ts`: `REPORT_REASONS` expõe exatamente os motivos `golpe` ("Golpe ou fraude"), `ofensa` ("Comportamento ofensivo"), `spam` ("Spam ou propaganda"), `perfil_falso` ("Perfil falso"), `outro` ("Outro"), nessa ordem, cada um com `value` e `label` não vazios e `value`s únicos.
-- [ ] **Step 2: Run to verify it fails** — `npx jest reportReasons` → falha por módulo inexistente.
-- [ ] **Step 3: Implement** — `src/features/social/reportReasons.ts` no mesmo padrão de `labels.ts` (array tipado `{ value: ReportReason; label: string }[]`) → GREEN.
-- [ ] **Step 4: Commit** — `feat: add shared report reasons module`
+- [x] **Step 1: Write the failing test** — `reportReasons.test.ts`: `REPORT_REASONS` expõe exatamente os motivos `golpe` ("Golpe ou fraude"), `ofensa` ("Comportamento ofensivo"), `spam` ("Spam ou propaganda"), `perfil_falso` ("Perfil falso"), `outro` ("Outro"), nessa ordem, cada um com `value` e `label` não vazios e `value`s únicos.
+- [x] **Step 2: Run to verify it fails** — `npx jest reportReasons` → falha por módulo inexistente.
+- [x] **Step 3: Implement** — `src/features/social/reportReasons.ts` no mesmo padrão de `labels.ts` (array tipado `{ value: ReportReason; label: string }[]`) → GREEN.
+- [x] **Step 4: Commit** — `feat: add shared report reasons module`
 
 ---
 
 ### Task 2: Seleção de motivo na denúncia pelo perfil
 
-- [ ] **Step 1: Write/adjust the failing RNTL tests** — em `user-profile.test.tsx`: (a) novo caso: press em `report-user` **não** chama `reportUser` e exibe o seletor com os 5 motivos (`report-reason-golpe` … `report-reason-outro`); (b) atualizar o caso "reports the user from the profile": press em `report-user` → press em `report-reason-golpe` → `reportUser` chamado com `(userId, "Golpe ou fraude", "perfil <id>")` e `Alert` de sucesso; (c) atualizar o caso de falha ("alerts when reporting fails") para o novo fluxo em dois passos.
-- [ ] **Step 2: Run to verify it fails** — `npx jest user-profile` → casos novos/atualizados falham, demais verdes.
-- [ ] **Step 3: Implement** — estado `reportingReason: boolean` em `app/user/[userId].tsx`; press em "Denunciar usuário" alterna o seletor; press num motivo fecha o seletor e chama `reportUser` com o `label` escolhido → GREEN.
-- [ ] **Step 4: Commit** — `feat: add report reason picker to user profile`
+- [x] **Step 1: Write/adjust the failing RNTL tests** — em `user-profile.test.tsx`: (a) novo caso: press em `report-user` **não** chama `reportUser` e exibe o seletor com os 5 motivos (`report-reason-golpe` … `report-reason-outro`); (b) atualizar o caso "reports the user from the profile": press em `report-user` → press em `report-reason-golpe` → `reportUser` chamado com `(userId, "Golpe ou fraude", "perfil <id>")` e `Alert` de sucesso; (c) atualizar o caso de falha ("alerts when reporting fails") para o novo fluxo em dois passos.
+- [x] **Step 2: Run to verify it fails** — `npx jest user-profile` → casos novos/atualizados falham, demais verdes (3 falhas, 6 verdes).
+- [x] **Step 3: Implement** — estado `choosingReason: boolean` em `app/user/[userId].tsx`; press em "Denunciar usuário" alterna o seletor; press num motivo fecha o seletor e chama `reportUser` com o `label` escolhido → GREEN (9/9).
+- [x] **Step 4: Commit** — `feat: add report reason picker to user profile`
 
 ---
 
 ### Task 3: Seleção de motivo na denúncia pelo chat
 
-- [ ] **Step 1: Write/adjust the failing RNTL tests** — em `chat.test.tsx`: mesmo padrão do perfil — press em `chat-report` exibe o seletor sem chamar `reportUser`; press em `report-reason-spam` chama `reportUser(other, "Spam ou propaganda", "conversa <id>")` e exibe o `Alert` de sucesso.
-- [ ] **Step 2: Run to verify it fails** — `npx jest chat.test` → casos novos falham, existentes verdes.
-- [ ] **Step 3: Implement** — mesmo padrão do perfil em `app/chat/[conversationId].tsx` → GREEN.
-- [ ] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: add report reason picker to chat`
+- [x] **Step 1: Write/adjust the failing RNTL tests** — em `chat.test.tsx`: mesmo padrão do perfil — press em `chat-report` exibe o seletor sem chamar `reportUser`; press em `report-reason-spam` chama `reportUser(other, "Spam ou propaganda", "conversa <id>")` e exibe o `Alert` de sucesso (casos aditivos — nenhum teste do chat pressionava a denúncia).
+- [x] **Step 2: Run to verify it fails** — `npx jest chat.test` → casos novos falham, existentes verdes (2 falhas, 10 verdes).
+- [x] **Step 3: Implement** — mesmo padrão do perfil em `app/chat/[conversationId].tsx` → GREEN (12/12).
+- [x] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes (55 suites, 290 testes).
+- [x] **Step 5: Commit** — `feat: add report reason picker to chat`
 
 ---
 
