@@ -4,7 +4,8 @@ jest.mock("expo-router", () => ({
   useRouter: () => ({ push: mockPush })
 }));
 jest.mock("../../src/features/catalog/catalogRepository", () => ({
-  fetchCatalogPage: jest.fn()
+  fetchCatalogPage: jest.fn(),
+  searchCatalogByName: jest.fn()
 }));
 jest.mock("../../src/features/social/wishlistRepository", () => ({
   addToWishlist: jest.fn()
@@ -200,6 +201,90 @@ describe("CatalogScreen loading state", () => {
 
     expect(getByTestId("catalog-loading")).toBeTruthy();
     expect(queryByTestId("catalog-empty")).toBeNull();
+  });
+});
+
+describe("CatalogScreen busca server-side", () => {
+  const { searchCatalogByName } = require("../../src/features/catalog/catalogRepository");
+
+  const MEWTWO = {
+    id: "card-2",
+    name: "Mewtwo",
+    number: "10",
+    setName: "Fossil",
+    rarity: "Rare",
+    imageUrl: "https://example.com/10.png"
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.useFakeTimers();
+    (fetchCatalogPage as jest.Mock).mockResolvedValue(CARDS);
+    (isPremium as jest.Mock).mockResolvedValue(false);
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it("busca no servidor após o debounce e mostra carta fora da página inicial", async () => {
+    (searchCatalogByName as jest.Mock).mockResolvedValue([MEWTWO]);
+    const { getByTestId } = render(<CatalogScreen />);
+    await act(async () => {});
+
+    fireEvent.changeText(getByTestId("catalog-search-input"), "Mewtwo");
+    expect(searchCatalogByName).not.toHaveBeenCalled();
+
+    await act(async () => {
+      jest.advanceTimersByTime(300);
+    });
+
+    expect(searchCatalogByName).toHaveBeenCalledWith("Mewtwo");
+    expect(getByTestId("wishlist-add-card-2")).toBeTruthy();
+  });
+
+  it("volta para a página inicial quando o campo é limpo, sem busca extra", async () => {
+    (searchCatalogByName as jest.Mock).mockResolvedValue([MEWTWO]);
+    const { getByTestId } = render(<CatalogScreen />);
+    await act(async () => {});
+
+    fireEvent.changeText(getByTestId("catalog-search-input"), "Mewtwo");
+    await act(async () => {
+      jest.advanceTimersByTime(300);
+    });
+
+    fireEvent.changeText(getByTestId("catalog-search-input"), "");
+    await act(async () => {
+      jest.advanceTimersByTime(300);
+    });
+
+    expect(searchCatalogByName).toHaveBeenCalledTimes(1);
+    expect(fetchCatalogPage).toHaveBeenCalledTimes(2);
+    expect(getByTestId("wishlist-add-card-1")).toBeTruthy();
+  });
+
+  it("mostra erro quando a busca falha e o retry refaz a mesma busca", async () => {
+    (searchCatalogByName as jest.Mock)
+      .mockRejectedValueOnce(new Error("sem conexão"))
+      .mockResolvedValueOnce([MEWTWO]);
+    const { getByTestId, queryByTestId } = render(<CatalogScreen />);
+    await act(async () => {});
+
+    fireEvent.changeText(getByTestId("catalog-search-input"), "Mewtwo");
+    await act(async () => {
+      jest.advanceTimersByTime(300);
+    });
+
+    expect(getByTestId("catalog-error")).toBeTruthy();
+
+    await act(async () => {
+      fireEvent.press(getByTestId("catalog-retry"));
+    });
+
+    expect(searchCatalogByName).toHaveBeenCalledTimes(2);
+    expect(searchCatalogByName).toHaveBeenLastCalledWith("Mewtwo");
+    expect(queryByTestId("catalog-error")).toBeNull();
+    expect(getByTestId("wishlist-add-card-2")).toBeTruthy();
   });
 });
 

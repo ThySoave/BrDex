@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Alert, FlatList, Linking, Pressable, Text, TextInput, View } from "react-native";
 import { useRouter } from "expo-router";
-import { fetchCatalogPage } from "../../src/features/catalog/catalogRepository";
+import { fetchCatalogPage, searchCatalogByName } from "../../src/features/catalog/catalogRepository";
 import { filterCatalogCards } from "../../src/features/catalog/catalogSearch";
 import { addToWishlist } from "../../src/features/social/wishlistRepository";
 import { buildTcgplayerSearchUrl } from "../../src/features/premium/affiliateLinks";
@@ -12,6 +12,9 @@ import type { CatalogCard } from "../../src/features/catalog/types";
 import type { CardLanguage } from "../../src/features/collection/types";
 import { LANGUAGE_OPTIONS } from "../../src/features/collection/labels";
 import { parseBrlPrice } from "../../src/lib/parsePrice";
+import { useDebouncedValue } from "../../src/lib/useDebouncedValue";
+
+const SEARCH_DEBOUNCE_MS = 300;
 
 export default function CatalogScreen() {
   const router = useRouter();
@@ -25,8 +28,12 @@ export default function CatalogScreen() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const loadCatalog = useCallback(() => {
-    fetchCatalogPage(0)
+  const debouncedQuery = useDebouncedValue(query, SEARCH_DEBOUNCE_MS);
+
+  const loadCards = useCallback((searchText: string) => {
+    const trimmed = searchText.trim();
+    const request = trimmed === "" ? fetchCatalogPage(0) : searchCatalogByName(trimmed);
+    request
       .then((items) => {
         setCards(items);
         setError(null);
@@ -36,16 +43,19 @@ export default function CatalogScreen() {
   }, []);
 
   useEffect(() => {
-    loadCatalog();
+    loadCards(debouncedQuery);
+  }, [loadCards, debouncedQuery]);
+
+  useEffect(() => {
     isPremium()
       .then(setPremium)
       .catch(() => setPremium(false));
-  }, [loadCatalog]);
+  }, []);
 
   const handleRetry = () => {
     setError(null);
     setLoading(true);
-    loadCatalog();
+    loadCards(debouncedQuery);
   };
 
   const visibleCards = filterCatalogCards(cards, query);

@@ -34,11 +34,11 @@
 
 ### Task 2: Busca server-side na aba Catálogo
 
-- [ ] **Step 1: Write the failing RNTL tests** — casos novos em `catalog.test.tsx` (describe próprio, fake timers): (a) digitar no `catalog-search-input` e avançar 300 ms → `searchCatalogByName` chamado com o texto e resultados renderizados (carta que não estava na página 0 aparece); (b) antes de vencer o debounce, `searchCatalogByName` ainda não foi chamado; (c) limpar o campo e avançar 300 ms → volta a mostrar a página 0 (novo `fetchCatalogPage`), sem chamada extra de busca; (d) falha de `searchCatalogByName` → `catalog-error` com retry que re-executa a busca com a mesma query.
-- [ ] **Step 2: Run to verify it fails** — `npx jest catalog.test` → casos novos falham, existentes verdes.
-- [ ] **Step 3: Implement** — `catalog.tsx`: importar `searchCatalogByName` e `useDebouncedValue`; `loadCards(searchText)` em `useCallback` (vazio → `fetchCatalogPage(0)`, senão → `searchCatalogByName`); `useEffect` sobre o valor debounced; retry usa a query atual → GREEN sem editar casos existentes.
-- [ ] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes.
-- [ ] **Step 5: Commit** — `feat: search full catalog server-side with debounce`
+- [x] **Step 1: Write the failing RNTL tests** — casos novos em `catalog.test.tsx` (describe próprio, fake timers): (a) digitar no `catalog-search-input` e avançar 300 ms → `searchCatalogByName` chamado com o texto e resultados renderizados (carta que não estava na página 0 aparece); (b) antes de vencer o debounce, `searchCatalogByName` ainda não foi chamado; (c) limpar o campo e avançar 300 ms → volta a mostrar a página 0 (novo `fetchCatalogPage`), sem chamada extra de busca; (d) falha de `searchCatalogByName` → `catalog-error` com retry que re-executa a busca com a mesma query.
+- [x] **Step 2: Run to verify it fails** — `npx jest catalog.test` → casos novos falham, existentes verdes (3 falhas novas, 12 verdes).
+- [x] **Step 3: Implement** — `catalog.tsx`: importar `searchCatalogByName` e `useDebouncedValue`; `loadCards(searchText)` em `useCallback` (vazio → `fetchCatalogPage(0)`, senão → `searchCatalogByName`); `useEffect` sobre o valor debounced; retry usa a query atual → GREEN sem editar casos existentes.
+- [x] **Step 4: Full suite** — `npx jest --maxWorkers=2 && npx tsc --noEmit` verdes (56 suites, 296 testes).
+- [x] **Step 5: Commit** — `feat: search full catalog server-side with debounce`
 
 ---
 
